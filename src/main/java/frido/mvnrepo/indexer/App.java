@@ -9,5 +9,7 @@ public class App {
 
     public static void main(String[] args) {
         System.out.println(new App().getGreeting());
+        Crawler crawler = new Crawler();
+        crawler.search("http://central.maven.org/maven2/activesoap/");
     }
 }
