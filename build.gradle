@@ -14,6 +14,7 @@ apply plugin: 'application'
 
 // Apply the code analysis tools
 apply plugin: 'checkstyle'
+apply plugin: 'findbugs'
 
 // In this section you declare where to find the dependencies of your project
 repositories {
@@ -57,3 +58,9 @@ checkstyle {
     configFile rootProject.file('config/checkstyle/checkstyle.xml')
 }
 
+tasks.withType(FindBugs) {
+    reports {
+        xml.enabled false
+        html.enabled true
+    }
+}
