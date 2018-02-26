@@ -5,6 +5,10 @@
  * For more details take a look at the Java Quickstart chapter in the Gradle
  * user guide available at https://docs.gradle.org/4.0/userguide/tutorial_java_projects.html
  */
+ 
+ plugins {
+    id "org.sonarqube" version "2.6.1"
+} 
 
 // Apply the java plugin to add support for Java
 apply plugin: 'java'
@@ -20,6 +24,8 @@ apply plugin: "jacoco"
 
 // Project report
 apply plugin: 'project-report'
+
+ 
 
 // In this section you declare where to find the dependencies of your project
 repositories {
