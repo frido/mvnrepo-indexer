@@ -11,3 +11,6 @@
 
 ## SonarCloud
 https://sonarcloud.io/dashboard?id=mvnrepo-indexer
+
+## CircleCI
+[![CircleCI](https://circleci.com/bb/frido/mvnrepo-indexer.svg?style=svg)](https://circleci.com/bb/frido/mvnrepo-indexer)
