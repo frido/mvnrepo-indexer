@@ -1,7 +1,11 @@
 package frido.mvnrepo.indexer;
 
+import java.util.Comparator;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
+import java.util.concurrent.PriorityBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
@@ -14,14 +18,24 @@ public class Crawler {
 
     Crawler(MatchHandler matchHandler) {
         this.executor = Executors.newFixedThreadPool(50);//TODO: configurable value 50
+        //TODO: comparable priorty queue executor
+        this.executor = new ThreadPoolExecutor(10, 50, 100, TimeUnit.HOURS, new PriorityBlockingQueue<Runnable>(100, new Comparator<Runnable>() {
+        @Override
+        public int compare(Runnable o1, Runnable o2) {
+            Task t1 = (Task) o1;
+            Task t2 = (Task) o2;
+            return (-1) * (t1.getDeep() - t2.getDeep()); // reverse order
+        }
+        }));
         this.matchHandler = matchHandler;
     }
 
     /**
      * Process link. Download, parse and call crawler for next steps
      */
-    public void search(String link) {
-        Task task = new Task(this, link);
+    public void search(String link, int deep) {
+        System.out.println(deep + " -> " + link);
+        Task task = new Task(this, link, ++deep);
         this.executor.execute(task);
     }
 

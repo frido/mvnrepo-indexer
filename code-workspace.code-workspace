@@ -5,7 +5,7 @@
 		}
 	],
 	"settings": {
-		"java.configuration.updateBuildConfiguration": "interactive",
+		"java.configuration.updateBuildConfiguration": "automatic",
 		"checkstyle.enable": false,
 		"checkstyle.configurationPath": "config/checkstyle/checkstyle.xml",
 		"checkstyle.checkstylePath": "C:/dev/tools/checkstyle-8.8-all.jar"

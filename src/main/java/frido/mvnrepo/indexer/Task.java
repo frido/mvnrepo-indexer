@@ -9,13 +9,19 @@ public class Task implements Runnable {
 
     private static String PATTERN = "<a href=\"(.*?)\"";
     private static Pattern p = Pattern.compile(PATTERN);
+    private int deep = 0;
 
     private Crawler ctx;
     private String url;
 
-    Task(Crawler context, String link) {
+    Task(Crawler context, String link, int deep) {
         this.ctx = context;
         this.url = link;
+        this.deep = deep;
+    }
+
+    public int getDeep(){
+        return this.deep;
     }
 
     /**
@@ -61,7 +67,7 @@ public class Task implements Runnable {
                 this.ctx.match(link);
             }
             if (url.endsWith("/")) {
-                this.ctx.search(link);
+                this.ctx.search(link, deep);
             }
         }
     }
@@ -70,12 +76,19 @@ public class Task implements Runnable {
      * Check file extension in the link.
      */
     public boolean isValidLink(String link) {
-        if (link.endsWith(".html") || link.endsWith(".xhtml") || link.endsWith(".pom") || link.endsWith("../")
-                || link.endsWith(".jar") || link.endsWith(".gz") || link.endsWith(".zip") || link.endsWith(".asc")
-                || link.endsWith(".md5") || link.endsWith(".sha1")) {
+        // if (link.endsWith(".html") || link.endsWith(".xhtml") || link.endsWith(".pom") || link.endsWith("../")
+        //         || link.endsWith(".jar") || link.endsWith(".gz") || link.endsWith(".zip") || link.endsWith(".asc")
+        //         || link.endsWith(".md5") || link.endsWith(".sha1")) {
+        //     return false;
+        // }
+        // return true;
+        if (link.endsWith("../")) {
             return false;
         }
-        return true;
+        if (link.endsWith("maven-metadata.xml") || url.endsWith("/")) { //TODO: configurable search string
+            return true;
+        } 
+        return false;
     }
 
     /**
