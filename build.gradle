@@ -16,6 +16,7 @@ apply plugin: 'application'
 apply plugin: 'checkstyle'
 apply plugin: 'findbugs'
 apply plugin: 'pmd'
+apply plugin: "jacoco"
 
 // Project report
 apply plugin: 'project-report'
