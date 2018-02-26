@@ -5,6 +5,30 @@
 		}
 	],
 	"settings": {
-		"java.configuration.updateBuildConfiguration": "interactive"
+		"java.configuration.updateBuildConfiguration": "interactive",
+		// Specify whether the Checkstyle extension will check Java files automatically.
+		"checkstyle.enable": true,
+		// Specify the Checkstyle version, or the local path to the checkstyle jar file.
+		//"checkstyle.version": "8.8",
+		// Specify the checkstyle configuration file. You can use bundled ```google_checks``` or ```sun_checks```.
+		// Or you can specify the local path to the configuration file.
+		"checkstyle.configurationPath": "config/checkstyle/checkstyle.xml",
+		//C:\dev\tools
+		// Specify the path to the checkstyle properties file, by default it's empty.
+		"checkstyle.checkstylePath": "C:/dev/tools/checkstyle-8.8-all.jar"
+	},
+	"extensions": {
+		"recommendations": [
+			"naco-siren.gradle-language",
+			"shengchen.vscode-checkstyle",
+			"vscjava.vscode-java-pack",
+			"vscjava.vscode-java-debug",
+			"vscjava.vscode-java-test",
+			"redhat.java",
+			"WakaTime.vscode-wakatime",
+			"CoenraadS.bracket-pair-colorizer",
+			"EditorConfig.editorconfig",
+			"rianadon.vscode-java-checkstyle"
+		]
 	}
 }

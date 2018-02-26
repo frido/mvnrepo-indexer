@@ -39,14 +39,13 @@ public class Task implements Runnable {
     /**
      * Use http client to download url content
      */
-    private String download(String url){
+    private String download(String url) {
         Client client = Client.create(); //TODO: dont create cown client for every Task
         WebResource webResource = client.resource(url);
         ClientResponse response = webResource.get(ClientResponse.class);
 
         if (response.getStatus() != 200) {
-            throw new RuntimeException("Failed : HTTP error code : "
-                    + response.getStatus() + ", url:" + url);
+            throw new RuntimeException("Failed : HTTP error code : " + response.getStatus() + ", url:" + url);
         }
 
         String output = response.getEntity(String.class);
@@ -56,38 +55,31 @@ public class Task implements Runnable {
     /**
      * Search for links in text
      */
-    private List<String> getLinks(String text){
+    private List<String> getLinks(String text) {
         List<String> links = new LinkedList<String>();
         Matcher m = p.matcher(text);
-        while(m.find()) {
+        while (m.find()) {
             String link = getFullUrl(this.url, m.group(1));
             links.add(link);
         }
         return links;
     }
 
-    private void doNext(String link){
-        if(isValidLink(link)){
-            if(link.endsWith("maven-metadata.xml")){
+    private void doNext(String link) {
+        if (isValidLink(link)) {
+            if (link.endsWith("maven-metadata.xml")) {
                 this.ctx.metadata(link);
             }
-            if(url.endsWith("/")){
+            if (url.endsWith("/")) {
                 this.ctx.search(link);
             }
         }
     }
 
     public boolean isValidLink(String link) {
-        if( link.endsWith(".html") ||
-            link.endsWith(".xhtml") ||
-            link.endsWith(".pom") ||
-            link.endsWith("../") ||
-            link.endsWith(".jar") ||
-            link.endsWith(".gz") ||
-            link.endsWith(".zip") ||
-            link.endsWith(".asc") ||
-            link.endsWith(".md5") ||
-            link.endsWith(".sha1")){
+        if (link.endsWith(".html") || link.endsWith(".xhtml") || link.endsWith(".pom") || link.endsWith("../")
+                || link.endsWith(".jar") || link.endsWith(".gz") || link.endsWith(".zip") || link.endsWith(".asc")
+                || link.endsWith(".md5") || link.endsWith(".sha1")) {
             return false;
         }
         return true;
@@ -97,7 +89,7 @@ public class Task implements Runnable {
      * join base url and link to full url path
      */
     private String getFullUrl(String url, String link) {
-        if(link.startsWith("https://") || link.startsWith("http://")){
+        if (link.startsWith("https://") || link.startsWith("http://")) {
             return link;
         }
         return url + link;
