@@ -5,10 +5,6 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import com.sun.jersey.api.client.Client;
-import com.sun.jersey.api.client.ClientResponse;
-import com.sun.jersey.api.client.WebResource;
-
 public class Task implements Runnable {
 
     private static String PATTERN = "<a href=\"(.*?)\"";
@@ -25,7 +21,7 @@ public class Task implements Runnable {
     /**
      * Download url page.
      * Collect links.
-     * Decide what to do next with link
+     * Decide what to do next with link.
      */
     @Override
     public void run() {
@@ -37,23 +33,14 @@ public class Task implements Runnable {
     }
 
     /**
-     * Use http client to download url content
+     * Use http client to download url content.
      */
     private String download(String url) {
-        Client client = Client.create(); //TODO: dont create cown client for every Task
-        WebResource webResource = client.resource(url);
-        ClientResponse response = webResource.get(ClientResponse.class);
-
-        if (response.getStatus() != 200) {
-            throw new RuntimeException("Failed : HTTP error code : " + response.getStatus() + ", url:" + url);
-        }
-
-        String output = response.getEntity(String.class);
-        return output;
+        return this.ctx.download(url);
     }
 
     /**
-     * Search for links in text
+     * Search for links in text.
      */
     private List<String> getLinks(String text) {
         List<String> links = new LinkedList<String>();
@@ -65,10 +52,13 @@ public class Task implements Runnable {
         return links;
     }
 
+    /**
+     * Process next step with finded links.
+     */
     private void doNext(String link) {
         if (isValidLink(link)) {
-            if (link.endsWith("maven-metadata.xml")) {
-                this.ctx.metadata(link);
+            if (link.endsWith("maven-metadata.xml")) { //TODO: configurable search string
+                this.ctx.match(link);
             }
             if (url.endsWith("/")) {
                 this.ctx.search(link);
@@ -76,6 +66,9 @@ public class Task implements Runnable {
         }
     }
 
+    /**
+     * Check file extension in the link.
+     */
     public boolean isValidLink(String link) {
         if (link.endsWith(".html") || link.endsWith(".xhtml") || link.endsWith(".pom") || link.endsWith("../")
                 || link.endsWith(".jar") || link.endsWith(".gz") || link.endsWith(".zip") || link.endsWith(".asc")
@@ -86,7 +79,7 @@ public class Task implements Runnable {
     }
 
     /**
-     * join base url and link to full url path
+     * Join base url and link to full url path.
      */
     private String getFullUrl(String url, String link) {
         if (link.startsWith("https://") || link.startsWith("http://")) {

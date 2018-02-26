@@ -10,9 +10,11 @@ import com.sun.jersey.api.client.WebResource;
 public class Crawler {
 
     private Executor executor;
+    private MatchHandler matchHandler;
 
-    Crawler() {
-        this.executor = Executors.newFixedThreadPool(50);
+    Crawler(MatchHandler matchHandler) {
+        this.executor = Executors.newFixedThreadPool(50);//TODO: configurable value 50
+        this.matchHandler = matchHandler;
     }
 
     /**
@@ -23,21 +25,21 @@ public class Crawler {
         this.executor.execute(task);
     }
 
-    public void metadata(String link) {
-        System.out.println(Parser.parseMetadata(download(link)));
+    public void match(String link) {
+        matchHandler.match(download(link));
     }
 
     /**
-     * Use http client to download url content
-     */
-    // FIXME: duplicated code from Task class
-    private String download(String url) {
+     * Use http client to download url content.
+     */    
+    public String download(String url) { //TODO: alternative httpClient
         Client client = Client.create(); //TODO: dont create cown client for every Task
         WebResource webResource = client.resource(url);
         ClientResponse response = webResource.get(ClientResponse.class);
 
         if (response.getStatus() != 200) {
-            throw new RuntimeException("Failed : HTTP error code : " + response.getStatus() + ", url:" + url);
+            throw new RuntimeException(
+                "Failed : HTTP error code : " + response.getStatus() + ", url:" + url);
         }
 
         String output = response.getEntity(String.class);

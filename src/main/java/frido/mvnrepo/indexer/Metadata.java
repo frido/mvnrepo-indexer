@@ -15,17 +15,21 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
-public class Parser {
-    public static org.bson.Document parseMetadata(String xml) {
-        DocumentBuilder dBuilder = null;
+public class Metadata {
+    /**
+     * Parse metadata Json from content.
+     */
+    public static org.bson.Document valueOf(String xml) {
+        DocumentBuilder docBuilder = null;
         try {
-            dBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+            docBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
         } catch (ParserConfigurationException e) {
             e.printStackTrace();
         }
         Document doc = null;
         try {
-            doc = dBuilder.parse(new InputSource(new ByteArrayInputStream(xml.getBytes("utf-8"))));
+            doc = docBuilder.parse(
+                new InputSource(new ByteArrayInputStream(xml.getBytes("utf-8"))));
         } catch (SAXException e) {
             e.printStackTrace();
         } catch (IOException e) {

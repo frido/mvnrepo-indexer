@@ -6,15 +6,8 @@
 	],
 	"settings": {
 		"java.configuration.updateBuildConfiguration": "interactive",
-		// Specify whether the Checkstyle extension will check Java files automatically.
-		"checkstyle.enable": true,
-		// Specify the Checkstyle version, or the local path to the checkstyle jar file.
-		//"checkstyle.version": "8.8",
-		// Specify the checkstyle configuration file. You can use bundled ```google_checks``` or ```sun_checks```.
-		// Or you can specify the local path to the configuration file.
+		"checkstyle.enable": false,
 		"checkstyle.configurationPath": "config/checkstyle/checkstyle.xml",
-		//C:\dev\tools
-		// Specify the path to the checkstyle properties file, by default it's empty.
 		"checkstyle.checkstylePath": "C:/dev/tools/checkstyle-8.8-all.jar"
 	},
 	"extensions": {
