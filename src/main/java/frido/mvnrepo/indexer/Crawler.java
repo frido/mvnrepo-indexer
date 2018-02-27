@@ -24,7 +24,7 @@ public class Crawler {
     Crawler(MatchHandler matchHandler) {
         //this.executor = Executors.newFixedThreadPool(50);//TODO: configurable value 50
         //TODO: comparable priorty queue executor
-        this.executor = new ThreadPoolExecutor(1, 5, 100, TimeUnit.HOURS, new PriorityBlockingQueue<Runnable>(100, new Comparator<Runnable>() {
+        this.executor = new ThreadPoolExecutor(10, 50, 100, TimeUnit.HOURS, new PriorityBlockingQueue<Runnable>(100, new Comparator<Runnable>() {
         @Override
         public int compare(Runnable o1, Runnable o2) {
             Task t1 = (Task) o1;
