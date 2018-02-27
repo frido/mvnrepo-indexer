@@ -66,3 +66,12 @@ tasks.withType(FindBugs) {
         html.enabled true
     }
 }
+
+//task fatJar(type: Jar) {
+//	manifest {
+//        attributes 'Main-Class': 'frido.mvnrepo.indexer.App'
+//    }
+//    baseName = project.name + '-all'
+//    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+//    with jar
+//}
