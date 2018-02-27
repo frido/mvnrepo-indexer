@@ -11,7 +11,12 @@ import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.WebResource;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class Crawler {
+
+    Logger log = LoggerFactory.getLogger(Crawler.class);
 
     private Executor executor;
     private MatchHandler matchHandler;
@@ -34,12 +39,13 @@ public class Crawler {
      * Process link. Download, parse and call crawler for next steps
      */
     public void search(String link, int deep) {
-        System.out.println(deep + " -> " + link);
+        log.debug("search({})", link);
         Task task = new Task(this, link, ++deep);
         this.executor.execute(task);
     }
 
     public void match(String link) {
+        log.debug("match({})", link);
         matchHandler.match(download(link));
     }
 
@@ -47,6 +53,7 @@ public class Crawler {
      * Use http client to download url content.
      */    
     public String download(String url) { //TODO: alternative httpClient
+        log.debug("download({})", url);
         Client client = Client.create(); //TODO: dont create cown client for every Task
         WebResource webResource = client.resource(url);
         ClientResponse response = webResource.get(ClientResponse.class);
