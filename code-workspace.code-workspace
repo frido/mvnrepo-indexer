@@ -5,6 +5,23 @@
 		}
 	],
 	"settings": {
-		"java.configuration.updateBuildConfiguration": "interactive"
+		"java.configuration.updateBuildConfiguration": "automatic",
+		"checkstyle.enable": false,
+		"checkstyle.configurationPath": "config/checkstyle/checkstyle.xml",
+		"checkstyle.checkstylePath": "C:/dev/tools/checkstyle-8.8-all.jar"
+	},
+	"extensions": {
+		"recommendations": [
+			"naco-siren.gradle-language",
+			"shengchen.vscode-checkstyle",
+			"vscjava.vscode-java-pack",
+			"vscjava.vscode-java-debug",
+			"vscjava.vscode-java-test",
+			"redhat.java",
+			"WakaTime.vscode-wakatime",
+			"CoenraadS.bracket-pair-colorizer",
+			"EditorConfig.editorconfig",
+			"rianadon.vscode-java-checkstyle"
+		]
 	}
 }
