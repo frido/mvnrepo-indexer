@@ -42,6 +42,6 @@ public class App implements MatchHandler {
     public void match(String content){
         Document doc = Metadata.valueOf(content);
         log.info("match({})", doc);
-        //this.mongo.save("metadata", doc);
+        this.mongo.save("metadata", doc);
     }
 }
