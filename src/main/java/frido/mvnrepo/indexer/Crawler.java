@@ -20,8 +20,9 @@ public class Crawler {
 
     private Executor executor;
     private MatchHandler matchHandler;
+    private String match;
 
-    Crawler(MatchHandler matchHandler) {
+    Crawler(String match, MatchHandler matchHandler) {
         //this.executor = Executors.newFixedThreadPool(50);//TODO: configurable value 50
         //TODO: comparable priorty queue executor
         this.executor = new ThreadPoolExecutor(10, 50, 100, TimeUnit.HOURS, new PriorityBlockingQueue<Runnable>(100, new Comparator<Runnable>() {
@@ -33,6 +34,7 @@ public class Crawler {
         }
         }));
         this.matchHandler = matchHandler;
+        this.match = match;
     }
 
     /**
@@ -40,7 +42,7 @@ public class Crawler {
      */
     public void search(String link, int deep) {
         log.debug("search({})", link);
-        Task task = new Task(this, link, ++deep);
+        Task task = new Task(this, link, ++deep, match);
         this.executor.execute(task);
     }
 
@@ -59,8 +61,9 @@ public class Crawler {
         ClientResponse response = webResource.get(ClientResponse.class);
 
         if (response.getStatus() != 200) {
-            throw new RuntimeException(
-                "Failed : HTTP error code : " + response.getStatus() + ", url:" + url);
+            //throw new RuntimeException(
+             //   "Failed : HTTP error code : " + response.getStatus() + ", url:" + url);
+             log.error("Failed : HTTP error code : " + response.getStatus() + ", url:" + url);
         }
 
         String output = response.getEntity(String.class);

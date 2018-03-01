@@ -1,5 +1,9 @@
 package frido.mvnrepo.indexer;
 
+
+import java.util.ArrayList;
+import java.util.List;
+
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientURI;
 import com.mongodb.client.MongoDatabase;
@@ -18,5 +22,9 @@ public class Mongo {
     public Document save(String collection, Document doc) {
         db.getCollection(collection).insertOne(doc);
         return doc;
+    }
+
+    public Iterable<Document> getAll(String collection) {
+        return db.getCollection(collection).find();
     }
 }

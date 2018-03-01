@@ -54,7 +54,7 @@ dependencies {
     compile group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.3'
     compile group: 'ch.qos.logback', name: 'logback-core', version: '1.2.3'
     compile group: 'com.logentries', name: 'logentries-appender', version: '1.1.38'
-    //compile group: 'org.apache.maven', name: 'maven-model', version: '3.5.0'
+    compile group: 'org.apache.maven', name: 'maven-model', version: '3.5.2'
     compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.9.4'
     compile group: 'org.json', name: 'json', version: '20180130'
 
@@ -67,7 +67,7 @@ dependencies {
 }
 
 // Define the main class for the application
-mainClassName = "frido.mvnrepo.indexer.App"
+mainClassName = "frido.mvnrepo.indexer.App2"
 
 checkstyle {
     toolVersion='8.8'

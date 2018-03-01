@@ -15,15 +15,17 @@ public class Task implements Runnable {
     private static String PATTERN = "<a href=\"(.*?)\"";
     private static Pattern p = Pattern.compile(PATTERN);
     private int deep = 0;
+    private String premenna;
 
     private Crawler ctx;
     private String url;
 
-    Task(Crawler context, String link, int deep) {
+    Task(Crawler context, String link, int deep, String match) {
         log.trace("Task({})", link);
         this.ctx = context;
         this.url = link;
-        this.deep = deep;
+        this.deep = deep; //TODO: I can calculate deep
+        this.premenna = match;
     }
 
     public int getDeep(){
@@ -38,11 +40,12 @@ public class Task implements Runnable {
     @Override
     public void run() {
         log.debug("run({})", this.url);
-        String content = download(this.url);
-        List<String> links = getLinks(content);
-        for (String link : links) {
-            doNext(link);
-        }
+        doNext(this.url);
+        // String content = download(this.url);
+        // List<String> links = getLinks(content);
+        // for (String link : links) {
+        //     doNext(link);
+        // }
     }
 
     /**
@@ -73,7 +76,7 @@ public class Task implements Runnable {
     private void doNext(String link) {
         log.trace("doNext({}})", link);
         if (isValidLink(link)) {
-            if (link.endsWith("maven-metadata.xml")) { //TODO: configurable search string
+            if (link.endsWith(premenna)) { //TODO: configurable search string
                 this.ctx.match(link);
             }
             if (link.endsWith("/")) {
@@ -96,7 +99,7 @@ public class Task implements Runnable {
         if (link.endsWith("../")) {
             return false;
         }
-        if (link.endsWith("maven-metadata.xml") || url.endsWith("/")) { //TODO: configurable search string
+        if (link.endsWith(premenna) || url.endsWith("/")) { //TODO: configurable search string
             return true;
         } 
         return false;

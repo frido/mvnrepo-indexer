@@ -64,6 +64,7 @@ public class Metadata {
             }
             versioningDoc.put("versions", versions);
         }
+        //TODO: set default version the first/last one from list if version is empty
         out.put("versioning", versioningDoc);
         return out;
     }

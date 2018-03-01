@@ -33,7 +33,7 @@ public class App implements MatchHandler {
      */
     public static void main(String[] args) {
         App app = new App();
-        Crawler crawler = new Crawler(app);
+        Crawler crawler = new Crawler("maven-metadata.xml", app);
         crawler.search("http://central.maven.org/maven2/", 0);//TODO: configurable
         //TODO: remove 0 parameter
     }
