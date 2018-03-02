@@ -67,7 +67,7 @@ dependencies {
 }
 
 // Define the main class for the application
-mainClassName = "frido.mvnrepo.indexer.App2"
+mainClassName = "frido.mvnrepo.indexer.App3"
 
 checkstyle {
     toolVersion='8.8'
