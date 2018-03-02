@@ -7,6 +7,7 @@ import java.util.List;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientURI;
 import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.model.UpdateOptions;
 
 import org.bson.Document;
 
@@ -26,5 +27,11 @@ public class Mongo {
 
     public Iterable<Document> getAll(String collection) {
         return db.getCollection(collection).find();
+    }
+
+    public void update(String collection, Document oldOne, Document newOne){
+        UpdateOptions uo = new UpdateOptions();
+        uo.upsert(true);
+        db.getCollection(collection).replaceOne(oldOne, newOne, uo);
     }
 }

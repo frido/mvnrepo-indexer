@@ -13,7 +13,7 @@ public class App implements MatchHandler {
 
     Logger log = LoggerFactory.getLogger(App.class);
     
-    private static final String ENV_MONGO_URL = "MONGO_URL";
+    public static final String ENV_MONGO_URL = "MONGO_URL";
     
     private Mongo mongo;
 
@@ -24,7 +24,7 @@ public class App implements MatchHandler {
     }
 
     public App(){
-        String connectionString = getProperties().get(ENV_MONGO_URL);
+        String connectionString = getProperties().get(App.ENV_MONGO_URL);
         this.mongo = new Mongo(connectionString);
     }
 
