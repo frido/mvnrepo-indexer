@@ -10,6 +10,7 @@ import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.UpdateOptions;
 
 import org.bson.Document;
+import org.bson.conversions.Bson;
 
 public class Mongo {
     private MongoDatabase db;
@@ -27,6 +28,15 @@ public class Mongo {
 
     public Iterable<Document> getAll(String collection) {
         return db.getCollection(collection).find();
+    }
+
+    public Iterable<Document> getGitHubRelated(){
+        Document filter = new Document();
+        Document regex = new Document();
+        regex.put("$regex", "^https://github.com/.+?/.+");
+        regex.put("$options", "i");
+        filter.put("projectUrl", regex);
+		return db.getCollection("metadata").find(filter);
     }
 
     public void update(String collection, Document oldOne, Document newOne){

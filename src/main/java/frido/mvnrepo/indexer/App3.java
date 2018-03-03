@@ -43,11 +43,11 @@ public class App3 {
 
     public void run(){
         GitHubLoader loader = new GitHubLoader();
-        loader.start("gitHubLink");
-        // Downloader downloader = new Downloader();
-        // this.mongo.getAll("metadata").forEach(doc -> {
-        //     downloader.start(doc);
-        // });
+        this.mongo.getGitHubRelated().forEach(doc -> {
+            loader.start(doc.getString("projectUrl"));
+        });
+        // Document doc = this.mongo.getGitHubRelated().iterator().next();
+        // loader.start(doc.getString("projectUrl"));
     }
 
     

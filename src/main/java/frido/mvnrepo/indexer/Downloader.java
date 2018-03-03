@@ -24,7 +24,7 @@ public class Downloader{
     public Downloader(){
         this.executor = Executors.newFixedThreadPool(2);
         String connectionString = getProperties().get(App.ENV_MONGO_URL);
-        this.mongo = new Mongo(connectionString);
+        this.mongo = new Mongo(connectionString); // TODO: there should be only one Mongo for all application
     }
 
     public void start(Document metadata){
