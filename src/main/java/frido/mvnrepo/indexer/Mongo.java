@@ -1,16 +1,13 @@
 package frido.mvnrepo.indexer;
 
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientURI;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.UpdateOptions;
+import com.mongodb.client.result.UpdateResult;
 
 import org.bson.Document;
-import org.bson.conversions.Bson;
 
 public class Mongo {
     private MongoDatabase db;
@@ -30,6 +27,7 @@ public class Mongo {
         return db.getCollection(collection).find();
     }
 
+    // TODO: group by
     public Iterable<Document> getGitHubRelated(){
         Document filter = new Document();
         Document regex = new Document();
@@ -39,9 +37,10 @@ public class Mongo {
 		return db.getCollection("metadata").find(filter);
     }
 
-    public void update(String collection, Document oldOne, Document newOne){
+    public void update(String collection, Document query, Document newOne){
         UpdateOptions uo = new UpdateOptions();
         uo.upsert(true);
-        db.getCollection(collection).replaceOne(oldOne, newOne, uo);
+        UpdateResult result = db.getCollection(collection).replaceOne(query, newOne, uo);
+        System.out.println(result.getMatchedCount() + " - " + result.getModifiedCount() + " - " + result.getUpsertedId());
     }
 }

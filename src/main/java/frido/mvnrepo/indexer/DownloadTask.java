@@ -1,9 +1,5 @@
 package frido.mvnrepo.indexer;
 
-import com.sun.jersey.api.client.Client;
-import com.sun.jersey.api.client.ClientResponse;
-import com.sun.jersey.api.client.WebResource;
-
 import org.bson.Document;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,7 +11,7 @@ public class DownloadTask implements Runnable {
     private Document metadata;
     private Downloader ctx;
 
-    public DownloadTask(Document metadata, Downloader ctx) {
+    public DownloadTask(Downloader ctx, Document metadata) {
         this.metadata = metadata;
         this.ctx = ctx;
     }
@@ -24,19 +20,16 @@ public class DownloadTask implements Runnable {
     public void run() {
         try {
             String link = generateLink(this.metadata);
-            String content = download(link);
-            PomToJson converter = new PomToJson();
-            Document json = converter.toJsonMain(content); // TODO: better function name7
-            String url = json.getString("Url"); //TODO: Optional
-            if (url != null) {
-                this.ctx.notify(this.metadata, url);
-            }
+            String content = this.ctx.download(link);
+            this.ctx.notify(content);
         } catch (Exception e) {
             log.error(e.getMessage());
             e.printStackTrace();
         }
     }
 
+    // TODO: existuju duplicitne metadata vid http://central.maven.org/maven2/antlr/antlr/
+    // TODO: najst sposob ako ich ignorovat
     private String generateLink(Document doc) throws Exception { //TODO: input groupId, arch... instead of Document
         String groupId = doc.getString("groupId");
         String artifactId = doc.getString("artifactId");
@@ -44,25 +37,9 @@ public class DownloadTask implements Runnable {
         if (groupId == null || artifactId == null || version == null) {
             throw new Exception("Wrong metadata: " + doc);
         }
+        // TODO: base url configurable
         return "http://central.maven.org/maven2/" + groupId.replace(".", "/") + "/" + artifactId + "/" + version + "/"
                 + artifactId + "-" + version + ".pom";
-    }
-
-    //TODO: duplicitny kod z crawler-a
-    private String download(String url) throws Exception {
-        log.debug("download({})", url);
-        Client client = Client.create();
-        WebResource webResource = client.resource(url);
-        ClientResponse response = webResource.get(ClientResponse.class);
-
-        if (response.getStatus() != 200) {
-            //throw new RuntimeException(
-            //   "Failed : HTTP error code : " + response.getStatus() + ", url:" + url);
-            throw new Exception("Failed : HTTP error code : " + response.getStatus() + ", url:" + url);
-        }
-
-        String output = response.getEntity(String.class);
-        return output;
     }
 
 }

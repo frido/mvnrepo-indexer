@@ -2,10 +2,10 @@ package frido.mvnrepo.indexer;
 
 import java.util.HashSet;
 import java.util.Map;
-import java.util.Optional;
 import java.util.Set;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
-import org.bson.Document;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -16,41 +16,14 @@ public class App3 {
 
     Logger log = LoggerFactory.getLogger(App3.class);
     
-    private static final String ENV_MONGO_URL = "MONGO_URL";
-    
-    private Mongo mongo;
-
-    private Set<String> projectLinks = new HashSet<String>();
-
-    //TODO: file properties, env, params?
-    private Map<String, String> getProperties(){
-        Map<String, String> env = System.getenv();
-        return env;
-    }
-
-    public App3(){
-        String connectionString = getProperties().get(ENV_MONGO_URL);
-        this.mongo = new Mongo(connectionString);
-    }
-
-    /** 
-     * Run main application.
-     */
     public static void main(String[] args) {
-        App3 app = new App3();
-        app.run();
-    }
-
-    public void run(){
-        GitHubLoader loader = new GitHubLoader();
-        this.mongo.getGitHubRelated().forEach(doc -> {
+        Executor executor = Executors.newFixedThreadPool(5); 
+        Database database = new MongoDatabase(); 
+        Consumer consumer = new GitHubHandler(database); 
+        HttpClient httpClient = new JerseyHttpClient("frido", System.getenv().get("GITHUB_KEY") );   
+        GitHubLoader loader = new GitHubLoader(executor, consumer, httpClient);
+        database.getGitHubRelated().forEach(doc -> {
             loader.start(doc.getString("projectUrl"));
         });
-        // Document doc = this.mongo.getGitHubRelated().iterator().next();
-        // loader.start(doc.getString("projectUrl"));
     }
-
-    
-
-	
 }

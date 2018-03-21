@@ -8,28 +8,36 @@ import java.util.regex.Pattern;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class Task implements Runnable {
+public class Task implements Runnable, Prioritable {
 
     Logger log = LoggerFactory.getLogger(Task.class);
 
     private static String PATTERN = "<a href=\"(.*?)\"";
     private static Pattern p = Pattern.compile(PATTERN);
-    private int deep = 0;
-    private String premenna;
+    private int priority = 0;
 
     private Crawler ctx;
     private String url;
 
-    Task(Crawler context, String link, int deep, String match) {
-        log.trace("Task({})", link);
+    public Task(Crawler context, String link) {
+        log.trace("Task: {}", link);
         this.ctx = context;
         this.url = link;
-        this.deep = deep; //TODO: I can calculate deep
-        this.premenna = match;
+        this.priority = calculatePriority(link);
     }
 
-    public int getDeep(){
-        return this.deep;
+    private int calculatePriority(String link){
+        int count = 0;
+        for (char ch : link.toCharArray()) {
+            if(ch == '/'){
+                count++;
+            }
+        }
+        return count;
+    }
+
+    public int getPriority(){
+        return this.priority;
     }
 
     /**
@@ -39,28 +47,19 @@ public class Task implements Runnable {
      */
     @Override
     public void run() {
-        log.debug("run({})", this.url);
-        doNext(this.url);
-        // String content = download(this.url);
-        // List<String> links = getLinks(content);
-        // for (String link : links) {
-        //     doNext(link);
-        // }
-    }
-
-    /**
-     * Use http client to download url content.
-     */
-    private String download(String link) {
-        log.trace("download{})", link);
-        return this.ctx.download(link);
+        log.trace("run: {}", this.url);
+        String content = this.ctx.download(this.url);
+        List<String> links = getLinks(content);
+        for (String link : links) {
+            doNext(link);
+        }
     }
 
     /**
      * Search for links in text.
      */
     private List<String> getLinks(String text) {
-        log.trace("getLinks(%s)", text);
+        log.trace("getLinks: {}", text);
         List<String> links = new LinkedList<String>();
         Matcher m = p.matcher(text);
         while (m.find()) {
@@ -74,13 +73,13 @@ public class Task implements Runnable {
      * Process next step with finded links.
      */
     private void doNext(String link) {
-        log.trace("doNext({}})", link);
+        log.trace("doNext: {}", link);
         if (isValidLink(link)) {
-            if (link.endsWith(premenna)) { //TODO: configurable search string
+            if (link.endsWith(this.ctx.getPattern())) {
                 this.ctx.match(link);
             }
             if (link.endsWith("/")) {
-                this.ctx.search(link, deep);
+                this.ctx.search(link);
             }
         }
     }
@@ -90,16 +89,10 @@ public class Task implements Runnable {
      */
     public boolean isValidLink(String link) {
         log.trace("isValidLink(%s)", link);
-        // if (link.endsWith(".html") || link.endsWith(".xhtml") || link.endsWith(".pom") || link.endsWith("../")
-        //         || link.endsWith(".jar") || link.endsWith(".gz") || link.endsWith(".zip") || link.endsWith(".asc")
-        //         || link.endsWith(".md5") || link.endsWith(".sha1")) {
-        //     return false;
-        // }
-        // return true;
         if (link.endsWith("../")) {
             return false;
         }
-        if (link.endsWith(premenna) || url.endsWith("/")) { //TODO: configurable search string
+        if (link.endsWith(this.ctx.getPattern()) || url.endsWith("/")) {
             return true;
         } 
         return false;
@@ -109,7 +102,7 @@ public class Task implements Runnable {
      * Join base url and link to full url path.
      */
     private String getFullUrl(String url, String link) {
-        log.trace("getFullUrl(%s + %s)", url, link);
+        log.trace("getFullUrl: {}, {})", url, link);
         if (link.startsWith("https://") || link.startsWith("http://")) {
             return link;
         }

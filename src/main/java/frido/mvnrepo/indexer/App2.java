@@ -1,11 +1,8 @@
 package frido.mvnrepo.indexer;
 
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
-import org.bson.Document;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -16,40 +13,14 @@ public class App2 {
 
     Logger log = LoggerFactory.getLogger(App2.class);
     
-    private static final String ENV_MONGO_URL = "MONGO_URL";
-    
-    private Mongo mongo;
-
-    private Set<String> projectLinks = new HashSet<String>();
-
-    //TODO: file properties, env, params?
-    private Map<String, String> getProperties(){
-        Map<String, String> env = System.getenv();
-        return env;
-    }
-
-    public App2(){
-        String connectionString = getProperties().get(ENV_MONGO_URL);
-        this.mongo = new Mongo(connectionString);
-    }
-
-    /** 
-     * Run main application.
-     */
     public static void main(String[] args) {
-        App2 app = new App2();
-        app.run();
-    }
-
-    static int counter = 0; // TODO:delete
-    public void run(){
-        Downloader downloader = new Downloader();
-        this.mongo.getAll("metadata").forEach(doc -> {
+        Database database = new MongoDatabase();
+        Executor executor = Executors.newFixedThreadPool(2);
+        HttpClient httpClient = new JerseyHttpClient();
+        Consumer pomHandler = new PomHandler(database);
+        Downloader downloader = new Downloader(executor, httpClient, pomHandler);
+        database.getAll("metadata").forEach(doc -> {
             downloader.start(doc);
         });
     }
-
-    
-
-	
 }

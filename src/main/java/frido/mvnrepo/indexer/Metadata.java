@@ -15,6 +15,7 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
+// TODO: adapter pattern for conversion from xml to json?
 public class Metadata {
     /**
      * Parse metadata Json from content.
@@ -38,6 +39,7 @@ public class Metadata {
         doc.getDocumentElement().normalize();
         org.bson.Document out = new org.bson.Document();
 
+        // TODO: field names as constants
         NodeList metadata = doc.getElementsByTagName("metadata");
         for (int i = 0; i < metadata.getLength(); i++) {
             Element element = (Element) metadata.item(i);

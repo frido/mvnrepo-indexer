@@ -1,17 +1,50 @@
 package frido.mvnrepo.indexer;
 
-import org.apache.maven.model.*;
-import org.apache.maven.model.io.xpp3.MavenXpp3Reader;
-import org.bson.Document;
-import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
-
 import java.io.ByteArrayInputStream;
-import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
+
+import org.apache.maven.model.Activation;
+import org.apache.maven.model.ActivationFile;
+import org.apache.maven.model.ActivationOS;
+import org.apache.maven.model.ActivationProperty;
+import org.apache.maven.model.Build;
+import org.apache.maven.model.BuildBase;
+import org.apache.maven.model.CiManagement;
+import org.apache.maven.model.Contributor;
+import org.apache.maven.model.Dependency;
+import org.apache.maven.model.DependencyManagement;
+import org.apache.maven.model.Developer;
+import org.apache.maven.model.DistributionManagement;
+import org.apache.maven.model.Exclusion;
+import org.apache.maven.model.Extension;
+import org.apache.maven.model.IssueManagement;
+import org.apache.maven.model.License;
+import org.apache.maven.model.MailingList;
+import org.apache.maven.model.Model;
+import org.apache.maven.model.Notifier;
+import org.apache.maven.model.Organization;
+import org.apache.maven.model.Parent;
+import org.apache.maven.model.Plugin;
+import org.apache.maven.model.PluginExecution;
+import org.apache.maven.model.PluginManagement;
+import org.apache.maven.model.Prerequisites;
+import org.apache.maven.model.Profile;
+import org.apache.maven.model.Relocation;
+import org.apache.maven.model.ReportPlugin;
+import org.apache.maven.model.ReportSet;
+import org.apache.maven.model.Reporting;
+import org.apache.maven.model.Repository;
+import org.apache.maven.model.RepositoryPolicy;
+import org.apache.maven.model.Resource;
+import org.apache.maven.model.Scm;
+import org.apache.maven.model.Site;
+import org.apache.maven.model.io.xpp3.MavenXpp3Reader;
+import org.bson.Document;
+import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 
 public class PomToJson {
 
