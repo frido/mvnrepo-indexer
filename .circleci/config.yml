@@ -44,4 +44,5 @@ jobs:
       - store_test_results:
           path: build/test-results/test
 
-      - run: gradle run
+      - run: gradle fatJar
+      - run: java -jar build/libs/mvnrepo-indexer-all.jar
