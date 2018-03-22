@@ -23,11 +23,11 @@ class StoreMatchHandler implements CrawlerMatchHandler {
             .append("groupId", doc.getString("groupId"))
             .append("artifactId", doc.getString("artifactId"))
             .append("version", doc.getString("version"));
-        log.info("match: {}", doc);
+        log.trace("match: {}", doc);
         String[] linkParts = link.split("/");
         String artifactId = Arrays.asList(linkParts).get(linkParts.length - 2);
         if(!artifactId.equals(doc.getString("artifactId"))){
-            System.out.println(".....:"+artifactId+"::"+doc.getString("artifactId"));
+            //System.out.println(".....:"+artifactId+"::"+doc.getString("artifactId"));
         }else{
             this.db.update("metadata", query, doc);	
         }

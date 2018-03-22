@@ -41,6 +41,6 @@ public class Mongo {
         UpdateOptions uo = new UpdateOptions();
         uo.upsert(true);
         UpdateResult result = db.getCollection(collection).replaceOne(query, newOne, uo);
-        System.out.println(result.getMatchedCount() + " - " + result.getModifiedCount() + " - " + result.getUpsertedId());
+        System.out.println(newOne.toString());
     }
 }
