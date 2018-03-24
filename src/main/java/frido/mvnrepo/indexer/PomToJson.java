@@ -46,6 +46,7 @@ import org.apache.maven.model.io.xpp3.MavenXpp3Reader;
 import org.bson.Document;
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 
+// TODO: bad class, wrong name, static
 public class PomToJson {
 
     public Document toJsonMain(String content) {

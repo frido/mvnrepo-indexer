@@ -7,6 +7,7 @@ class MongoDatabase implements Database {
     private static final String ENV_MONGO_URL = "MONGO_URL";
     private Mongo mongo;
 
+    // Merge with Mongo class
     public MongoDatabase() {
         String connectionString = System.getenv().get(ENV_MONGO_URL);
         this.mongo = new Mongo(connectionString);

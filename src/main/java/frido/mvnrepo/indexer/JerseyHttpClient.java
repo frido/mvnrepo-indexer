@@ -39,12 +39,13 @@ public class JerseyHttpClient implements HttpClient {
         return output;
     }
 
+    // https://api.github.com/graphql
     @Override
-    public String callGitHub(String query) throws Exception {
+    public String post(String url, String query) throws Exception {
         log.debug("download: {}-{}", user, pwd);
         Client client = Client.create();
         client.addFilter(new HTTPBasicAuthFilter(this.user, this.pwd));
-        WebResource webResource = client.resource("https://api.github.com/graphql");
+        WebResource webResource = client.resource(url);
         ClientResponse response = webResource.post(ClientResponse.class, query);
         if (response.getStatus() != 200) {
             throw new Exception(

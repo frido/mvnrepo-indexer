@@ -5,11 +5,15 @@ import com.mongodb.MongoClient;
 import com.mongodb.MongoClientURI;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.UpdateOptions;
-import com.mongodb.client.result.UpdateResult;
 
 import org.bson.Document;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class Mongo {
+
+    Logger log = LoggerFactory.getLogger(Mongo.class);
+
     private MongoDatabase db;
 
     public Mongo(String connectionString){
@@ -37,10 +41,11 @@ public class Mongo {
 		return db.getCollection("metadata").find(filter);
     }
 
+    // TODO: test na toto
     public void update(String collection, Document query, Document newOne){
+        log.trace("update: {}", newOne);
         UpdateOptions uo = new UpdateOptions();
         uo.upsert(true);
-        UpdateResult result = db.getCollection(collection).replaceOne(query, newOne, uo);
-        System.out.println(newOne.toString());
+        db.getCollection(collection).replaceOne(query, newOne, uo);
     }
 }

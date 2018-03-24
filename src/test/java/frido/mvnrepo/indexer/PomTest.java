@@ -15,14 +15,14 @@ public class PomTest {
     Logger log = LoggerFactory.getLogger(PomTest.class);
 
     @Test
-    public void testDownloader() {
-        Executor executor = new DummyExecutor();
-        HttpClient httpClient = new JerseyHttpClient();
+    public void testDownloader() throws Exception {
+        Executor executor = new NoThreadExecutor();
+        UrlClient httpClient = new UrlClient(new JerseyHttpClient());
         DummyPomHandler pomHandler = new DummyPomHandler();
         Downloader downloader = new Downloader(executor, httpClient, pomHandler);
         Document metadata = new Document().append("groupId", "antlr").append("artifactId", "antlr").append("version",
                 "2.7.1");
-        downloader.start(metadata);
+        downloader.start(new Artifact(metadata).getPomUrl());
         assertTrue(pomHandler.getContent().contains("<groupId>antlr</groupId>"));
         PomToJson converter = new PomToJson();
         Document pomJson = converter.toJsonMain(pomHandler.getContent());

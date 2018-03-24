@@ -1,15 +1,17 @@
 package frido.mvnrepo.indexer;
 
-import java.io.IOException;
 import java.util.HashMap;
 
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.bson.Document;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class DummyGitHubHandler implements Consumer {
+
+    Logger log = LoggerFactory.getLogger(DummyGitHubHandler.class);
 
     private Document response;
 
@@ -19,19 +21,12 @@ public class DummyGitHubHandler implements Consumer {
 	@Override
 	public void notify(String content) {
 		try {
-            HashMap<String, Object> result = new ObjectMapper().readValue(content, HashMap.class);
-            HashMap<String, Object> data = (HashMap<String, Object>) result.get("data");
+            HashMap<String, HashMap<String, HashMap<String, Object>>> result = new ObjectMapper().readValue(content, new TypeReference<HashMap<String, Object>>() {});
+            HashMap<String, HashMap<String, Object>> data = (HashMap<String, HashMap<String, Object>>) result.get("data");
             HashMap<String, Object> repository = (HashMap<String, Object>) data.get("repository");
-            this.response = new Document(repository);
-        } catch (JsonParseException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (JsonMappingException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            response = new Document(repository);
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
         }
     }
     

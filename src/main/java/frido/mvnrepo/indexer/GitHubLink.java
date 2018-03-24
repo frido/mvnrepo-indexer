@@ -3,10 +3,8 @@ package frido.mvnrepo.indexer;
 public class GitHubLink {
     private String owner;
     private String repo;
-    private String url;
 
     public GitHubLink(String url){
-        this.url = url;
         String link1 = url + "/";
         String part1 = link1.substring("https://github.com/".length()); // TODO: make it constant
         this.owner = part1.substring(0, part1.indexOf("/"));

@@ -3,6 +3,7 @@ package frido.mvnrepo.indexer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+// TODO: remove
 public class GitHubLoaderTask implements Runnable {
 
     Logger log = LoggerFactory.getLogger(GitHubLoaderTask.class);

@@ -11,16 +11,23 @@ import org.slf4j.LoggerFactory;
  */
 public class App2 {
 
-    Logger log = LoggerFactory.getLogger(App2.class);
+    static Logger log = LoggerFactory.getLogger(App2.class);
     
     public static void main(String[] args) {
         Database database = new MongoDatabase();
         Executor executor = Executors.newFixedThreadPool(2);
-        HttpClient httpClient = new JerseyHttpClient();
+        Client httpClient = new UrlClient(new JerseyHttpClient());
         Consumer pomHandler = new PomHandler(database);
         Downloader downloader = new Downloader(executor, httpClient, pomHandler);
-        database.getAll("metadata").forEach(doc -> {
-            downloader.start(doc);
+        database.getAll("metadata").forEach(metadata -> {
+			try { // TODO: not everything in try
+                String pomUrl;
+                pomUrl = new Artifact(metadata).getPomUrl();
+                downloader.start(pomUrl);
+			} catch (Exception e) {
+                log.error("Artifact - PomUrl", e);
+			}
+            
         });
     }
 }

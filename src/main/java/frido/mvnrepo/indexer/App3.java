@@ -1,8 +1,5 @@
 package frido.mvnrepo.indexer;
 
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
@@ -15,12 +12,12 @@ import org.slf4j.LoggerFactory;
 public class App3 {
 
     Logger log = LoggerFactory.getLogger(App3.class);
-    
+
     public static void main(String[] args) {
-        Executor executor = Executors.newFixedThreadPool(5); 
-        Database database = new MongoDatabase(); 
-        Consumer consumer = new GitHubHandler(database); 
-        HttpClient httpClient = new JerseyHttpClient("frido", System.getenv().get("GITHUB_KEY") );   
+        Executor executor = Executors.newFixedThreadPool(5);
+        Database database = new MongoDatabase();
+        Consumer consumer = new GitHubHandler(database);
+        Client httpClient = new GitHubClient(new JerseyHttpClient("frido", System.getenv().get("GITHUB_KEY")));
         GitHubLoader loader = new GitHubLoader(executor, consumer, httpClient);
         database.getGitHubRelated().forEach(doc -> {
             loader.start(doc.getString("projectUrl"));

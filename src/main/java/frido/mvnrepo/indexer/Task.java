@@ -26,17 +26,17 @@ public class Task implements Runnable, Prioritable {
         this.priority = calculatePriority(link);
     }
 
-    private int calculatePriority(String link){
+    private int calculatePriority(String link) {
         int count = 0;
         for (char ch : link.toCharArray()) {
-            if(ch == '/'){
+            if (ch == '/') {
                 count++;
             }
         }
         return count;
     }
 
-    public int getPriority(){
+    public int getPriority() {
         return this.priority;
     }
 
@@ -48,10 +48,14 @@ public class Task implements Runnable, Prioritable {
     @Override
     public void run() {
         log.trace("run: {}", this.url);
-        String content = this.ctx.download(this.url);
-        List<String> links = getLinks(content);
-        for (String link : links) {
-            doNext(link);
+        try {
+            String content = this.ctx.download(this.url);
+            List<String> links = getLinks(content);
+            for (String link : links) {
+                doNext(link);
+            }
+        } catch (Exception e) {
+            log.error("Crawler - Task - Error", e);
         }
     }
 
@@ -94,7 +98,7 @@ public class Task implements Runnable, Prioritable {
         }
         if (link.endsWith(this.ctx.getPattern()) || url.endsWith("/")) {
             return true;
-        } 
+        }
         return false;
     }
 
