@@ -22,7 +22,6 @@ public class MetadataTest {
 
     @Test
     public void testTaskPriority() {
-        //assertNotNull("app should have a greeting", "app should have a greeting");
         CrawlerMatchHandler matchHandler = new DummyMatchHandler();
         Executor executor = new NoThreadExecutor();
         HttpClient httpClient = new JerseyHttpClient();
@@ -46,7 +45,6 @@ public class MetadataTest {
     public void testMetadata() throws IOException {
         String fileName = ClassLoader.getSystemResource("maven-metadata.xml").getFile();
         String content = new String(Files.readAllBytes(new File(fileName).toPath()));
-        System.out.println(content);
         Document result = Metadata.valueOf(content);
         assertEquals("abbot", result.getString("groupId"));
         assertEquals("abbot", result.getString("artifactId"));
@@ -59,8 +57,6 @@ public class MetadataTest {
         for (String version : versionsBson) {
             versions.add(version);
         }
-        ;
         assertArrayEquals(Arrays.asList("0.12.3", "0.13.0", "1.4.0").toArray(), versions.toArray());
-        log.info("testMetadata: {}", result);
     }
 }

@@ -26,7 +26,6 @@ public class PomTest {
         assertTrue(pomHandler.getContent().contains("<groupId>antlr</groupId>"));
         PomToJson converter = new PomToJson();
         Document pomJson = converter.toJsonMain(pomHandler.getContent());
-        System.out.println(pomJson);
         assertEquals("antlr", pomJson.getString("GroupId"));
         assertEquals("antlr", pomJson.getString("ArtifactId"));
         assertEquals("2.7.1", pomJson.getString("Version"));

@@ -5,7 +5,7 @@ import org.slf4j.LoggerFactory;
 
 public class GitHubClient implements Client {
 
-    Logger log = LoggerFactory.getLogger(GitHubHandler.class);
+    Logger log = LoggerFactory.getLogger(GitHubClient.class);
 
     private HttpClient client;
 

@@ -22,12 +22,13 @@ public class GitHubTest {
     public void testDownloader() {
         DummyGitHubHandler consumer = new DummyGitHubHandler();
         Executor executor = new NoThreadExecutor();
-        Client httpClient = new GitHubClient(new JerseyHttpClient("frido", System.getenv().get("GITHUB_KEY")));
+        Client httpClient = new GitHubClient(
+            new JerseyHttpClient("frido", System.getenv().get("GITHUB_KEY")));
         //GitHubLoader loader = new GitHubLoader(executor, consumer, httpClient);
         Downloader loader = new Downloader(executor, httpClient, consumer);
-        loader.start("https://github.com/frido/mvnrepo");
+        loader.start("https://github.com/frido/flowable");
         assertEquals(
-                "Document{{owner={login=frido}, name=mvnrepo, createdAt=2017-04-13T08:04:12Z, description=null, homepageUrl=null, pushedAt=2018-03-23T09:06:59Z, stargazers={totalCount=1}, watchers={totalCount=1}, forks={totalCount=0}}}",
+                "Document{{owner={login=frido}, name=flowable, createdAt=2017-05-06T09:52:29Z, description=null, homepageUrl=null, pushedAt=2017-05-06T09:52:29Z, stargazers={totalCount=0}, watchers={totalCount=0}, forks={totalCount=0}}}",
                 consumer.getResponse().toString());
     }
 
@@ -40,7 +41,6 @@ public class GitHubTest {
             list.add(doc);
             set.add(doc.getString("Url"));
         });
-        System.out.println("list.size:" + list.size());
         assertNotEquals(0, list.size());
         assertEquals(list.size(), set.size());
     }
