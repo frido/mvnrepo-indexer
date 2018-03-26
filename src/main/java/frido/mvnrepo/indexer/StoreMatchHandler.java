@@ -27,7 +27,6 @@ class StoreMatchHandler implements CrawlerMatchHandler {
         String[] linkParts = link.split("/");
         String artifactId = Arrays.asList(linkParts).get(linkParts.length - 2);
         if(!artifactId.equals(doc.getString("artifactId"))){
-            //System.out.println(".....:"+artifactId+"::"+doc.getString("artifactId"));
         }else{
             this.db.update("metadata", query, doc);	
         }
