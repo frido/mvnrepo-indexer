@@ -1,5 +1,7 @@
 package frido.mvnrepo.indexer;
 
+import java.util.Collection;
+
 import org.bson.Document;
 
 class MongoDatabase implements Database {
@@ -24,7 +26,12 @@ class MongoDatabase implements Database {
     }
 
     @Override
-    public Iterable<Document> getGitHubRelated(){
+    public Iterable<Document> getByFilter(String collection, Document filter){
+        return this.mongo.getByFilter(collection, filter);
+    }
+
+    @Override
+    public Collection<Document> getGitHubRelated(){
         return this.mongo.getGitHubRelated();
     }
 

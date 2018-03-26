@@ -1,8 +1,10 @@
 package frido.mvnrepo.indexer;
 
-import java.util.concurrent.Executor;
+import java.util.Collection;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import org.bson.Document;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -14,13 +16,14 @@ public class App3 {
     Logger log = LoggerFactory.getLogger(App3.class);
 
     public static void main(String[] args) {
-        Executor executor = Executors.newFixedThreadPool(5);
+        ExecutorService executor = Executors.newFixedThreadPool(5);
         Database database = new MongoDatabase();
-        Consumer consumer = new GitHubHandler(database);
+        Collection<Document> list = database.getGitHubRelated();
+        Consumer consumer = new GitHubHandler(database, executor, list.size());
         Client httpClient = new GitHubClient(new JerseyHttpClient("frido", System.getenv().get("GITHUB_KEY")));
-        GitHubLoader loader = new GitHubLoader(executor, consumer, httpClient);
-        database.getGitHubRelated().forEach(doc -> {
-            loader.start(doc.getString("projectUrl"));
+        Downloader loader = new Downloader(executor, httpClient, consumer);
+        list.forEach(doc -> {
+            loader.start(doc.getString("Url"));
         });
     }
 }

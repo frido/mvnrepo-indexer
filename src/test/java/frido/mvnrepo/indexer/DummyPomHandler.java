@@ -14,6 +14,11 @@ public class DummyPomHandler implements Consumer {
         this.content = content;
     }
 
+    @Override
+    public void error(Throwable e){
+        
+    }
+
     public String getContent(){
         return this.content;
     }

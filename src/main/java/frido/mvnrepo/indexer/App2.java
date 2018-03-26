@@ -1,8 +1,12 @@
 package frido.mvnrepo.indexer;
 
-import java.util.concurrent.Executor;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import org.bson.Document;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -15,19 +19,29 @@ public class App2 {
     
     public static void main(String[] args) {
         Database database = new MongoDatabase();
-        Executor executor = Executors.newFixedThreadPool(2);
+        ExecutorService executor = Executors.newFixedThreadPool(5);
         Client httpClient = new UrlClient(new JerseyHttpClient());
-        Consumer pomHandler = new PomHandler(database);
+        List<Document> metadatas = toList(database.getAll("metadata").iterator());
+        Consumer pomHandler = new PomHandler(database, executor, metadatas.size());
         Downloader downloader = new Downloader(executor, httpClient, pomHandler);
-        database.getAll("metadata").forEach(metadata -> {
-			try { // TODO: not everything in try
-                String pomUrl;
-                pomUrl = new Artifact(metadata).getPomUrl();
-                downloader.start(pomUrl);
-			} catch (Exception e) {
+        for(Document doc : metadatas){
+            String pomUrl = null;
+			try {
+                pomUrl = new Artifact(doc).getPomUrl();
+            } catch (Exception e) {
                 log.error("Artifact - PomUrl", e);
+                pomHandler.error(e);
+                continue;
 			}
-            
-        });
+            downloader.start(pomUrl);
+        }
+    }
+
+    public static List<Document> toList(Iterator<Document> iterator){
+        List<Document> out = new LinkedList<Document>();
+        while(iterator.hasNext()){
+            out.add(iterator.next());
+        }
+        return out;
     }
 }

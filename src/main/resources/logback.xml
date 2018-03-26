@@ -12,7 +12,7 @@
       </encoder>
    </appender>
 
-  <logger name="frido.mvnrepo.indexer.Mongo" level="TRACE"/>
+  <logger name="frido.mvnrepo.indexer.GitHubHandler" level="DEBUG"/>
 
   <root level="INFO">
     <appender-ref ref="STDOUT" />

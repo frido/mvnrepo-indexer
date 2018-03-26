@@ -29,6 +29,11 @@ public class DummyGitHubHandler implements Consumer {
             log.error(e.getMessage(), e);
         }
     }
+
+    @Override
+    public void error(Throwable e){
+        
+    }
     
     public Document getResponse(){
         return this.response;

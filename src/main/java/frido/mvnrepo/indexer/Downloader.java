@@ -20,13 +20,13 @@ public class Downloader{
     }
 
     public void start(String url){
-        //this.executor.execute(new DownloadTask(this, url));
         this.executor.execute( () -> {
             try {
                 String content = this.httpClient.download(url);
                 this.consumer.notify(content);
             } catch (Exception e) {
                 log.error("Downloader - Task - Error", e);
+                this.consumer.error(e);
             }
         });
     }

@@ -18,7 +18,7 @@ class StoreMatchHandler implements CrawlerMatchHandler {
 	@Override
 	public void match(String link, String content) {
         Document doc = Metadata.valueOf(content); // TODO: we dont want static methods???
-        Document query = new Document();
+        Document query = new Document(); // TODO: get query id from Document
         query
             .append("groupId", doc.getString("groupId"))
             .append("artifactId", doc.getString("artifactId"))

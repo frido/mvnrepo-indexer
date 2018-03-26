@@ -1,6 +1,11 @@
 package frido.mvnrepo.indexer;
 
 
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.function.Consumer;
+
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientURI;
 import com.mongodb.client.MongoDatabase;
@@ -16,6 +21,7 @@ public class Mongo {
 
     private MongoDatabase db;
 
+    @SuppressWarnings("resource")
     public Mongo(String connectionString){
         MongoClientURI uri  = new MongoClientURI(connectionString);
         MongoClient client = new MongoClient(uri);
@@ -31,17 +37,29 @@ public class Mongo {
         return db.getCollection(collection).find();
     }
 
-    // TODO: group by
-    public Iterable<Document> getGitHubRelated(){
+    public Iterable<Document> getByFilter(String collection, Document filter) {
+        return db.getCollection(collection).find(filter);
+    }
+
+    public Collection<Document> getGitHubRelated(){
         Document filter = new Document();
         Document regex = new Document();
         regex.put("$regex", "^https://github.com/.+?/.+");
         regex.put("$options", "i");
-        filter.put("projectUrl", regex);
-		return db.getCollection("metadata").find(filter);
+        filter.put("Url", regex);
+        Map<String, Document> hash = new HashMap<>();
+        db.getCollection("pom").find(filter).forEach(new Consumer<Document>() {
+
+			@Override
+			public void accept(Document doc) {
+				hash.put(doc.getString("Url"), doc);
+			}
+        });
+        return hash.values();
+        // TODO: toto neviem spravit v jednom query
+        //return db.getCollection("pom").aggregate(Arrays.asList(filter, Aggregates.group("$Url")));
     }
 
-    // TODO: test na toto
     public void update(String collection, Document query, Document newOne){
         log.trace("update: {}", newOne);
         UpdateOptions uo = new UpdateOptions();

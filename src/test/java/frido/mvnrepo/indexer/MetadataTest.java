@@ -42,12 +42,10 @@ public class MetadataTest {
     }
 
     @Test
+    @SuppressWarnings("unchecked")
     public void testMetadata() throws IOException {
-        // TODO: realy ugly way how to read file
         String fileName = ClassLoader.getSystemResource("maven-metadata.xml").getFile();
-        System.out.println(fileName);
-        File file = new File(fileName);
-        String content = new String(Files.readAllBytes(file.toPath()));
+        String content = new String(Files.readAllBytes(new File(fileName).toPath()));
         System.out.println(content);
         Document result = Metadata.valueOf(content);
         assertEquals("abbot", result.getString("groupId"));
