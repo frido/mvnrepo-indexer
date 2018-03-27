@@ -1,56 +1,106 @@
 package frido.mvnrepo.indexer;
 
-import java.util.concurrent.Executor;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class Crawler {
+public class Crawler implements Consumer {
 
     Logger log = LoggerFactory.getLogger(Crawler.class);
 
-    private Executor executor;
+    private static String PATTERN = "<a href=\"(.*?)\"";
+    private static Pattern p = Pattern.compile(PATTERN);
+
     private CrawlerMatchHandler matchHandler;
     private String pattern;
-    private HttpClient httpClient;
+    Downloader downloader;
 
-    // TODO: Crawler can use Downloader
-    public Crawler(String match, CrawlerMatchHandler matchHandler, Executor executor, HttpClient httpClient) {
-        this.executor = executor;
+    public Crawler(Downloader downloader, String match, CrawlerMatchHandler matchHandler) {
+
         this.matchHandler = matchHandler;
         this.pattern = match;
-        this.httpClient = httpClient;
+        this.downloader = downloader;
     }
 
-    /**
-     * Process link. Download, parse and call crawler for next steps
-     */
     public void search(String link) {
         log.trace("search: {}", link);
-        this.executor.execute(new Task(this, link));
+        downloader.start(link, this);
     }
 
-    /**
-     * Is called when link match pattern
-     */
     public void match(String link) {
         log.trace("match: {}", link);
-        matchHandler.match(link, download(link));
+        this.downloader.start(link, new Consumer() {
+
+            @Override
+            public void notify(String url, String content) {
+                matchHandler.match(url, content);
+            }
+
+            @Override
+            public void error(Throwable e) {
+                log.error("Crawler - Task - Error", e);
+            }
+        });
     }
 
-    /**
-     * Use http client to download url content.
-     */    
-    public String download(String link) {
-        log.trace("download: {}", link);
-        return httpClient.get(link);
+    @Override
+    public void notify(String url, String content) {
+        List<String> links = getLinks(url, content);
+        for (String link : links) {
+            doNext(link);
+        }
     }
 
-    /**
-     * Return pattern to search for
-     */
-    public String getPattern(){
-        return this.pattern;
+    @Override
+    public void error(Throwable e) {
+        log.error("Crawler - Task - Error", e);
+    }
+
+    private List<String> getLinks(String url, String content) {
+        log.trace("getLinks: {}", content);
+        List<String> links = new LinkedList<String>();
+        Matcher m = p.matcher(content);
+        while (m.find()) {
+            String link = getFullUrl(url, m.group(1));
+            links.add(link);
+        }
+        return links;
+    }
+
+    // TODO: join with isValidLink
+    private void doNext(String link) {
+        log.trace("doNext: {}", link);
+        if (isValidLink(link)) {
+            if (link.endsWith(this.pattern)) {
+                this.match(link);
+            }
+            if (link.endsWith("/")) {
+                this.search(link);
+            }
+        }
+    }
+
+    private boolean isValidLink(String link) {
+        log.trace("isValidLink(%s)", link);
+        if (link.endsWith("../")) {
+            return false;
+        }
+        if (link.endsWith(this.pattern) || link.endsWith("/")) {
+            return true;
+        }
+        return false;
+    }
+
+    private String getFullUrl(String url, String link) {
+        log.trace("getFullUrl: {}, {})", url, link);
+        if (link.startsWith("https://") || link.startsWith("http://")) {
+            return link;
+        }
+        return url + link;
     }
 
 }

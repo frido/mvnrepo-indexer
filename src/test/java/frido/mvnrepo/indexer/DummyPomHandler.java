@@ -10,7 +10,7 @@ public class DummyPomHandler implements Consumer {
     private String content;
 
     @Override
-    public void notify(String content) {
+    public void notify(String url, String content) {
         this.content = content;
     }
 

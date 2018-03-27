@@ -1,5 +1,5 @@
 package frido.mvnrepo.indexer;
 
-interface Prioritable{
+interface Prioritable extends Runnable{
     public int getPriority();
 }

@@ -22,7 +22,7 @@ public class PomHandler implements Consumer {
     }
 
     @Override
-    public void notify(String content) {
+    public void notify(String url, String content) {
         try{
         PomToJson converter = new PomToJson();
         Document doc = converter.toJsonMain(content);

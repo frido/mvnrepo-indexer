@@ -67,7 +67,7 @@ dependencies {
 }
 
 // Define the main class for the application
-mainClassName = "frido.mvnrepo.indexer.App3"
+mainClassName = "frido.mvnrepo.indexer.App"
 
 checkstyle {
     toolVersion='8.8'
@@ -84,7 +84,7 @@ tasks.withType(FindBugs) {
 
 task fatJar(type: Jar) {
 	manifest {
-        attributes 'Main-Class': 'frido.mvnrepo.indexer.App3'
+        attributes 'Main-Class': 'frido.mvnrepo.indexer.App'
     }
     baseName = project.name + '-all'
     from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }

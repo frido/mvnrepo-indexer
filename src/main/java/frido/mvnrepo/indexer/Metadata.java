@@ -9,6 +9,8 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -17,6 +19,7 @@ import org.xml.sax.SAXException;
 
 // TODO: adapter pattern for conversion from xml to json?
 public class Metadata {
+    static Logger log = LoggerFactory.getLogger(Metadata.class);
     /**
      * Parse metadata Json from content.
      */
@@ -25,16 +28,16 @@ public class Metadata {
         try {
             docBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
         } catch (ParserConfigurationException e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
         }
         Document doc = null;
         try {
             doc = docBuilder.parse(
                 new InputSource(new ByteArrayInputStream(xml.getBytes("utf-8"))));
         } catch (SAXException e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
         }
         doc.getDocumentElement().normalize();
         org.bson.Document out = new org.bson.Document();

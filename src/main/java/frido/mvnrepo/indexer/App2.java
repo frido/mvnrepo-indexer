@@ -23,7 +23,7 @@ public class App2 {
         Client httpClient = new UrlClient(new JerseyHttpClient());
         List<Document> metadatas = toList(database.getAll("metadata").iterator());
         Consumer pomHandler = new PomHandler(database, executor, metadatas.size());
-        Downloader downloader = new Downloader(executor, httpClient, pomHandler);
+        Downloader downloader = new Downloader(executor, httpClient);
         for(Document doc : metadatas){
             String pomUrl = null;
 			try {
@@ -33,7 +33,7 @@ public class App2 {
                 pomHandler.error(e);
                 continue;
 			}
-            downloader.start(pomUrl);
+            downloader.start(pomUrl, pomHandler);
         }
     }
 

@@ -45,9 +45,13 @@ import org.apache.maven.model.Site;
 import org.apache.maven.model.io.xpp3.MavenXpp3Reader;
 import org.bson.Document;
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 // TODO: bad class, wrong name, static
 public class PomToJson {
+
+    static Logger log = LoggerFactory.getLogger(PomToJson.class);
 
     public Document toJsonMain(String content) {
         MavenXpp3Reader reader = new MavenXpp3Reader();
@@ -55,9 +59,9 @@ public class PomToJson {
         try {
             model = reader.read(new ByteArrayInputStream(content.getBytes(StandardCharsets.UTF_8)));
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
         } catch (XmlPullParserException e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
         }
 
         if(model == null) return null;

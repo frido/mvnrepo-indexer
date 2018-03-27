@@ -25,8 +25,8 @@ public class GitHubTest {
         Client httpClient = new GitHubClient(
             new JerseyHttpClient("frido", System.getenv().get("GITHUB_KEY")));
         //GitHubLoader loader = new GitHubLoader(executor, consumer, httpClient);
-        Downloader loader = new Downloader(executor, httpClient, consumer);
-        loader.start("https://github.com/frido/flowable");
+        Downloader loader = new Downloader(executor, httpClient);
+        loader.start("https://github.com/frido/flowable", consumer);
         assertEquals(
                 "Document{{owner={login=frido}, name=flowable, createdAt=2017-05-06T09:52:29Z, description=null, homepageUrl=null, pushedAt=2017-05-06T09:52:29Z, stargazers={totalCount=0}, watchers={totalCount=0}, forks={totalCount=0}}}",
                 consumer.getResponse().toString());

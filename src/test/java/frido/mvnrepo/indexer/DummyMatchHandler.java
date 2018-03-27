@@ -11,7 +11,7 @@ class DummyMatchHandler implements CrawlerMatchHandler {
 
 	@Override
 	public void match(String link, String content) {
-        log.trace("match: {}", content);
+        log.info("match: {}", link);
         counter++;
     }
     

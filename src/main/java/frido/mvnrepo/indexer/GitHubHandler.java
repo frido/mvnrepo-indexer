@@ -27,7 +27,7 @@ public class GitHubHandler implements Consumer {
     }
 
 	@Override
-	public void notify(String content) {
+	public void notify(String url, String content) {
 		try {
             HashMap<String, HashMap<String, HashMap<String, Object>>> result = new ObjectMapper().readValue(content, new TypeReference<HashMap<String, Object>>() {});
             HashMap<String, HashMap<String, Object>> data = (HashMap<String, HashMap<String, Object>>) result.get("data");

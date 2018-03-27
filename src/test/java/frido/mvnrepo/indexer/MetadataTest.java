@@ -22,20 +22,17 @@ public class MetadataTest {
 
     @Test
     public void testTaskPriority() {
-        CrawlerMatchHandler matchHandler = new DummyMatchHandler();
-        Executor executor = new NoThreadExecutor();
-        HttpClient httpClient = new JerseyHttpClient();
-        Crawler crawler = new Crawler("test", matchHandler, executor, httpClient);
-        Task task = new Task(crawler, "http://central.maven.org/maven2/activemq/activemq/");
+        PrioritableUrlTask task = new PrioritableUrlTask("http://central.maven.org/maven2/activemq/activemq/", null, null);
         assertEquals(6, task.getPriority());
     }
 
     @Test
-    public void testCrawler() {
-        DummyMatchHandler matchHandler = new DummyMatchHandler();
+    public void testCrawler() throws Exception {
         Executor executor = new NoThreadExecutor();
-        HttpClient httpClient = new JerseyHttpClient();
-        Crawler crawler = new Crawler("maven-metadata.xml", matchHandler, executor, httpClient);
+        UrlClient httpClient = new UrlClient(new JerseyHttpClient());
+        DummyMatchHandler matchHandler = new DummyMatchHandler();
+        Downloader downloader = new Downloader(executor, httpClient);
+        Crawler crawler = new Crawler(downloader, "maven-metadata.xml", matchHandler);
         crawler.search("http://central.maven.org/maven2/abbot/");
         assertEquals(4, matchHandler.getCount());
     }

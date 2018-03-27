@@ -5,29 +5,30 @@ import java.util.concurrent.Executor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class Downloader{
+public class Downloader {
 
     Logger log = LoggerFactory.getLogger(Downloader.class);
 
     private Executor executor;
     private Client httpClient;
-    private Consumer consumer;
+    //private Consumer consumer;
 
-    public Downloader(Executor executor, Client httpClient, Consumer consumer){
+    public Downloader(Executor executor, Client httpClient) {
         this.executor = executor;
         this.httpClient = httpClient;
-        this.consumer = consumer;
+        //this.consumer = consumer;
     }
 
-    public void start(String url){
-        this.executor.execute( () -> {
-            try {
-                String content = this.httpClient.download(url);
-                this.consumer.notify(content);
-            } catch (Exception e) {
-                log.error("Downloader - Task - Error", e);
-                this.consumer.error(e);
-            }
-        });
+    public void start(String url, Consumer consumer) {
+        this.executor.execute(new PrioritableUrlTask(url, httpClient, consumer));
+        // this.executor.execute( () -> {
+        //     try {
+        //         String content = this.httpClient.download(url);
+        //         consumer.notify(url, content);
+        //     } catch (Exception e) {
+        //         log.error("Downloader - Task - Error", e);
+        //         consumer.error(e);
+        //     }
+        // });
     }
 }

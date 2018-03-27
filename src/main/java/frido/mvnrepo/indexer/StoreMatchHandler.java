@@ -18,12 +18,12 @@ class StoreMatchHandler implements CrawlerMatchHandler {
 	@Override
 	public void match(String link, String content) {
         Document doc = Metadata.valueOf(content); // TODO: we dont want static methods???
+        log.trace("match: {}", doc);
         Document query = new Document(); // TODO: get query id from Document
         query
             .append("groupId", doc.getString("groupId"))
             .append("artifactId", doc.getString("artifactId"))
             .append("version", doc.getString("version"));
-        log.trace("match: {}", doc);
         String[] linkParts = link.split("/");
         String artifactId = Arrays.asList(linkParts).get(linkParts.length - 2);
         if(!artifactId.equals(doc.getString("artifactId"))){

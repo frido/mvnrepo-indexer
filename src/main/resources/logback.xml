@@ -12,7 +12,7 @@
       </encoder>
    </appender>
 
-  <logger name="frido.mvnrepo.indexer.GitHubHandler" level="DEBUG"/>
+  <logger name="frido.mvnrepo.indexer.StoreMatchHandler" level="TRACE"/>
   <logger name="org.mongodb.driver" level="ERROR"/>
   
 

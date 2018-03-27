@@ -19,10 +19,10 @@ public class PomTest {
         Executor executor = new NoThreadExecutor();
         UrlClient httpClient = new UrlClient(new JerseyHttpClient());
         DummyPomHandler pomHandler = new DummyPomHandler();
-        Downloader downloader = new Downloader(executor, httpClient, pomHandler);
+        Downloader downloader = new Downloader(executor, httpClient);
         Document metadata = new Document().append("groupId", "antlr").append("artifactId", "antlr").append("version",
                 "2.7.1");
-        downloader.start(new Artifact(metadata).getPomUrl());
+        downloader.start(new Artifact(metadata).getPomUrl(), pomHandler);
         assertTrue(pomHandler.getContent().contains("<groupId>antlr</groupId>"));
         PomToJson converter = new PomToJson();
         Document pomJson = converter.toJsonMain(pomHandler.getContent());
