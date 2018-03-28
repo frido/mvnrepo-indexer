@@ -71,28 +71,13 @@ public class Crawler implements Consumer {
         return links;
     }
 
-    // TODO: join with isValidLink
     private void doNext(String link) {
         log.trace("doNext: {}", link);
-        if (isValidLink(link)) {
-            if (link.endsWith(this.pattern)) {
-                this.match(link);
-            }
-            if (link.endsWith("/")) {
-                this.search(link);
-            }
+        if (link.endsWith(this.pattern)) {
+            this.match(link);
+        }else if (link.endsWith("/") && !link.endsWith("../")) {
+            this.search(link);
         }
-    }
-
-    private boolean isValidLink(String link) {
-        log.trace("isValidLink(%s)", link);
-        if (link.endsWith("../")) {
-            return false;
-        }
-        if (link.endsWith(this.pattern) || link.endsWith("/")) {
-            return true;
-        }
-        return false;
     }
 
     private String getFullUrl(String url, String link) {

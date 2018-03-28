@@ -8,8 +8,14 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.Executor;
+
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 
 import org.bson.Document;
 import org.junit.jupiter.api.Test;
@@ -22,7 +28,8 @@ public class MetadataTest {
 
     @Test
     public void testTaskPriority() {
-        PrioritableUrlTask task = new PrioritableUrlTask("http://central.maven.org/maven2/activemq/activemq/", null, null);
+        PrioritableUrlTask task = new PrioritableUrlTask("http://central.maven.org/maven2/activemq/activemq/", null,
+                null);
         assertEquals(6, task.getPriority());
     }
 
@@ -55,5 +62,25 @@ public class MetadataTest {
             versions.add(version);
         }
         assertArrayEquals(Arrays.asList("0.12.3", "0.13.0", "1.4.0").toArray(), versions.toArray());
+    }
+
+    @Test
+    public void testMetadata2() {
+        System.out.println("testMetadata2"); 
+        try{
+        String fileName = ClassLoader.getSystemResource("maven-metadata.xml").getFile();
+        String content = new String(Files.readAllBytes(new File(fileName).toPath()));
+
+        XmlMapper xmlMapper = new XmlMapper();
+        TypeReference<HashMap<String, Object>> typeRef = new TypeReference<HashMap<String, Object>>() {
+        };
+        Map<String, Object> map = xmlMapper.readValue(content, typeRef);
+        System.out.println("testMetadata3");
+        System.out.println(map);
+        System.out.println(new Document( map));
+        System.out.println("testMetadata4");
+    }catch(Exception e){
+        e.printStackTrace();
+    }
     }
 }
