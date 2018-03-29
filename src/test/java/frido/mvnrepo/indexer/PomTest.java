@@ -19,7 +19,7 @@ public class PomTest {
 
     Logger log = LoggerFactory.getLogger(PomTest.class);
 
-    @Test
+    //@Test
     public void testDownloader() throws Exception {
         Executor executor = new NoThreadExecutor();
         UrlClient httpClient = new UrlClient(new JerseyHttpClient());
