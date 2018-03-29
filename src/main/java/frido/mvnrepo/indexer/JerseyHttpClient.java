@@ -12,46 +12,38 @@ public class JerseyHttpClient implements HttpClient {
 
     Logger log = LoggerFactory.getLogger(JerseyHttpClient.class);
 
-    private String user;
-    private String pwd;
+    Client client;
 
     JerseyHttpClient() {
-
+        this.client = Client.create();
     }
 
-    JerseyHttpClient(String user, String pwd) {
-        this.user = user;
-        this.pwd = pwd;
+    JerseyHttpClient(String user, String pwd)  {
+        this();
+        client.addFilter(new HTTPBasicAuthFilter(user, pwd));
     }
 
     @Override
-    public String get(String url) {
+    public String get(String url) throws ClientException {
         log.trace("download: {}", url);
-        Client client = Client.create(); //TODO: dont create cown client for every Task
         WebResource webResource = client.resource(url);
         ClientResponse response = webResource.get(ClientResponse.class);
 
         if (response.getStatus() != 200) {
-            log.error("Failed : HTTP error code : " + response.getStatus() + ", url:" + url);
+            throw new ClientException(url, null, response.getStatus(), response.getEntity(String.class));
         }
 
-        String output = response.getEntity(String.class);
-        return output;
+        return response.getEntity(String.class);
     }
 
-    // https://api.github.com/graphql
     @Override
-    public String post(String url, String query) throws Exception {
-        log.debug("download: {}-{}", user, pwd);
-        Client client = Client.create();
-        client.addFilter(new HTTPBasicAuthFilter(this.user, this.pwd));
+    public String post(String url, String query) throws ClientException {
+        log.trace("download: {}-{}", url, query);
         WebResource webResource = client.resource(url);
         ClientResponse response = webResource.post(ClientResponse.class, query);
         if (response.getStatus() != 200) {
-            throw new Exception(
-                    "Failed : HTTP error code : " + response.getStatus() + " -> " + response.getEntity(String.class));
+            throw new ClientException(url, query, response.getStatus(), response.getEntity(String.class));
         }
-        String output = response.getEntity(String.class);
-        return output;
+        return response.getEntity(String.class);
     }
 }

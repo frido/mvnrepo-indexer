@@ -22,8 +22,6 @@ public class App3 {
         Consumer consumer = new GitHubHandler(database, executor, list.size());
         Client httpClient = new GitHubClient(new JerseyHttpClient("frido", System.getenv().get("GITHUB_KEY")));
         Downloader loader = new Downloader(executor, httpClient);
-        list.forEach(doc -> {
-            loader.start(doc.getString("Url"), consumer);
-        });
+        list.forEach(doc -> loader.start(doc.getString("Url"), consumer) );
     }
 }

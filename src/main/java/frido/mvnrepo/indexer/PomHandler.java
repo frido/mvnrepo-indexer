@@ -3,7 +3,6 @@ package frido.mvnrepo.indexer;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import org.bson.Document;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -22,32 +21,26 @@ public class PomHandler implements Consumer {
     }
 
     @Override
-    public void notify(String url, String content) {
-        try{
-        PomToJson converter = new PomToJson();
-        Document doc = converter.toJsonMain(content);
-        Document query = new Document(); // TODO: get query id from Document like Project
-        query
-            .append("ArtifactId", doc.getString("ArtifactId"))
-            .append("GroupId", doc.getString("GroupId"))
-            .append("Version", doc.getString("Version"));
-        this.db.update("pom", query, doc);
+    public void notify(String url, String xml) {
+        try {
+            Pom pom = Pom.valueOf(xml);
+            this.db.update("pom", pom.getUniqFilter(), pom.getDocument());// TODO: ako vstup moze byt rovno pom
         } finally {
             terminate();
         }
     }
 
     @Override
-    public void error(Throwable e){
+    public void error(Throwable e) {
         terminate();
     }
 
-    private void terminate(){
+    private void terminate() {
         int count = counter.incrementAndGet();
-        if(count % 10 == 0) {
+        if (count % 10 == 0) {
             log.debug("count: {} / {}", count, this.size);
         }
-        if(count == this.size){
+        if (count == this.size) {
             this.executor.shutdown();
         }
     }

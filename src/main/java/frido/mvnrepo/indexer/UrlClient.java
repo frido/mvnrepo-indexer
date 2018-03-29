@@ -8,7 +8,7 @@ public class UrlClient implements Client {
         this.client = client;
     }
 
-    public String download(String url) {
+    public String download(String url) throws ClientException {
         return this.client.get(url);
     }
 }

@@ -22,8 +22,8 @@ public class DummyGitHubHandler implements Consumer {
 	public void notify(String url, String content) {
 		try {
             HashMap<String, HashMap<String, HashMap<String, Object>>> result = new ObjectMapper().readValue(content, new TypeReference<HashMap<String, Object>>() {});
-            HashMap<String, HashMap<String, Object>> data = (HashMap<String, HashMap<String, Object>>) result.get("data");
-            HashMap<String, Object> repository = (HashMap<String, Object>) data.get("repository");
+            HashMap<String, HashMap<String, Object>> data = result.get("data");
+            HashMap<String, Object> repository = data.get("repository");
             response = new Document(repository);
         } catch (Exception e) {
             log.error(e.getMessage(), e);

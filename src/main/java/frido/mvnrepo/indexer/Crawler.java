@@ -12,17 +12,17 @@ public class Crawler implements Consumer {
 
     Logger log = LoggerFactory.getLogger(Crawler.class);
 
-    private static String PATTERN = "<a href=\"(.*?)\"";
-    private static Pattern p = Pattern.compile(PATTERN);
+    private static String LINK_PATTERN = "<a href=\"(.*?)\"";
+    private static Pattern p = Pattern.compile(LINK_PATTERN);
 
     private CrawlerMatchHandler matchHandler;
-    private String pattern;
+    private String filter;
     Downloader downloader;
 
     public Crawler(Downloader downloader, String match, CrawlerMatchHandler matchHandler) {
 
         this.matchHandler = matchHandler;
-        this.pattern = match;
+        this.filter = match;
         this.downloader = downloader;
     }
 
@@ -62,7 +62,7 @@ public class Crawler implements Consumer {
 
     private List<String> getLinks(String url, String content) {
         log.trace("getLinks: {}", content);
-        List<String> links = new LinkedList<String>();
+        List<String> links = new LinkedList<>();
         Matcher m = p.matcher(content);
         while (m.find()) {
             String link = getFullUrl(url, m.group(1));
@@ -73,7 +73,7 @@ public class Crawler implements Consumer {
 
     private void doNext(String link) {
         log.trace("doNext: {}", link);
-        if (link.endsWith(this.pattern)) {
+        if (link.endsWith(this.filter)) {
             this.match(link);
         }else if (link.endsWith("/") && !link.endsWith("../")) {
             this.search(link);

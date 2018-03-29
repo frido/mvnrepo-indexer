@@ -38,7 +38,7 @@ public class App2 {
     }
 
     public static List<Document> toList(Iterator<Document> iterator){
-        List<Document> out = new LinkedList<Document>();
+        List<Document> out = new LinkedList<>();
         while(iterator.hasNext()){
             out.add(iterator.next());
         }

@@ -48,12 +48,11 @@ import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-// TODO: bad class, wrong name, static
-public class PomToJson {
+public class PomConverter {
 
-    static Logger log = LoggerFactory.getLogger(PomToJson.class);
+    static Logger log = LoggerFactory.getLogger(PomConverter.class);
 
-    public Document toJsonMain(String content) {
+    public Document valueOf(String content) {
         MavenXpp3Reader reader = new MavenXpp3Reader();
         Model model = null;
         try {
@@ -456,14 +455,6 @@ public class PomToJson {
         return d;
     }
 
-    @Deprecated
-    private Document toJson(Properties properties) {
-        if(properties == null) return null;
-        Document d = new Document();
-        //d.put("", toJson(properties.get));
-        return d;
-    }
-    
     private List<Document> toJsonRep(List<Repository> repositories) {
         List<Document> out = new ArrayList<>();
         if(repositories == null) return out;

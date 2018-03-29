@@ -74,7 +74,6 @@ public class Metadata {
         return out;
     }
 
-    // FIXME: duplicitne volanie getElement...
     private static String getContent(Element element, String tag) {
         if (element.getElementsByTagName(tag).getLength() > 0) {
             return element.getElementsByTagName(tag).item(0).getTextContent();
