@@ -1,12 +1,12 @@
 package frido.mvnrepo.indexer;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.function.Consumer;
+import java.util.Arrays;
 
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientURI;
+import com.mongodb.client.model.Accumulators;
+import com.mongodb.client.model.Aggregates;
+import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.UpdateOptions;
 
 import org.bson.Document;
@@ -44,21 +44,11 @@ class MongoDatabase implements Database {
     }
 
     @Override
-    public Collection<Document> getGitHubRelated(){
-        Document filter = new Document();
-        Document regex = new Document();
-        regex.put("$regex", "^https://github.com/.+?/.+");
-        regex.put("$options", "i");
-        filter.put("Url", regex);
-        Map<String, Document> hash = new HashMap<>();
-        db.getCollection("pom").find(filter).forEach(new Consumer<Document>() {
-
-			@Override
-			public void accept(Document doc) {
-				hash.put(doc.getString("Url"), doc);
-			}
-        });
-        return hash.values();
+    public Iterable<Document> getGitHubRelated(){
+        return db.getCollection("pom").aggregate(Arrays.asList(
+            Aggregates.match(Filters.regex("Url", "^https://github.com/.+?/.+")),
+            Aggregates.group("$Url", Accumulators.first("Url", "$Url"))
+        ));
     }
 
     @Override

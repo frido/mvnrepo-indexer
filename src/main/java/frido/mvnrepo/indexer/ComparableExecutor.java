@@ -10,7 +10,7 @@ class ComparableExecutor extends ThreadPoolExecutor {
                 new PriorityBlockingQueue<Runnable>(100, (Runnable r1, Runnable r2) -> {
                     Prioritable t1 = (Prioritable) r1;
                     Prioritable t2 = (Prioritable) r2;
-                    return (-1) * (t1.getPriority() - t2.getPriority()); // reverse order
+                    return (-1) * (t1.getPriority() - t2.getPriority());
                 }));
     }
 

@@ -43,7 +43,7 @@ public class MetadataTest {
 
     @Test
     @SuppressWarnings("unchecked")
-    public void testMetadata() throws IOException {
+    public void testMetadata() throws IOException, XmlParseException {
         String fileName = ClassLoader.getSystemResource("maven-metadata.xml").getFile();
         String content = new String(Files.readAllBytes(new File(fileName).toPath()));
         Document result = Metadata.valueOf(content);

@@ -37,7 +37,7 @@ public class Artifact {
     public boolean isValid(String link) {
         String[] linkParts = link.split("/");
         String artifactId = Arrays.asList(linkParts).get(linkParts.length - 2);
-        if(artifactId.equals(data.getString("artifactId"))){
+        if(artifactId.equals(data.getString(ARTIFACT_ID))){
             return true;
         }
         return false;

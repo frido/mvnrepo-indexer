@@ -28,11 +28,9 @@ public class JerseyHttpClient implements HttpClient {
         log.trace("download: {}", url);
         WebResource webResource = client.resource(url);
         ClientResponse response = webResource.get(ClientResponse.class);
-
         if (response.getStatus() != 200) {
             throw new ClientException(url, null, response.getStatus(), response.getEntity(String.class));
         }
-
         return response.getEntity(String.class);
     }
 

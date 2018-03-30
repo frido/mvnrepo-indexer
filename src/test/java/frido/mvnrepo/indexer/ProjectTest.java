@@ -3,6 +3,7 @@ package frido.mvnrepo.indexer;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 
+import java.util.Arrays;
 import java.util.Iterator;
 
 import org.bson.Document;
@@ -26,5 +27,24 @@ public class ProjectTest {
             assertEquals(doc.getString("name"), result.getString("name"));
             assertFalse(it.hasNext());
         }
+    }
+
+    @Test
+    public void generalTest(){
+        Iterable<String> iterable = Arrays.asList("a","b","c","d","e");
+        int size1 = 0;
+        int size2 = 0;
+        Iterator<String> it1 = iterable.iterator();
+        while(it1.hasNext()){
+            it1.next();
+            size1++;
+        }
+        Iterator<String> it2 = iterable.iterator();
+        while(it2.hasNext()){
+            it2.next();
+            size2++;
+        }
+        assertEquals(5, size2);
+        assertEquals(size1, size2);
     }
 }

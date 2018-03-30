@@ -15,8 +15,14 @@ class StoreMatchHandler implements CrawlerMatchHandler {
 
 	@Override
 	public void match(String link, String content) {
-        Document doc = Metadata.valueOf(content);
-        log.trace("match: {}", doc);
+        log.trace("match: {}", link);
+        Document doc;
+		try {
+			doc = Metadata.valueOf(content);
+		} catch (XmlParseException e) {
+            log.error(link, e);
+            return;
+		}
         Artifact artifact = new Artifact(doc);
         if(artifact.isValid(link)){
             this.db.update("metadata", artifact.getUniqFilter(), artifact.getDocument());	

@@ -22,7 +22,27 @@
 			"WakaTime.vscode-wakatime",
 			"CoenraadS.bracket-pair-colorizer",
 			"EditorConfig.editorconfig",
-			"rianadon.vscode-java-checkstyle"
+			"rianadon.vscode-java-checkstyle",
+			"aaron-bond.better-comments",
+			"christian-kohler.path-intellisense",
+			"DavidAnson.vscode-markdownlint",
+			"dbaeumer.vscode-eslint",
+			"donjayamanne.githistory",
+			"eg2.tslint",
+			"Equinusocio.vsc-material-theme",
+			"jprestidge.theme-material-theme",
+			"mathiasfrohlich.Kotlin",
+			"Mikael.Angular-BeastCode",
+			"mrmlnc.vscode-scss",
+			"naco-siren.gradle-language",
+			"natewallace.angular2-inline",
+			"Pivotal.vscode-spring-boot",
+			"redhat.java",
+			"robertohuertasm.vscode-icons",
+			"vscjava.vscode-maven",
+			"shengchen.vscode-checkstyle",
+			"WakaTime.vscode-wakatime",
+			"yzhang.markdown-all-in-one"
 		]
 	}
 }

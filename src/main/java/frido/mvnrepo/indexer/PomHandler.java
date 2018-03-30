@@ -24,7 +24,7 @@ public class PomHandler implements Consumer {
     public void notify(String url, String xml) {
         try {
             Pom pom = Pom.valueOf(xml);
-            this.db.update("pom", pom.getUniqFilter(), pom.getDocument());// TODO: ako vstup moze byt rovno pom
+            this.db.update("pom", pom.getUniqFilter(), pom.getDocument());
         } finally {
             terminate();
         }

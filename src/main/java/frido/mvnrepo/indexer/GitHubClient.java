@@ -5,8 +5,6 @@ import org.slf4j.LoggerFactory;
 
 public class GitHubClient implements Client {
 
-	private static final String HTTPS_GITHUB_COM = "https://github.com/";
-
 	Logger log = LoggerFactory.getLogger(GitHubClient.class);
 
     private HttpClient client;
@@ -16,13 +14,7 @@ public class GitHubClient implements Client {
     }
 
     public String download(String url) throws ClientException {
-        log.info("link:{}", url);
-        String link1 = url + "/";
-        String part1 = link1.substring(HTTPS_GITHUB_COM.length());
-        String owner = part1.substring(0, part1.indexOf('/'));
-        String part2 = part1.substring(owner.length() + 1);
-        String repo = part2.substring(0, part2.indexOf('/')); 
-        String query =  "{ \"query\": \"query{repository(owner:\\\""+owner+"\\\", name:\\\""+repo+"\\\"){owner {login} name createdAt description homepageUrl pushedAt stargazers {totalCount}watchers{totalCount}forks{totalCount}}}\"}";
-		return this.client.post("https://api.github.com/graphql", query);
+        log.trace("link:{}", url);
+		return this.client.post("https://api.github.com/graphql", new GitHubUrl(url).query());
     }
 }
