@@ -2,7 +2,6 @@ package frido.mvnrepo.indexer.pom;
 
 import java.util.Iterator;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 import org.bson.Document;
 import org.slf4j.Logger;
@@ -18,14 +17,15 @@ import frido.mvnrepo.indexer.core.download.Downloader;
 
 public class PomProcessor {
     static Logger log = LoggerFactory.getLogger(PomProcessor.class);
-    Database db;
+    private Database db;
+    private ExecutorService executor;
 
-    public PomProcessor(Database database){
+    public PomProcessor(Database database, ExecutorService executor){
         this.db = database;
+        this.executor = executor;
     }
 
     public void start() {
-        ExecutorService executor = Executors.newFixedThreadPool(5);
         Client httpClient = new UrlClient(new JerseyHttpClient());
         Iterable<Document> metadatas = db.getAll("metadata");
         Iterator<Document> it = metadatas.iterator();

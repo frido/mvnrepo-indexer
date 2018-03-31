@@ -1,6 +1,7 @@
 package frido.mvnrepo.indexer.core;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.bson.Document;
@@ -18,6 +19,13 @@ public class MockDatabase implements Database {
 
 	@Override
 	public Iterable<Document> getAll(String collection) {
+        if("metadata".equals(collection)){
+            Document doc = new Document()
+                .append("groupId", "org.apache.abdera")
+                .append("artifactId", "abdera")
+                .append("version", "1.1.3");
+            return Arrays.asList(doc);
+        }
 		return null;
 	}
 
@@ -28,7 +36,7 @@ public class MockDatabase implements Database {
 
 	@Override
 	public Iterable<Document> getGitHubRelated() {
-		return null;
+		return Arrays.asList(new Document("Url", "https://github.com/frido/flowable"));
 	}
 
 	@Override

@@ -56,9 +56,7 @@ public class PomConverter {
         Model model = null;
         try {
             model = reader.read(new ByteArrayInputStream(content.getBytes(StandardCharsets.UTF_8)));
-        } catch (IOException e) {
-            log.error(e.getMessage(), e);
-        } catch (XmlPullParserException e) {
+        } catch (IOException | XmlPullParserException e) {
             log.error(e.getMessage(), e);
         }
 

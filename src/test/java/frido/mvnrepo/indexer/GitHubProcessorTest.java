@@ -8,37 +8,31 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
-import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
 
 import org.bson.Document;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import frido.mvnrepo.indexer.core.DummyGitHubHandler;
+import frido.mvnrepo.indexer.core.MockDatabase;
 import frido.mvnrepo.indexer.core.NoThreadExecutor;
-import frido.mvnrepo.indexer.core.client.Client;
-import frido.mvnrepo.indexer.core.client.JerseyHttpClient;
 import frido.mvnrepo.indexer.core.db.MongoDatabase;
-import frido.mvnrepo.indexer.core.download.Downloader;
-import frido.mvnrepo.indexer.github.GitHubClient;
+import frido.mvnrepo.indexer.github.GitHubProcessor;
 
-public class GitHubTest {
+public class GitHubProcessorTest {
 
-    Logger log = LoggerFactory.getLogger(GitHubTest.class);
+    Logger log = LoggerFactory.getLogger(GitHubProcessorTest.class);
 
     @Test
     public void testDownloader() {
-        DummyGitHubHandler consumer = new DummyGitHubHandler();
-        Executor executor = new NoThreadExecutor();
-        Client httpClient = new GitHubClient(
-            new JerseyHttpClient("frido", System.getenv().get("GITHUB_KEY")));
-        //GitHubLoader loader = new GitHubLoader(executor, consumer, httpClient);
-        Downloader loader = new Downloader(executor, httpClient);
-        loader.start("https://github.com/frido/flowable", consumer);
+        MockDatabase database = new MockDatabase();
+        ExecutorService executor = new NoThreadExecutor();
+        GitHubProcessor process3 = new GitHubProcessor(database, executor);
+        process3.start();
         assertEquals(
                 "Document{{owner={login=frido}, name=flowable, createdAt=2017-05-06T09:52:29Z, description=null, homepageUrl=null, pushedAt=2017-05-06T09:52:29Z, stargazers={totalCount=0}, watchers={totalCount=0}, forks={totalCount=0}}}",
-                consumer.getResponse().toString());
+                database.getUpdated().get(0).toString());
     }
 
     @Test

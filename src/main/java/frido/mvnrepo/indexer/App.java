@@ -29,11 +29,11 @@ public class App {
             process1.start("http://central.maven.org/maven2/");
         }
         if(arguments.contains("pom")) {
-            PomProcessor process2 = new PomProcessor(database);
+            PomProcessor process2 = new PomProcessor(database, executor);
             process2.start();
         }
         if(arguments.contains("github")) {
-            GitHubProcessor process3 = new GitHubProcessor(database);
+            GitHubProcessor process3 = new GitHubProcessor(database, executor);
             process3.start();
         }
     }

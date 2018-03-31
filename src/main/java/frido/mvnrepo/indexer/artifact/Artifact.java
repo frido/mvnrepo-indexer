@@ -63,11 +63,11 @@ public class Artifact {
             NodeList metadata = doc.getElementsByTagName("metadata");
             for (int i = 0; i < metadata.getLength(); i++) {
                 Element element = (Element) metadata.item(i);
-                out.put("groupId", getContent(element, "groupId"));
-                out.put("artifactId", getContent(element, "artifactId"));
-                String v = getContent(element, "version");
+                out.put(GROUP_ID, getContent(element, GROUP_ID));
+                out.put(ARTIFACT_ID, getContent(element, ARTIFACT_ID));
+                String v = getContent(element, VERSION);
                 if (v != null) {
-                    out.put("version", v);
+                    out.put(VERSION, v);
                 }
             }
 
@@ -79,7 +79,7 @@ public class Artifact {
                 versioningDoc.put("release", getContent(element, "release"));
                 versioningDoc.put("lastUpdated", getContent(element, "lastUpdated"));
                 List<String> versions = new ArrayList<>();
-                NodeList versionsElement = element.getElementsByTagName("version");
+                NodeList versionsElement = element.getElementsByTagName(VERSION);
                 for (int j = 0; j < versionsElement.getLength(); j++) {
                     Element versionElement = (Element) versionsElement.item(j);
                     versions.add(versionElement.getTextContent());
