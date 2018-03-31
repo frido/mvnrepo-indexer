@@ -9,6 +9,13 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import frido.mvnrepo.indexer.core.DummyPomHandler;
+import frido.mvnrepo.indexer.core.NoThreadExecutor;
+import frido.mvnrepo.indexer.core.client.JerseyHttpClient;
+import frido.mvnrepo.indexer.core.client.UrlClient;
+import frido.mvnrepo.indexer.core.download.Downloader;
+import frido.mvnrepo.indexer.pom.Pom;
+
 public class PomTest {
 
     Logger log = LoggerFactory.getLogger(PomTest.class);

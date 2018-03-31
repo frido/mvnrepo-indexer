@@ -11,6 +11,10 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import frido.mvnrepo.indexer.core.db.Database;
+import frido.mvnrepo.indexer.core.db.MongoDatabase;
+import frido.mvnrepo.indexer.github.Project;
+
 public class ProjectTest {
 
     Logger log = LoggerFactory.getLogger(ProjectTest.class);

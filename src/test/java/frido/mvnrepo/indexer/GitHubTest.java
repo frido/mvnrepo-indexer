@@ -15,6 +15,14 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import frido.mvnrepo.indexer.core.DummyGitHubHandler;
+import frido.mvnrepo.indexer.core.NoThreadExecutor;
+import frido.mvnrepo.indexer.core.client.Client;
+import frido.mvnrepo.indexer.core.client.JerseyHttpClient;
+import frido.mvnrepo.indexer.core.db.MongoDatabase;
+import frido.mvnrepo.indexer.core.download.Downloader;
+import frido.mvnrepo.indexer.github.GitHubClient;
+
 public class GitHubTest {
 
     Logger log = LoggerFactory.getLogger(GitHubTest.class);
