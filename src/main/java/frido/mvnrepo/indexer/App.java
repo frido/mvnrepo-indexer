@@ -7,6 +7,7 @@ import java.util.concurrent.ExecutorService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import frido.mvnrepo.indexer.artifact.ArtifactHandler;
 import frido.mvnrepo.indexer.artifact.ArtifactProcessor;
 import frido.mvnrepo.indexer.core.db.Database;
 import frido.mvnrepo.indexer.core.db.MongoDatabase;
@@ -25,7 +26,8 @@ public class App {
 
         List<String> arguments = Arrays.asList(args);
         if(arguments.isEmpty() || arguments.contains("metadata")) {
-            ArtifactProcessor process1 = new ArtifactProcessor(database, executor);
+            ArtifactHandler handler = new ArtifactHandler(database, executor);
+            ArtifactProcessor process1 = new ArtifactProcessor(handler);
             process1.start("http://central.maven.org/maven2/");
         }
         if(arguments.contains("pom")) {

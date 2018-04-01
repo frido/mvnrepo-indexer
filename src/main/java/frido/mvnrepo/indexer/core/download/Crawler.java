@@ -2,6 +2,7 @@ package frido.mvnrepo.indexer.core.download;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -19,6 +20,8 @@ public class Crawler implements Consumer {
     private String filter;
     Downloader downloader;
 
+    AtomicInteger counter = new AtomicInteger(0);
+
     public Crawler(Downloader downloader, String match, CrawlerMatchHandler matchHandler) {
 
         this.matchHandler = matchHandler;
@@ -28,6 +31,8 @@ public class Crawler implements Consumer {
 
     public void search(String link) {
         log.trace("search: {}", link);
+        System.out.println("+ "+link+".........................");
+        counter.incrementAndGet();
         downloader.start(link, this);
     }
 
@@ -53,11 +58,25 @@ public class Crawler implements Consumer {
         for (String link : links) {
             doNext(link);
         }
+        System.out.println("- "+url+".........................");
+        counter.decrementAndGet();
+        isLast();
     }
 
-    @Override
+    private void isLast() {
+        if(counter.get() == 0){
+            System.out.println("KONIEC.........................");
+            matchHandler.terminate();
+        }
+        System.out.println(counter.get()+".........................");
+	}
+
+	@Override
     public void error(Throwable e) {
         log.error("Crawler - Task - Error", e);
+        System.out.println("+ "+"error"+".........................");
+        counter.decrementAndGet();
+        isLast();
     }
 
     private List<String> getLinks(String url, String content) {

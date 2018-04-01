@@ -41,6 +41,7 @@ public class MockDatabase implements Database {
 
 	@Override
 	public void update(String collection, Document query, Document newOne) {
+        System.out.println(newOne);
 		updated.add(newOne);
     }
     

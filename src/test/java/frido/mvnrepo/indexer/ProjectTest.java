@@ -3,8 +3,13 @@ package frido.mvnrepo.indexer;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
+import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import org.bson.Document;
 import org.junit.Test;
@@ -50,5 +55,25 @@ public class ProjectTest {
         }
         assertEquals(5, size2);
         assertEquals(size1, size2);
+    }
+
+    @Test
+    public void threading() throws InterruptedException{
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        List<String> list = new ArrayList<>();
+        for(int i=0 ; i<100 ; i++){
+            list.add("x");
+        }
+        AtomicInteger count = new AtomicInteger(0);
+        for(int i=0 ; i<list.size() ; i++){
+            executor.execute(() -> {
+                count.incrementAndGet();
+            });
+            
+        }
+        executor.shutdown();
+        while(!executor.isTerminated()){
+        }
+        assertEquals(list.size(), count.get());
     }
 }
