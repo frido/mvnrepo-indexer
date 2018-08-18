@@ -13,22 +13,22 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 
-import frido.mvnrepo.indexer.pom.PomUrlBuilder;
+import frido.mvnrepo.indexer.pom.PomLinkBuilder;
 import frido.mvnrepo.indexer.pom.PomUrlException;
 
-public class Artifact {
+public class Metadata {
 	public static final String VERSION = "version";
 	public static final String ARTIFACT_ID = "artifactId";
 	public static final String GROUP_ID = "groupId";
     
     private Document data;
 
-    public Artifact(Document metadata){
+    public Metadata(Document metadata){
         data = metadata;
     }
     
-    public String getPomUrl() throws PomUrlException {
-        PomUrlBuilder urlBuilder = new PomUrlBuilder();
+    public String getPomLink() throws PomUrlException {
+        PomLinkBuilder urlBuilder = new PomLinkBuilder();
         return urlBuilder
             .group(data.getString(GROUP_ID))
             .artifact(data.getString(ARTIFACT_ID))

@@ -1,22 +1,22 @@
 package frido.mvnrepo.indexer.pom;
 
-public class PomUrlBuilder {
+public class PomLinkBuilder {
 	private static final String HTTP_CENTRAL_MAVEN_ORG_MAVEN2 = "http://central.maven.org/maven2/";
 	private String group;
     private String artifact;
     private String version;
 
-	public PomUrlBuilder group(String group) {
+	public PomLinkBuilder group(String group) {
         this.group = group;
 		return this;
     }
     
-    public PomUrlBuilder artifact(String artifact) {
+    public PomLinkBuilder artifact(String artifact) {
         this.artifact = artifact;
         return this;
     }
     
-    public PomUrlBuilder version(String version) {
+    public PomLinkBuilder version(String version) {
         this.version = version;
         return this;
     }

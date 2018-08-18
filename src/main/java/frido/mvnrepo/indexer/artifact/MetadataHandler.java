@@ -1,6 +1,5 @@
 package frido.mvnrepo.indexer.artifact;
 
-import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 
 import org.bson.Document;
@@ -9,6 +8,7 @@ import org.slf4j.LoggerFactory;
 
 import frido.mvnrepo.indexer.core.db.Database;
 import frido.mvnrepo.indexer.core.download.CrawlerMatchHandler;
+import frido.mvnrepo.indexer.core.download.DownloadLink;
 
 public class MetadataHandler implements CrawlerMatchHandler {
 
@@ -21,33 +21,18 @@ public class MetadataHandler implements CrawlerMatchHandler {
     }
 
 	@Override
-	public void match(String link, String content) {
+	public void match(DownloadLink link, String content) {
         log.trace("match: {}", link);
         Document doc;
 		try {
-			doc = Artifact.valueOf(content);
+			doc = Metadata.valueOf(content);
 		} catch (XmlParseException e) {
-            log.error(link, e);
+            log.error(link.toString(), e);
             return;
 		}
-        Artifact artifact = new Artifact(doc);
-        if(artifact.isValid(link)){
+        Metadata artifact = new Metadata(doc);
+        if(artifact.isValid(link.getLink())){
             this.db.update("metadata", artifact.getUniqFilter(), artifact.getDocument());	
         }
 	}
-/*
-    @Override
-    //TODO: move to own interface
-	public void terminate() {
-        this.executor.shutdown();
-    }
-    
-    public boolean isTerminated() {
-        return this.executor.isTerminated();
-    }
-
-	public Executor getExecutor() {
-		return this.executor;
-	}
-*/
 }

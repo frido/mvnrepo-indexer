@@ -4,13 +4,13 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class MyExecutor implements Executor{
+public class DownloadExecutor implements Executor{
 
     private ExecutorService executor;
 
     private AtomicInteger counter = new AtomicInteger(0);
 
-    public MyExecutor(ExecutorService e) {
+    public DownloadExecutor(ExecutorService e) {
         this.executor = e;
     }
 

@@ -2,7 +2,6 @@ package frido.mvnrepo.indexer.core.download;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -20,26 +19,23 @@ public class Crawler implements Consumer {
     private String filter;
     Downloader downloader;
 
-    
-
     public Crawler(Downloader downloader, String match, CrawlerMatchHandler matchHandler) {
-
         this.matchHandler = matchHandler;
         this.filter = match;
         this.downloader = downloader;
     }
 
-    public void search(String link) {
+    public void search(DownloadLink link) {
         log.trace("search: {}", link);
         downloader.start(link, this);
     }
 
-    public void match(String link) {
+    public void match(DownloadLink link) {
         log.trace("match: {}", link);
         this.downloader.start(link, new Consumer() {
 
             @Override
-            public void notify(String url, String content) {
+            public void notify(DownloadLink url, String content) {
                 matchHandler.match(url, content);
             }
 
@@ -51,44 +47,36 @@ public class Crawler implements Consumer {
     }
 
     @Override
-    public void notify(String url, String content) {
-        List<String> links = getLinks(url, content);
-        for (String link : links) {
-            doNext(link);
+    public void notify(DownloadLink link, String content) {
+        List<DownloadLink> links = getLinks(link, content);
+        for (DownloadLink item : links) {
+            doNext(item);
         }
     }
 
-	@Override
+    @Override
     public void error(Throwable e) {
         log.error("Crawler - Task - Error", e);
     }
 
-    private List<String> getLinks(String url, String content) {
-        log.trace("getLinks: {}", content);
-        List<String> links = new LinkedList<>();
+    private List<DownloadLink> getLinks(DownloadLink link, String content) {
+        log.trace("getLinks - content: {}", content);
+        log.trace("getLinks - link: {}", link);
+        List<DownloadLink> links = new LinkedList<>();
         Matcher m = p.matcher(content);
         while (m.find()) {
-            String link = getFullUrl(url, m.group(1));
-            links.add(link);
+            links.add(link.append(m.group(1)));
+            log.trace("getLinks - appender: {}", link.append(m.group(1)));
         }
         return links;
     }
 
-    private void doNext(String link) {
+    private void doNext(DownloadLink link) {
         log.trace("doNext: {}", link);
-        if (link.endsWith(this.filter)) {
+        if (link.match(this.filter)) {
             this.match(link);
-        }else if (link.endsWith("/") && !link.endsWith("../")) {
+        } else if (link.isDirectory()) {
             this.search(link);
         }
     }
-
-    private String getFullUrl(String url, String link) {
-        log.trace("getFullUrl: {}, {})", url, link);
-        if (link.startsWith("https://") || link.startsWith("http://")) {
-            return link;
-        }
-        return url + link;
-    }
-
 }

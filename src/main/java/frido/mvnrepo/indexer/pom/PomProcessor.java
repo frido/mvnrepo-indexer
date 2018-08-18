@@ -1,54 +1,44 @@
 package frido.mvnrepo.indexer.pom;
 
-import java.util.Iterator;
-import java.util.concurrent.Executor;
-import java.util.concurrent.ExecutorService;
-
 import org.bson.Document;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import frido.mvnrepo.indexer.artifact.Artifact;
+import frido.mvnrepo.indexer.artifact.Metadata;
 import frido.mvnrepo.indexer.core.client.Client;
+import frido.mvnrepo.indexer.core.client.DownloadClient;
 import frido.mvnrepo.indexer.core.client.JerseyHttpClient;
-import frido.mvnrepo.indexer.core.client.UrlClient;
 import frido.mvnrepo.indexer.core.db.Database;
 import frido.mvnrepo.indexer.core.download.Consumer;
+import frido.mvnrepo.indexer.core.download.DownloadExecutor;
+import frido.mvnrepo.indexer.core.download.DownloadLink;
 import frido.mvnrepo.indexer.core.download.Downloader;
-import frido.mvnrepo.indexer.core.download.MyExecutor;
 
 public class PomProcessor {
     static Logger log = LoggerFactory.getLogger(PomProcessor.class);
     private Database db;
-    private MyExecutor executor;
+    private DownloadExecutor executor;
 
-    public PomProcessor(Database database, MyExecutor executor){
+    public PomProcessor(Database database, DownloadExecutor executor){
         this.db = database;
         this.executor = executor;
     }
 
     public void start() {
-        Client httpClient = new UrlClient(new JerseyHttpClient());
-        Iterable<Document> metadatas = db.getAll("metadata");
-        Iterator<Document> it = metadatas.iterator();
-        int size = 0;
-        while(it.hasNext()){
-            it.next();
-            size++;
-        }
-        Consumer pomHandler = new PomHandler(db);
-        Downloader downloader = new Downloader(executor, httpClient);
-        it = metadatas.iterator();
-        while(it.hasNext()){
-            String pomUrl = null;
-			try {
-                pomUrl = new Artifact(it.next()).getPomUrl();
-            } catch (Exception e) {
-                log.error("Artifact - PomUrl", e);
-                pomHandler.error(e);
-                continue;
+        Iterable<Document> list  = db.getAll("metadata");
+        Consumer consumer = new PomHandler(db);
+        Client httpClient = new DownloadClient(new JerseyHttpClient());
+        Downloader loader = new Downloader(executor, httpClient);
+        list.forEach(doc -> {
+            String pomLink = null;
+            try {
+                pomLink = new Metadata(doc).getPomLink();
+            } catch (PomUrlException e) {
+                log.error("Artifact - pomLink", e);
+                consumer.error(e);
+                return;
 			}
-            downloader.start(pomUrl, pomHandler);
-        }
+            loader.start(new DownloadLink(pomLink), consumer);
+        });
     }
 }

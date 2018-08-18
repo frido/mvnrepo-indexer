@@ -1,5 +1,7 @@
 package frido.mvnrepo.indexer.github;
 
+import frido.mvnrepo.indexer.core.download.DownloadLink;
+
 public class GitHubUrl {
     private static final String HTTPS_GITHUB_COM = "https://github.com/";
 
@@ -7,9 +9,9 @@ public class GitHubUrl {
     private String owner;
     private String repo;
 
-    GitHubUrl(String link){
+    GitHubUrl(DownloadLink link){
         // this.url = link;
-        String link1 = link + "/";
+        String link1 = link.getLink() + "/";
         String part1 = link1.substring(HTTPS_GITHUB_COM.length());
         owner = part1.substring(0, part1.indexOf('/'));
         String part2 = part1.substring(owner.length() + 1);

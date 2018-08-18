@@ -5,31 +5,27 @@ import org.slf4j.LoggerFactory;
 
 import frido.mvnrepo.indexer.core.client.Client;
 
-public class PrioritableTask implements Prioritable {
+public class DownloadTask implements Prioritable {
 
-    Logger log = LoggerFactory.getLogger(PrioritableTask.class);
+    Logger log = LoggerFactory.getLogger(DownloadTask.class);
 
     private int priority = 0;
     private Client httpClient;
     private Consumer consumer;
-    private String url;
+    private DownloadLink link;
 
-    public PrioritableTask(String url, Client httpClient, Consumer consumer) {
+    public DownloadTask(DownloadLink link, Client httpClient, Consumer consumer) {
         this.httpClient = httpClient;
         this.consumer = consumer;
-        this.url = url;
-        for (char ch : url.toCharArray()) {
-            if (ch == '/') {
-                this.priority++;
-            }
-        }
+        this.link = link;
+        this.priority = link.getDeep();        
     }
 
     @Override
     public void run() {
         try {
-            String content = httpClient.download(url);
-            consumer.notify(url, content);
+            String content = httpClient.download(link);
+            consumer.notify(link, content);
         } catch (Exception e) {
             log.error("Downloader - Task - Error", e);
             consumer.error(e);

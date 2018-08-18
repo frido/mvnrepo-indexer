@@ -1,7 +1,5 @@
 package frido.mvnrepo.indexer.core.download;
 
-import java.util.concurrent.Executor;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -11,20 +9,20 @@ public class Downloader {
 
     Logger log = LoggerFactory.getLogger(Downloader.class);
 
-    private MyExecutor executor;
+    private DownloadExecutor executor;
     private Client httpClient;
 
-    public Downloader(MyExecutor executor, Client httpClient) {
+    public Downloader(DownloadExecutor executor, Client httpClient) {
         this.executor = executor;
         this.httpClient = httpClient;
     }
 
-    public void start(String url, Consumer consumer) {
+    public void start(DownloadLink link, Consumer consumer) {
         this.executor.increment();
-        this.executor.execute(new PrioritableTask(url, httpClient, new Consumer(){
+        this.executor.execute(new DownloadTask(link, httpClient, new Consumer(){
         
             @Override
-            public void notify(String url, String content) {
+            public void notify(DownloadLink url, String content) {
                 consumer.notify(url, content);
                 executor.decrementOrFinish();
             }

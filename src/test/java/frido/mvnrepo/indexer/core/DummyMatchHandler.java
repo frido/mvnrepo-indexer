@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import frido.mvnrepo.indexer.core.download.CrawlerMatchHandler;
+import frido.mvnrepo.indexer.core.download.DownloadLink;
 
 public class DummyMatchHandler implements CrawlerMatchHandler {
 
@@ -12,7 +13,7 @@ public class DummyMatchHandler implements CrawlerMatchHandler {
     private int counter = 0;
 
 	@Override
-	public void match(String link, String content) {
+	public void match(DownloadLink link, String content) {
         log.info("match: {}", link);
         counter++;
     }
