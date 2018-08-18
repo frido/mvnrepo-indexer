@@ -1,6 +1,7 @@
 package frido.mvnrepo.indexer.github;
 
 import java.util.HashMap;
+import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -19,11 +20,11 @@ public class GitHubHandler implements Consumer {
     Logger log = LoggerFactory.getLogger(GitHubHandler.class);
 
     private Database db;
-    private ExecutorService executor;
+    private Executor executor;
     private int size;
     private AtomicInteger counter = new AtomicInteger(0);
 
-    public GitHubHandler(Database database, ExecutorService executor, int size) {
+    public GitHubHandler(Database database, Executor executor, int size) {
         this.db = database;
         this.executor = executor;
         this.size = size;
@@ -39,24 +40,11 @@ public class GitHubHandler implements Consumer {
             this.db.update("projects", project.getUniqFilter(), project.getDocument());
         } catch (Exception e) {
             log.error(content, e);
-        } finally {
-            terminate();
         }
     }
     
     @Override
     public void error(Throwable e){
-        terminate();
-    }
 
-    private void terminate(){
-        int count = counter.incrementAndGet();
-        if(count % 10 == 0) {
-            log.debug("count: {} / {}", count, this.size);
-        }
-        if(count == this.size){
-            this.executor.shutdown();
-        }
     }
-
 }

@@ -10,7 +10,7 @@ import frido.mvnrepo.indexer.core.db.Database;
 
 public class MockDatabase implements Database {
 
-    private List<Document> updated = new ArrayList<>();;
+    private List<Document> updated = new ArrayList<>();
 
 	@Override
 	public Document save(String collection, Document doc) {
@@ -41,7 +41,6 @@ public class MockDatabase implements Database {
 
 	@Override
 	public void update(String collection, Document query, Document newOne) {
-        System.out.println(newOne);
 		updated.add(newOne);
     }
     

@@ -20,7 +20,7 @@ public class Crawler implements Consumer {
     private String filter;
     Downloader downloader;
 
-    AtomicInteger counter = new AtomicInteger(0);
+    
 
     public Crawler(Downloader downloader, String match, CrawlerMatchHandler matchHandler) {
 
@@ -31,8 +31,6 @@ public class Crawler implements Consumer {
 
     public void search(String link) {
         log.trace("search: {}", link);
-        System.out.println("+ "+link+".........................");
-        counter.incrementAndGet();
         downloader.start(link, this);
     }
 
@@ -58,25 +56,11 @@ public class Crawler implements Consumer {
         for (String link : links) {
             doNext(link);
         }
-        System.out.println("- "+url+".........................");
-        counter.decrementAndGet();
-        isLast();
     }
-
-    private void isLast() {
-        if(counter.get() == 0){
-            System.out.println("KONIEC.........................");
-            matchHandler.terminate();
-        }
-        System.out.println(counter.get()+".........................");
-	}
 
 	@Override
     public void error(Throwable e) {
         log.error("Crawler - Task - Error", e);
-        System.out.println("+ "+"error"+".........................");
-        counter.decrementAndGet();
-        isLast();
     }
 
     private List<String> getLinks(String url, String content) {

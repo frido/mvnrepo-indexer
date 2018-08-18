@@ -69,6 +69,14 @@ dependencies {
 // Define the main class for the application
 mainClassName = "frido.mvnrepo.indexer.App"
 
+test {
+    testLogging {
+        outputs.upToDateWhen {false}
+        showStandardStreams = true
+    }
+
+}
+
 jacoco {
     toolVersion = "0.8.0"
     reportsDir = file("$buildDir/reports/jacoco")

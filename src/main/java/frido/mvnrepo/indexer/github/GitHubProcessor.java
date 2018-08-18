@@ -10,12 +10,13 @@ import frido.mvnrepo.indexer.core.client.JerseyHttpClient;
 import frido.mvnrepo.indexer.core.db.Database;
 import frido.mvnrepo.indexer.core.download.Consumer;
 import frido.mvnrepo.indexer.core.download.Downloader;
+import frido.mvnrepo.indexer.core.download.MyExecutor;
 
 public class GitHubProcessor {
     private Database db;
-    private ExecutorService executor;
+    private MyExecutor executor;
 
-    public GitHubProcessor(Database database, ExecutorService executor){
+    public GitHubProcessor(Database database, MyExecutor executor){
         this.db = database;
         this.executor = executor;
     }

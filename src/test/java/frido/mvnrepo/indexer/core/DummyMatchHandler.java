@@ -21,9 +21,4 @@ public class DummyMatchHandler implements CrawlerMatchHandler {
         return this.counter;
     }
 
-	@Override
-	public void terminate() {
-		
-	}
-
 }

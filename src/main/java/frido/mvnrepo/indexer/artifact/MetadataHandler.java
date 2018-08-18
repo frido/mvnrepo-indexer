@@ -10,15 +10,14 @@ import org.slf4j.LoggerFactory;
 import frido.mvnrepo.indexer.core.db.Database;
 import frido.mvnrepo.indexer.core.download.CrawlerMatchHandler;
 
-public class ArtifactHandler implements CrawlerMatchHandler {
+public class MetadataHandler implements CrawlerMatchHandler {
 
-    Logger log = LoggerFactory.getLogger(ArtifactHandler.class);
+    Logger log = LoggerFactory.getLogger(MetadataHandler.class);
     private Database db;
     ExecutorService executor;
 
-    public ArtifactHandler(Database database, ExecutorService executor){
+    public MetadataHandler(Database database){
         this.db = database;
-        this.executor = executor;
     }
 
 	@Override
@@ -36,11 +35,11 @@ public class ArtifactHandler implements CrawlerMatchHandler {
             this.db.update("metadata", artifact.getUniqFilter(), artifact.getDocument());	
         }
 	}
-
-	@Override
+/*
+    @Override
+    //TODO: move to own interface
 	public void terminate() {
         this.executor.shutdown();
-        System.out.println("TERMINATE.........................");
     }
     
     public boolean isTerminated() {
@@ -50,5 +49,5 @@ public class ArtifactHandler implements CrawlerMatchHandler {
 	public Executor getExecutor() {
 		return this.executor;
 	}
-
+*/
 }

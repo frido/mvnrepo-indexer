@@ -17,35 +17,17 @@ public class PomHandler implements Consumer {
     private int size;
     private AtomicInteger counter = new AtomicInteger(0);
 
-    PomHandler(Database database, ExecutorService executor, int size) {
+    PomHandler(Database database) {
         this.db = database;
-        this.executor = executor;
-        this.size = size;
     }
 
     @Override
     public void notify(String url, String xml) {
-        try {
             Pom pom = Pom.valueOf(xml);
             this.db.update("pom", pom.getUniqFilter(), pom.getDocument());
-        } finally {
-            terminate();
-        }
     }
 
     @Override
     public void error(Throwable e) {
-        terminate();
     }
-
-    private void terminate() {
-        int count = counter.incrementAndGet();
-        if (count % 10 == 0) {
-            log.debug("count: {} / {}", count, this.size);
-        }
-        if (count == this.size) {
-            this.executor.shutdown();
-        }
-    }
-
 }

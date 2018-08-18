@@ -18,6 +18,7 @@ import org.slf4j.LoggerFactory;
 import frido.mvnrepo.indexer.core.MockDatabase;
 import frido.mvnrepo.indexer.core.NoThreadExecutor;
 import frido.mvnrepo.indexer.core.db.MongoDatabase;
+import frido.mvnrepo.indexer.core.download.MyExecutor;
 import frido.mvnrepo.indexer.github.GitHubProcessor;
 
 public class GitHubProcessorTest {
@@ -27,7 +28,7 @@ public class GitHubProcessorTest {
     @Test
     public void testDownloader() {
         MockDatabase database = new MockDatabase();
-        ExecutorService executor = new NoThreadExecutor();
+        MyExecutor executor = new MyExecutor(new NoThreadExecutor());
         GitHubProcessor process3 = new GitHubProcessor(database, executor);
         process3.start();
         assertEquals(

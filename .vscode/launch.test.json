@@ -1,0 +1,30 @@
+{
+    "run": {
+        "default": "",
+        "items": [
+            {
+                "name": "mvnrepo-indexer",
+                "projectName": "mvnrepo-indexer",
+                "workingDirectory": "c:\\dev\\repos\\mvnrepo-indexer",
+                "args": [],
+                "vmargs": [],
+                "env": {},
+                "preLaunchTask": ""
+            }
+        ]
+    },
+    "debug": {
+        "default": "",
+        "items": [
+            {
+                "name": "mvnrepo-indexer",
+                "projectName": "mvnrepo-indexer",
+                "workingDirectory": "c:\\dev\\repos\\mvnrepo-indexer",
+                "args": [],
+                "vmargs": [],
+                "env": {},
+                "preLaunchTask": ""
+            }
+        ]
+    }
+}

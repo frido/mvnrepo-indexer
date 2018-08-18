@@ -17,9 +17,9 @@ import frido.mvnrepo.indexer.pom.PomUrlBuilder;
 import frido.mvnrepo.indexer.pom.PomUrlException;
 
 public class Artifact {
-	private static final String VERSION = "version";
-	private static final String ARTIFACT_ID = "artifactId";
-	private static final String GROUP_ID = "groupId";
+	public static final String VERSION = "version";
+	public static final String ARTIFACT_ID = "artifactId";
+	public static final String GROUP_ID = "groupId";
     
     private Document data;
 
