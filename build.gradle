@@ -90,13 +90,34 @@ jacoco {
 checkstyle {
     toolVersion='8.8'
     configFile rootProject.file('config/checkstyle/checkstyle.xml')
+    reportsDir = file("docs/checkstyle")
+
 }
 
+// findbugs {
+//     ignoreFailures = true
+//     reports {
+//         html {
+//             enabled = true
+//             destination = file("docs/findbugs")
+//         }
+//     }
+// }
+// TODO: why previous doesn't work and next one works?
 tasks.withType(FindBugs) {
     ignoreFailures = true
     reports {
         xml.enabled false
         html.enabled true
+        html.destination = file("docs/findbugs/index.html")
+    }
+}
+
+tasks.withType(Pmd) {
+    reports {
+        xml.enabled false
+        html.enabled true
+        html.destination = file("docs/pmd/index.html")
     }
 }
 

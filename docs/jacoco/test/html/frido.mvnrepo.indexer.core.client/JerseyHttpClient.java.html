@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="sk"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>JerseyHttpClient.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">mvnrepo-indexer</a> &gt; <a href="index.source.html" class="el_package">frido.mvnrepo.indexer.core.client</a> &gt; <span class="el_source">JerseyHttpClient.java</span></div><h1>JerseyHttpClient.java</h1><pre class="source lang-java linenums">package frido.mvnrepo.indexer.core.client;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.sun.jersey.api.client.Client;
+import com.sun.jersey.api.client.ClientResponse;
+import com.sun.jersey.api.client.WebResource;
+import com.sun.jersey.api.client.filter.HTTPBasicAuthFilter;
+
+public class JerseyHttpClient implements HttpClient {
+
+<span class="fc" id="L13">    Logger log = LoggerFactory.getLogger(JerseyHttpClient.class);</span>
+
+    Client client;
+
+<span class="fc" id="L17">    public JerseyHttpClient() {</span>
+<span class="fc" id="L18">        this.client = Client.create();</span>
+<span class="fc" id="L19">    }</span>
+
+    public JerseyHttpClient(String user, String pwd)  {
+<span class="nc" id="L22">        this();</span>
+<span class="nc" id="L23">        client.addFilter(new HTTPBasicAuthFilter(user, pwd));</span>
+<span class="nc" id="L24">    }</span>
+
+    @Override
+    public String get(String url) throws ClientException {
+<span class="fc" id="L28">        log.trace(&quot;download: {}&quot;, url);</span>
+<span class="fc" id="L29">        WebResource webResource = client.resource(url);</span>
+<span class="fc" id="L30">        ClientResponse response = webResource.get(ClientResponse.class);</span>
+<span class="pc bpc" id="L31" title="1 of 2 branches missed.">        if (response.getStatus() != 200) {</span>
+<span class="nc" id="L32">            throw new ClientException(url, null, response.getStatus(), response.getEntity(String.class));</span>
+        }
+<span class="fc" id="L34">        return response.getEntity(String.class);</span>
+    }
+
+    @Override
+    public String post(String url, String query) throws ClientException {
+<span class="nc" id="L39">        log.trace(&quot;download: {}-{}&quot;, url, query);</span>
+<span class="nc" id="L40">        WebResource webResource = client.resource(url);</span>
+<span class="nc" id="L41">        ClientResponse response = webResource.post(ClientResponse.class, query);</span>
+<span class="nc bnc" id="L42" title="All 2 branches missed.">        if (response.getStatus() != 200) {</span>
+<span class="nc" id="L43">            throw new ClientException(url, query, response.getStatus(), response.getEntity(String.class));</span>
+        }
+<span class="nc" id="L45">        return response.getEntity(String.class);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.0.201801022044</span></div></body></html>

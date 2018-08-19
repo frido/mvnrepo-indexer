@@ -1,0 +1,606 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="sk"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>PomConverter.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">mvnrepo-indexer</a> &gt; <a href="index.source.html" class="el_package">frido.mvnrepo.indexer.pom</a> &gt; <span class="el_source">PomConverter.java</span></div><h1>PomConverter.java</h1><pre class="source lang-java linenums">package frido.mvnrepo.indexer.pom;
+
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.maven.model.Activation;
+import org.apache.maven.model.ActivationFile;
+import org.apache.maven.model.ActivationOS;
+import org.apache.maven.model.ActivationProperty;
+import org.apache.maven.model.Build;
+import org.apache.maven.model.BuildBase;
+import org.apache.maven.model.CiManagement;
+import org.apache.maven.model.Contributor;
+import org.apache.maven.model.Dependency;
+import org.apache.maven.model.DependencyManagement;
+import org.apache.maven.model.Developer;
+import org.apache.maven.model.DistributionManagement;
+import org.apache.maven.model.Exclusion;
+import org.apache.maven.model.Extension;
+import org.apache.maven.model.IssueManagement;
+import org.apache.maven.model.License;
+import org.apache.maven.model.MailingList;
+import org.apache.maven.model.Model;
+import org.apache.maven.model.Notifier;
+import org.apache.maven.model.Organization;
+import org.apache.maven.model.Parent;
+import org.apache.maven.model.Plugin;
+import org.apache.maven.model.PluginExecution;
+import org.apache.maven.model.PluginManagement;
+import org.apache.maven.model.Prerequisites;
+import org.apache.maven.model.Profile;
+import org.apache.maven.model.Relocation;
+import org.apache.maven.model.ReportPlugin;
+import org.apache.maven.model.ReportSet;
+import org.apache.maven.model.Reporting;
+import org.apache.maven.model.Repository;
+import org.apache.maven.model.RepositoryPolicy;
+import org.apache.maven.model.Resource;
+import org.apache.maven.model.Scm;
+import org.apache.maven.model.Site;
+import org.apache.maven.model.io.xpp3.MavenXpp3Reader;
+import org.bson.Document;
+import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+<span class="nc" id="L50">public class PomConverter {</span>
+
+<span class="nc" id="L52">    static Logger log = LoggerFactory.getLogger(PomConverter.class);</span>
+
+    public Document valueOf(String content) {
+<span class="nc" id="L55">        MavenXpp3Reader reader = new MavenXpp3Reader();</span>
+<span class="nc" id="L56">        Model model = null;</span>
+        try {
+<span class="nc" id="L58">            model = reader.read(new ByteArrayInputStream(content.getBytes(StandardCharsets.UTF_8)));</span>
+<span class="nc" id="L59">        } catch (IOException | XmlPullParserException e) {</span>
+<span class="nc" id="L60">            log.error(e.getMessage(), e);</span>
+<span class="nc" id="L61">        }</span>
+
+<span class="nc bnc" id="L63" title="All 2 branches missed.">        if(model == null) return null;</span>
+<span class="nc" id="L64">        Document d = new Document();</span>
+<span class="nc" id="L65">        d.put(&quot;ArtifactId&quot;, toJson(model.getArtifactId()));</span>
+<span class="nc" id="L66">        d.put(&quot;Build&quot;, toJson(model.getBuild()));</span>
+<span class="nc" id="L67">        d.put(&quot;CiManagement&quot;, toJson(model.getCiManagement()));</span>
+<span class="nc" id="L68">        d.put(&quot;Id&quot;, toJson(model.getId()));</span>
+<span class="nc" id="L69">        d.put(&quot;GroupId&quot;, toJson(model.getGroupId()));</span>
+<span class="nc" id="L70">        d.put(&quot;ModelEncoding&quot;, toJson(model.getModelEncoding()));</span>
+<span class="nc" id="L71">        d.put(&quot;ModelVersion&quot;, toJson(model.getModelVersion()));</span>
+<span class="nc" id="L72">        d.put(&quot;Description&quot;, toJson(model.getDescription()));</span>
+<span class="nc" id="L73">        d.put(&quot;InceptionYear&quot;, toJson(model.getInceptionYear()));</span>
+<span class="nc" id="L74">        d.put(&quot;Name&quot;, toJson(model.getName()));</span>
+<span class="nc" id="L75">        d.put(&quot;Packaging&quot;, toJson(model.getPackaging()));</span>
+<span class="nc" id="L76">        d.put(&quot;Url&quot;, toJson(model.getUrl()));</span>
+<span class="nc" id="L77">        d.put(&quot;Version&quot;, toJson(model.getVersion()));</span>
+<span class="nc" id="L78">        d.put(&quot;IssueManagement&quot;, toJson(model.getIssueManagement()));</span>
+<span class="nc" id="L79">        d.put(&quot;DependencyManagement&quot;, toJson(model.getDependencyManagement()));</span>
+<span class="nc" id="L80">        d.put(&quot;DistributionManagement&quot;, toJson(model.getDistributionManagement()));</span>
+<span class="nc" id="L81">        d.put(&quot;Contributors&quot;, toJsonCon(model.getContributors()));</span>
+<span class="nc" id="L82">        d.put(&quot;Developers&quot;, toJsonDev(model.getDevelopers()));</span>
+<span class="nc" id="L83">        d.put(&quot;Licenses&quot;, toJsonLic(model.getLicenses()));</span>
+<span class="nc" id="L84">        d.put(&quot;MailingLists&quot;, toJsonMai(model.getMailingLists()));</span>
+<span class="nc" id="L85">        d.put(&quot;Organization&quot;, toJson(model.getOrganization()));</span>
+<span class="nc" id="L86">        d.put(&quot;Parent&quot;, toJson(model.getParent()));</span>
+        //d.put(&quot;&quot;, toJson(model.getPomFile())); // NOTE: ignore file
+<span class="nc" id="L88">        d.put(&quot;Prerequisites&quot;, toJson(model.getPrerequisites()));</span>
+<span class="nc" id="L89">        d.put(&quot;Profiles&quot;, toJsonPro(model.getProfiles()));</span>
+        //d.put(&quot;&quot;, toJson(model.getProjectDirectory())); // NOTE: ignore file
+<span class="nc" id="L91">        d.put(&quot;Scm&quot;, toJson(model.getScm()));</span>
+<span class="nc" id="L92">        d.put(&quot;Dependencies&quot;, toJsonDep(model.getDependencies()));</span>
+<span class="nc" id="L93">        d.put(&quot;Modules&quot;, toJsonString(model.getModules()));</span>
+<span class="nc" id="L94">        d.put(&quot;PluginRepositories&quot;, toJsonRep(model.getPluginRepositories()));</span>
+        //d.put(&quot;&quot;, toJson(model.getProperties())); NOTE: ignore
+<span class="nc" id="L96">        d.put(&quot;Repositories&quot;, toJsonRep(model.getRepositories()));</span>
+<span class="nc" id="L97">        return d;</span>
+    }
+
+    private List&lt;Document&gt; toJsonDev(List&lt;Developer&gt; developers) {
+<span class="nc" id="L101">        List&lt;Document&gt; out = new ArrayList&lt;&gt;();</span>
+<span class="nc bnc" id="L102" title="All 2 branches missed.">        if(developers == null) return out;</span>
+<span class="nc" id="L103">        developers.forEach(developer -&gt; out.add(toJson(developer)));</span>
+<span class="nc" id="L104">        return out;</span>
+    }
+
+    private Document toJson(Developer developer) {
+<span class="nc bnc" id="L108" title="All 2 branches missed.">        if(developer == null) return null;</span>
+<span class="nc" id="L109">        Document d = new Document();</span>
+<span class="nc" id="L110">        d.put(&quot;Id&quot;, toJson(developer.getId()));</span>
+<span class="nc" id="L111">        d.put(&quot;Organization&quot;, toJson(developer.getOrganization()));</span>
+        // d.put(&quot;&quot;, toJson(developer.getProperties())); NOTE: ignore
+<span class="nc" id="L113">        d.put(&quot;OrganizationUrl&quot;, toJson(developer.getOrganizationUrl()));</span>
+<span class="nc" id="L114">        d.put(&quot;Email&quot;, toJson(developer.getEmail()));</span>
+<span class="nc" id="L115">        d.put(&quot;Name&quot;, toJson(developer.getName()));</span>
+<span class="nc" id="L116">        d.put(&quot;Timezone&quot;, toJson(developer.getTimezone()));</span>
+<span class="nc" id="L117">        d.put(&quot;Url&quot;, toJson(developer.getUrl()));</span>
+<span class="nc" id="L118">        d.put(&quot;Roles&quot;, toJsonString(developer.getRoles()));</span>
+<span class="nc" id="L119">        return d;</span>
+    }
+
+
+    private List&lt;Document&gt; toJsonLic(List&lt;License&gt; licenses) {
+<span class="nc" id="L124">        List&lt;Document&gt; out = new ArrayList&lt;&gt;();</span>
+<span class="nc bnc" id="L125" title="All 2 branches missed.">        if(licenses == null) return out;</span>
+<span class="nc" id="L126">        licenses.forEach(license -&gt; out.add(toJson(license)));</span>
+<span class="nc" id="L127">        return out;</span>
+    }
+
+    private Document toJson(License license) {
+<span class="nc bnc" id="L131" title="All 2 branches missed.">        if(license == null) return null;</span>
+<span class="nc" id="L132">        Document d = new Document();</span>
+<span class="nc" id="L133">        d.put(&quot;Distribution&quot;, toJson(license.getDistribution()));</span>
+<span class="nc" id="L134">        d.put(&quot;Comments&quot;, toJson(license.getComments()));</span>
+<span class="nc" id="L135">        d.put(&quot;Name&quot;, toJson(license.getName()));</span>
+<span class="nc" id="L136">        d.put(&quot;Url&quot;, toJson(license.getUrl()));</span>
+<span class="nc" id="L137">        return d;</span>
+    }
+
+    private List&lt;Document&gt; toJsonMai(List&lt;MailingList&gt; mailingLists) {
+<span class="nc" id="L141">        List&lt;Document&gt; out = new ArrayList&lt;&gt;();</span>
+<span class="nc bnc" id="L142" title="All 2 branches missed.">        if(mailingLists == null) return out;</span>
+<span class="nc" id="L143">        mailingLists.forEach(mailingList -&gt; out.add(toJson(mailingList)));</span>
+<span class="nc" id="L144">        return out;</span>
+    }
+
+    private Document toJson(MailingList mailingList) {
+<span class="nc bnc" id="L148" title="All 2 branches missed.">        if(mailingList == null) return null;</span>
+<span class="nc" id="L149">        Document d = new Document();</span>
+<span class="nc" id="L150">        d.put(&quot;Archive&quot;, toJson(mailingList.getArchive()));</span>
+<span class="nc" id="L151">        d.put(&quot;Name&quot;, toJson(mailingList.getName()));</span>
+<span class="nc" id="L152">        d.put(&quot;Post&quot;, toJson(mailingList.getPost()));</span>
+<span class="nc" id="L153">        d.put(&quot;Subscribe&quot;, toJson(mailingList.getSubscribe()));</span>
+<span class="nc" id="L154">        d.put(&quot;Unsubscribe&quot;, toJson(mailingList.getUnsubscribe()));</span>
+<span class="nc" id="L155">        d.put(&quot;OtherArchives&quot;, toJsonString(mailingList.getOtherArchives()));</span>
+<span class="nc" id="L156">        return d;</span>
+    }
+
+    private List&lt;String&gt; toJsonString(List&lt;String&gt; texts) {
+<span class="nc" id="L160">        return texts;</span>
+    }
+
+    private Document toJson(Prerequisites prerequisites) {
+<span class="nc bnc" id="L164" title="All 2 branches missed.">        if(prerequisites == null) return null;</span>
+<span class="nc" id="L165">        Document d = new Document();</span>
+<span class="nc" id="L166">        d.put(&quot;Maven&quot;, toJson(prerequisites.getMaven()));</span>
+<span class="nc" id="L167">        return d;</span>
+    }
+
+    private Document toJson(Organization organization) {
+<span class="nc bnc" id="L171" title="All 2 branches missed.">        if(organization == null) return null;</span>
+<span class="nc" id="L172">        Document d = new Document();</span>
+<span class="nc" id="L173">        d.put(&quot;Name&quot;, toJson(organization.getName()));</span>
+<span class="nc" id="L174">        d.put(&quot;Url&quot;, toJson(organization.getUrl()));</span>
+<span class="nc" id="L175">        return d;</span>
+    }
+
+    private Document toJson(Parent parent) {
+<span class="nc bnc" id="L179" title="All 2 branches missed.">        if(parent == null) return null;</span>
+<span class="nc" id="L180">        Document d = new Document();</span>
+<span class="nc" id="L181">        d.put(&quot;ArtifactId&quot;, toJson(parent.getArtifactId()));</span>
+<span class="nc" id="L182">        d.put(&quot;Id&quot;, toJson(parent.getId()));</span>
+<span class="nc" id="L183">        d.put(&quot;GroupId&quot;, toJson(parent.getGroupId()));</span>
+<span class="nc" id="L184">        d.put(&quot;RelativePath&quot;, toJson(parent.getRelativePath()));</span>
+<span class="nc" id="L185">        d.put(&quot;Version&quot;, toJson(parent.getVersion()));</span>
+<span class="nc" id="L186">        return d;</span>
+    }
+
+    private List&lt;Document&gt; toJsonPro(List&lt;Profile&gt; profiles) {
+<span class="nc" id="L190">        List&lt;Document&gt; out = new ArrayList&lt;&gt;();</span>
+<span class="nc bnc" id="L191" title="All 2 branches missed.">        if(profiles == null) return out;</span>
+<span class="nc" id="L192">        profiles.forEach(profile -&gt; out.add(toJson(profile)));</span>
+<span class="nc" id="L193">        return out;</span>
+    }
+
+    private Document toJson(Profile profile) {
+<span class="nc bnc" id="L197" title="All 2 branches missed.">        if(profile == null) return null;</span>
+<span class="nc" id="L198">        Document d = new Document();</span>
+<span class="nc" id="L199">        d.put(&quot;DependencyManagement&quot;, toJson(profile.getDependencyManagement()));</span>
+<span class="nc" id="L200">        d.put(&quot;DistributionManagement&quot;, toJson(profile.getDistributionManagement()));</span>
+<span class="nc" id="L201">        d.put(&quot;Id&quot;, toJson(profile.getId()));</span>
+        // d.put(&quot;&quot;, toJson(profile.getProperties())); NOTE: ignore
+<span class="nc" id="L203">        d.put(&quot;Source&quot;, toJson(profile.getSource()));</span>
+<span class="nc" id="L204">        d.put(&quot;Modules&quot;, toJsonString(profile.getModules()));</span>
+<span class="nc" id="L205">        d.put(&quot;Build&quot;, toJson(profile.getBuild()));</span>
+<span class="nc" id="L206">        d.put(&quot;Activation&quot;, toJson(profile.getActivation()));</span>
+<span class="nc" id="L207">        d.put(&quot;Dependencies&quot;, toJsonDep(profile.getDependencies()));</span>
+<span class="nc" id="L208">        d.put(&quot;PluginRepositories&quot;, toJsonPre(profile.getPluginRepositories()));</span>
+<span class="nc" id="L209">        d.put(&quot;Reporting&quot;, toJson(profile.getReporting()));</span>
+<span class="nc" id="L210">        d.put(&quot;Repositories&quot;, toJsonRep(profile.getRepositories()));</span>
+<span class="nc" id="L211">        return d;</span>
+    }
+
+    private Document toJson(Reporting reporting) {
+<span class="nc bnc" id="L215" title="All 2 branches missed.">        if(reporting == null) return null;</span>
+<span class="nc" id="L216">        Document d = new Document();</span>
+<span class="nc" id="L217">        d.put(&quot;OutputDirectory&quot;, toJson(reporting.getOutputDirectory()));</span>
+<span class="nc" id="L218">        d.put(&quot;ExcludeDefaults&quot;, toJson(reporting.getExcludeDefaults()));</span>
+<span class="nc" id="L219">        d.put(&quot;Plugins&quot;, toJsonPlu(reporting.getPlugins()));</span>
+        // d.put(&quot;&quot;, toJson(reporting.getReportPluginsAsMap())); NOTE: ignore for now
+<span class="nc" id="L221">        return d;</span>
+    }
+
+    private List&lt;Document&gt; toJsonPlu(List&lt;ReportPlugin&gt; plugins) {
+<span class="nc" id="L225">        List&lt;Document&gt; out = new ArrayList&lt;&gt;();</span>
+<span class="nc bnc" id="L226" title="All 2 branches missed.">        if(plugins == null) return out;</span>
+<span class="nc" id="L227">        plugins.forEach(plugin -&gt; out.add(toJson(plugin)));</span>
+<span class="nc" id="L228">        return out;</span>
+    }
+
+    private Document toJson(ReportPlugin plugin) {
+<span class="nc bnc" id="L232" title="All 2 branches missed.">        if(plugin == null) return null;</span>
+<span class="nc" id="L233">        Document d = new Document();</span>
+<span class="nc" id="L234">        d.put(&quot;ArtifactId&quot;, toJson(plugin.getArtifactId()));</span>
+<span class="nc" id="L235">        d.put(&quot;GroupId&quot;, toJson(plugin.getGroupId()));</span>
+<span class="nc" id="L236">        d.put(&quot;Key&quot;, toJson(plugin.getKey()));</span>
+<span class="nc" id="L237">        d.put(&quot;Version&quot;, toJson(plugin.getVersion()));</span>
+<span class="nc" id="L238">        d.put(&quot;ReportSets&quot;, toJsonRes(plugin.getReportSets()));</span>
+        //d.put(&quot;&quot;, toJson(plugin.getReportSetsAsMap())); NOTE: ignore
+        //d.put(&quot;&quot;, toJson(plugin.getConfiguration())); NOTE: ignore
+<span class="nc" id="L241">        return d;</span>
+    }
+
+    private List&lt;Document&gt; toJsonRes(List&lt;ReportSet&gt; reportSets) {
+<span class="nc" id="L245">        List&lt;Document&gt; out = new ArrayList&lt;&gt;();</span>
+<span class="nc bnc" id="L246" title="All 2 branches missed.">        if(reportSets == null) return out;</span>
+<span class="nc" id="L247">        reportSets.forEach(reportSet -&gt; out.add(toJson(reportSet)));</span>
+<span class="nc" id="L248">        return out;</span>
+    }
+
+    private Document toJson(ReportSet reportSet) {
+<span class="nc bnc" id="L252" title="All 2 branches missed.">        if(reportSet == null) return null;</span>
+<span class="nc" id="L253">        Document d = new Document();</span>
+<span class="nc" id="L254">        d.put(&quot;Id&quot;, toJson(reportSet.getId()));</span>
+<span class="nc" id="L255">        d.put(&quot;Reports&quot;, toJsonString(reportSet.getReports()));</span>
+<span class="nc" id="L256">        return d;</span>
+    }
+
+    private List&lt;Document&gt; toJsonPre(List&lt;Repository&gt; pluginRepositories) {
+<span class="nc" id="L260">        List&lt;Document&gt; out = new ArrayList&lt;&gt;();</span>
+<span class="nc bnc" id="L261" title="All 2 branches missed.">        if(pluginRepositories == null) return out;</span>
+<span class="nc" id="L262">        pluginRepositories.forEach(pluginRepositorie -&gt; out.add(toJsonPre(pluginRepositorie)));</span>
+<span class="nc" id="L263">        return out;</span>
+    }
+
+    private Document toJsonPre(Repository pluginRepositorie) {
+<span class="nc bnc" id="L267" title="All 2 branches missed.">        if(pluginRepositorie == null) return null;</span>
+<span class="nc" id="L268">        Document d = new Document();</span>
+<span class="nc" id="L269">        d.put(&quot;Id&quot;, toJson(pluginRepositorie.getId()));</span>
+<span class="nc" id="L270">        d.put(&quot;Layout&quot;, toJson(pluginRepositorie.getLayout()));</span>
+<span class="nc" id="L271">        d.put(&quot;Name&quot;, toJson(pluginRepositorie.getName()));</span>
+<span class="nc" id="L272">        d.put(&quot;Url&quot;, toJson(pluginRepositorie.getUrl()));</span>
+<span class="nc" id="L273">        d.put(&quot;Releases&quot;, toJson(pluginRepositorie.getReleases()));</span>
+<span class="nc" id="L274">        d.put(&quot;Snapshots&quot;, toJson(pluginRepositorie.getSnapshots()));</span>
+<span class="nc" id="L275">        return d;</span>
+    }
+
+    private Document toJson(RepositoryPolicy releases) {
+<span class="nc bnc" id="L279" title="All 2 branches missed.">        if(releases == null) return null;</span>
+<span class="nc" id="L280">        Document d = new Document();</span>
+<span class="nc" id="L281">        d.put(&quot;ChecksumPolicy&quot;, toJson(releases.getChecksumPolicy()));</span>
+<span class="nc" id="L282">        d.put(&quot;Enabled&quot;, toJson(releases.getEnabled()));</span>
+<span class="nc" id="L283">        d.put(&quot;UpdatePolicy&quot;, toJson(releases.getUpdatePolicy()));</span>
+<span class="nc" id="L284">        return d;</span>
+    }
+
+    private Document toJson(Activation activation) {
+<span class="nc bnc" id="L288" title="All 2 branches missed.">        if(activation == null) return null;</span>
+<span class="nc" id="L289">        Document d = new Document();</span>
+<span class="nc" id="L290">        d.put(&quot;Jdk&quot;, toJson(activation.getJdk()));</span>
+<span class="nc" id="L291">        d.put(&quot;File&quot;, toJson(activation.getFile()));</span>
+<span class="nc" id="L292">        d.put(&quot;Os&quot;, toJson(activation.getOs()));</span>
+<span class="nc" id="L293">        d.put(&quot;Property&quot;, toJson(activation.getProperty()));</span>
+<span class="nc" id="L294">        return d;</span>
+    }
+
+    private Document toJson(ActivationProperty property) {
+<span class="nc bnc" id="L298" title="All 2 branches missed.">        if(property == null) return null;</span>
+<span class="nc" id="L299">        Document d = new Document();</span>
+<span class="nc" id="L300">        d.put(&quot;Name&quot;, toJson(property.getName()));</span>
+<span class="nc" id="L301">        d.put(&quot;Value&quot;, toJson(property.getValue()));</span>
+<span class="nc" id="L302">        return d;</span>
+    }
+
+    private Object toJson(ActivationOS os) {
+<span class="nc bnc" id="L306" title="All 2 branches missed.">        if(os == null) return null;</span>
+<span class="nc" id="L307">        Document d = new Document();</span>
+<span class="nc" id="L308">        d.put(&quot;Arch&quot;, toJson(os.getArch()));</span>
+<span class="nc" id="L309">        d.put(&quot;Family&quot;, toJson(os.getFamily()));</span>
+<span class="nc" id="L310">        d.put(&quot;Name&quot;, toJson(os.getName()));</span>
+<span class="nc" id="L311">        d.put(&quot;Version&quot;, toJson(os.getVersion()));</span>
+<span class="nc" id="L312">        return d;</span>
+    }
+
+    private Document toJson(ActivationFile file) {
+<span class="nc bnc" id="L316" title="All 2 branches missed.">        if(file == null) return null;</span>
+<span class="nc" id="L317">        Document d = new Document();</span>
+<span class="nc" id="L318">        d.put(&quot;Exists&quot;, toJson(file.getExists()));</span>
+<span class="nc" id="L319">        d.put(&quot;Missing&quot;, toJson(file.getMissing()));</span>
+<span class="nc" id="L320">        return d;</span>
+    }
+
+    private Document toJson(BuildBase build) {
+<span class="nc bnc" id="L324" title="All 2 branches missed.">        if(build == null) return null;</span>
+<span class="nc" id="L325">        Document d = new Document();</span>
+<span class="nc" id="L326">        d.put(&quot;Directory&quot;, toJson(build.getDirectory()));</span>
+<span class="nc" id="L327">        d.put(&quot;DefaultGoal&quot;, toJson(build.getDefaultGoal()));</span>
+<span class="nc" id="L328">        d.put(&quot;FinalName&quot;, toJson(build.getFinalName()));</span>
+<span class="nc" id="L329">        d.put(&quot;PluginManagement&quot;, toJson(build.getPluginManagement()));</span>
+<span class="nc" id="L330">        d.put(&quot;Filters&quot;, toJsonString(build.getFilters()));</span>
+<span class="nc" id="L331">        d.put(&quot;Resources&quot;, toJsonRsc(build.getResources()));</span>
+<span class="nc" id="L332">        d.put(&quot;TestResources&quot;, toJsonRsc(build.getTestResources()));</span>
+<span class="nc" id="L333">        d.put(&quot;Plugins&quot;, toJsonPgn(build.getPlugins()));</span>
+<span class="nc" id="L334">        return d;</span>
+    }
+
+    private List&lt;Document&gt; toJsonPgn(List&lt;Plugin&gt; plugins) {
+<span class="nc" id="L338">        List&lt;Document&gt; out = new ArrayList&lt;&gt;();</span>
+<span class="nc bnc" id="L339" title="All 2 branches missed.">        if(plugins == null) return out;</span>
+<span class="nc" id="L340">        plugins.forEach(plugin -&gt; out.add(toJson(plugin)));</span>
+<span class="nc" id="L341">        return out;</span>
+    }
+
+    private Document toJson(Plugin plugin) {
+<span class="nc bnc" id="L345" title="All 2 branches missed.">        if(plugin == null) return null;</span>
+<span class="nc" id="L346">        Document d = new Document();</span>
+<span class="nc" id="L347">        d.put(&quot;ArtifactId&quot;, toJson(plugin.getArtifactId()));</span>
+<span class="nc" id="L348">        d.put(&quot;Id&quot;, toJson(plugin.getId()));</span>
+<span class="nc" id="L349">        d.put(&quot;GroupId&quot;, toJson(plugin.getGroupId()));</span>
+<span class="nc" id="L350">        d.put(&quot;Extensions&quot;, toJson(plugin.getExtensions()));</span>
+<span class="nc" id="L351">        d.put(&quot;Key&quot;, toJson(plugin.getKey()));</span>
+<span class="nc" id="L352">        d.put(&quot;Version&quot;, toJson(plugin.getVersion()));</span>
+<span class="nc" id="L353">        d.put(&quot;Inherited&quot;, toJson(plugin.getInherited()));</span>
+<span class="nc" id="L354">        d.put(&quot;Dependencies&quot;, toJsonDep(plugin.getDependencies()));</span>
+<span class="nc" id="L355">        d.put(&quot;Executions&quot;, toJsonExe(plugin.getExecutions()));</span>
+<span class="nc" id="L356">        return d;</span>
+    }
+
+    private List&lt;Document&gt; toJsonExe(List&lt;PluginExecution&gt; executions) {
+<span class="nc" id="L360">        List&lt;Document&gt; out = new ArrayList&lt;&gt;();</span>
+<span class="nc bnc" id="L361" title="All 2 branches missed.">        if(executions == null) return out;</span>
+<span class="nc" id="L362">        executions.forEach(execution -&gt; out.add(toJson(execution)));</span>
+<span class="nc" id="L363">        return out;</span>
+    }
+
+    private Document toJson(PluginExecution execution) {
+<span class="nc bnc" id="L367" title="All 2 branches missed.">        if(execution == null) return null;</span>
+<span class="nc" id="L368">        Document d = new Document();</span>
+<span class="nc" id="L369">        d.put(&quot;Id&quot;, toJson(execution.getId()));</span>
+<span class="nc" id="L370">        d.put(&quot;Phase&quot;, toJson(execution.getPhase()));</span>
+<span class="nc" id="L371">        d.put(&quot;Inherited&quot;, toJson(execution.getInherited()));</span>
+<span class="nc" id="L372">        d.put(&quot;Goals&quot;, toJsonString(execution.getGoals()));</span>
+<span class="nc" id="L373">        d.put(&quot;Priority&quot;, toJson(execution.getPriority()));</span>
+<span class="nc" id="L374">        return d;</span>
+    }
+
+    private int toJson(int number) {
+<span class="nc" id="L378">        return number;</span>
+    }
+
+    private List&lt;Document&gt; toJsonRsc(List&lt;Resource&gt; resources) {
+<span class="nc" id="L382">        List&lt;Document&gt; out = new ArrayList&lt;&gt;();</span>
+<span class="nc bnc" id="L383" title="All 2 branches missed.">        if(resources == null) return out;</span>
+<span class="nc" id="L384">        resources.forEach(resource -&gt; out.add(toJson(resource)));</span>
+<span class="nc" id="L385">        return out;</span>
+    }
+
+    private Document toJson(Resource resource) {
+<span class="nc bnc" id="L389" title="All 2 branches missed.">        if(resource == null) return null;</span>
+<span class="nc" id="L390">        Document d = new Document();</span>
+<span class="nc" id="L391">        d.put(&quot;MergeId&quot;, toJson(resource.getMergeId()));</span>
+<span class="nc" id="L392">        d.put(&quot;Directory&quot;, toJson(resource.getDirectory()));</span>
+<span class="nc" id="L393">        d.put(&quot;Filtering&quot;, toJson(resource.getFiltering()));</span>
+<span class="nc" id="L394">        d.put(&quot;TargetPath&quot;, toJson(resource.getTargetPath()));</span>
+<span class="nc" id="L395">        d.put(&quot;Excludes&quot;, toJsonString(resource.getExcludes()));</span>
+<span class="nc" id="L396">        d.put(&quot;Includes&quot;, toJsonString(resource.getIncludes()));</span>
+<span class="nc" id="L397">        return d;</span>
+    }
+
+    private Object toJson(PluginManagement pluginManagement) {
+<span class="nc bnc" id="L401" title="All 2 branches missed.">        if(pluginManagement == null) return null;</span>
+<span class="nc" id="L402">        Document d = new Document();</span>
+<span class="nc" id="L403">        d.put(&quot;Plugins&quot;, toJsonPgn(pluginManagement.getPlugins()));</span>
+<span class="nc" id="L404">        return d;</span>
+    }
+
+    private Document toJson(Scm scm) {
+<span class="nc bnc" id="L408" title="All 2 branches missed.">        if(scm == null) return null;</span>
+<span class="nc" id="L409">        Document d = new Document();</span>
+<span class="nc" id="L410">        d.put(&quot;Connection&quot;, toJson(scm.getConnection()));</span>
+<span class="nc" id="L411">        d.put(&quot;DeveloperConnection&quot;, toJson(scm.getDeveloperConnection()));</span>
+<span class="nc" id="L412">        d.put(&quot;Tag&quot;, toJson(scm.getTag()));</span>
+<span class="nc" id="L413">        d.put(&quot;Url&quot;, toJson(scm.getUrl()));</span>
+<span class="nc" id="L414">        return d;</span>
+    }
+
+    private List&lt;Document&gt; toJsonDep(List&lt;Dependency&gt; dependencies) {
+<span class="nc" id="L418">        List&lt;Document&gt; out = new ArrayList&lt;&gt;();</span>
+<span class="nc bnc" id="L419" title="All 2 branches missed.">        if(dependencies == null) return out;</span>
+<span class="nc" id="L420">        dependencies.forEach(dependencie -&gt; out.add(toJson(dependencie)));</span>
+<span class="nc" id="L421">        return out;</span>
+    }
+
+    private Document toJson(Dependency dependencie) {
+<span class="nc bnc" id="L425" title="All 2 branches missed.">        if(dependencie == null) return null;</span>
+<span class="nc" id="L426">        Document d = new Document();</span>
+<span class="nc" id="L427">        d.put(&quot;ManagementKey&quot;, toJson(dependencie.getManagementKey()));</span>
+<span class="nc" id="L428">        d.put(&quot;ArtifactId&quot;, toJson(dependencie.getArtifactId()));</span>
+<span class="nc" id="L429">        d.put(&quot;Classifier&quot;, toJson(dependencie.getClassifier()));</span>
+<span class="nc" id="L430">        d.put(&quot;GroupId&quot;, toJson(dependencie.getGroupId()));</span>
+<span class="nc" id="L431">        d.put(&quot;Optional&quot;, toJson(dependencie.getOptional()));</span>
+<span class="nc" id="L432">        d.put(&quot;Scope&quot;, toJson(dependencie.getScope()));</span>
+<span class="nc" id="L433">        d.put(&quot;SystemPath&quot;, toJson(dependencie.getSystemPath()));</span>
+<span class="nc" id="L434">        d.put(&quot;Type&quot;, toJson(dependencie.getType()));</span>
+<span class="nc" id="L435">        d.put(&quot;Version&quot;, toJson(dependencie.getVersion()));</span>
+<span class="nc" id="L436">        d.put(&quot;Exclusions&quot;, toJsonPex(dependencie.getExclusions()));</span>
+<span class="nc" id="L437">        return d;</span>
+    }
+
+    private List&lt;Document&gt; toJsonPex(List&lt;Exclusion&gt; exclusions) {
+<span class="nc" id="L441">        List&lt;Document&gt; out = new ArrayList&lt;&gt;();</span>
+<span class="nc bnc" id="L442" title="All 2 branches missed.">        if(exclusions == null) return out;</span>
+<span class="nc" id="L443">        exclusions.forEach(exclusion -&gt; out.add(toJson(exclusion)));</span>
+<span class="nc" id="L444">        return out;</span>
+    }
+
+    private Document toJson(Exclusion exclusion) {
+<span class="nc bnc" id="L448" title="All 2 branches missed.">        if(exclusion == null) return null;</span>
+<span class="nc" id="L449">        Document d = new Document();</span>
+<span class="nc" id="L450">        d.put(&quot;ArtifactId&quot;, toJson(exclusion.getArtifactId()));</span>
+<span class="nc" id="L451">        d.put(&quot;GroupId&quot;, toJson(exclusion.getGroupId()));</span>
+<span class="nc" id="L452">        return d;</span>
+    }
+
+    private List&lt;Document&gt; toJsonRep(List&lt;Repository&gt; repositories) {
+<span class="nc" id="L456">        List&lt;Document&gt; out = new ArrayList&lt;&gt;();</span>
+<span class="nc bnc" id="L457" title="All 2 branches missed.">        if(repositories == null) return out;</span>
+<span class="nc" id="L458">        repositories.forEach(repositorie -&gt; out.add(toJson(repositorie)));</span>
+<span class="nc" id="L459">        return out;</span>
+    }
+
+    private Document toJson(Repository repositorie) {
+<span class="nc bnc" id="L463" title="All 2 branches missed.">        if(repositorie == null) return null;</span>
+<span class="nc" id="L464">        Document d = new Document();</span>
+<span class="nc" id="L465">        d.put(&quot;Snapshots&quot;, toJson(repositorie.getSnapshots()));</span>
+<span class="nc" id="L466">        d.put(&quot;Releases&quot;, toJson(repositorie.getReleases()));</span>
+<span class="nc" id="L467">        d.put(&quot;Url&quot;, toJson(repositorie.getUrl()));</span>
+<span class="nc" id="L468">        d.put(&quot;Name&quot;, toJson(repositorie.getName()));</span>
+<span class="nc" id="L469">        d.put(&quot;Layout&quot;, toJson(repositorie.getLayout()));</span>
+<span class="nc" id="L470">        d.put(&quot;Id&quot;, toJson(repositorie.getId()));</span>
+<span class="nc" id="L471">        return d;</span>
+    }
+
+    private List&lt;Document&gt; toJsonCon(List&lt;Contributor&gt; contributors) {
+<span class="nc" id="L475">        List&lt;Document&gt; out = new ArrayList&lt;&gt;();</span>
+<span class="nc bnc" id="L476" title="All 2 branches missed.">        if(contributors == null) return out;</span>
+<span class="nc" id="L477">        contributors.forEach(contributor -&gt; out.add(toJson(contributor)));</span>
+<span class="nc" id="L478">        return out;</span>
+    }
+
+    private Document toJson(Contributor contributor) {
+<span class="nc bnc" id="L482" title="All 2 branches missed.">        if(contributor == null) return null;</span>
+<span class="nc" id="L483">        Document d = new Document();</span>
+<span class="nc" id="L484">        d.put(&quot;Organization&quot;, toJson(contributor.getOrganization()));</span>
+        // d.put(&quot;&quot;, toJson(contributor.getProperties())); NOTE: ignore
+<span class="nc" id="L486">        d.put(&quot;OrganizationUrl&quot;, toJson(contributor.getOrganizationUrl()));</span>
+<span class="nc" id="L487">        d.put(&quot;Email&quot;, toJson(contributor.getEmail()));</span>
+<span class="nc" id="L488">        d.put(&quot;Name&quot;, toJson(contributor.getName()));</span>
+<span class="nc" id="L489">        d.put(&quot;Timezone&quot;, toJson(contributor.getTimezone()));</span>
+<span class="nc" id="L490">        d.put(&quot;Url&quot;, toJson(contributor.getUrl()));</span>
+<span class="nc" id="L491">        d.put(&quot;Roles&quot;, toJsonString(contributor.getRoles()));</span>
+<span class="nc" id="L492">        return d;</span>
+    }
+
+    private Document toJson(DistributionManagement distributionManagement) {
+<span class="nc bnc" id="L496" title="All 2 branches missed.">        if(distributionManagement == null) return null;</span>
+<span class="nc" id="L497">        Document d = new Document();</span>
+<span class="nc" id="L498">        d.put(&quot;DownloadUrl&quot;, toJson(distributionManagement.getDownloadUrl()));</span>
+<span class="nc" id="L499">        d.put(&quot;Repository&quot;, toJson(distributionManagement.getRepository())); // as repository</span>
+<span class="nc" id="L500">        d.put(&quot;SnapshotRepository&quot;, toJson(distributionManagement.getSnapshotRepository())); // as repository</span>
+<span class="nc" id="L501">        d.put(&quot;Status&quot;, toJson(distributionManagement.getStatus()));</span>
+<span class="nc" id="L502">        d.put(&quot;Relocation&quot;, toJson(distributionManagement.getRelocation()));</span>
+<span class="nc" id="L503">        d.put(&quot;Site&quot;, toJson(distributionManagement.getSite()));</span>
+<span class="nc" id="L504">        return d;</span>
+    }
+
+    private Object toJson(Site site) {
+<span class="nc bnc" id="L508" title="All 2 branches missed.">        if(site == null) return null;</span>
+<span class="nc" id="L509">        Document d = new Document();</span>
+<span class="nc" id="L510">        d.put(&quot;Id&quot;, toJson(site.getId()));</span>
+<span class="nc" id="L511">        d.put(&quot;Name&quot;, toJson(site.getName()));</span>
+<span class="nc" id="L512">        d.put(&quot;Url&quot;, toJson(site.getUrl()));</span>
+<span class="nc" id="L513">        return d;</span>
+    }
+
+    private Object toJson(Relocation relocation) {
+<span class="nc bnc" id="L517" title="All 2 branches missed.">        if(relocation == null) return null;</span>
+<span class="nc" id="L518">        Document d = new Document();</span>
+<span class="nc" id="L519">        d.put(&quot;ArtifactId&quot;, toJson(relocation.getArtifactId()));</span>
+<span class="nc" id="L520">        d.put(&quot;GroupId&quot;, toJson(relocation.getGroupId()));</span>
+<span class="nc" id="L521">        d.put(&quot;Message&quot;, toJson(relocation.getMessage()));</span>
+<span class="nc" id="L522">        d.put(&quot;Version&quot;, toJson(relocation.getVersion()));</span>
+<span class="nc" id="L523">        return d;</span>
+    }
+
+    private Document toJson(DependencyManagement dependencyManagement) {
+<span class="nc bnc" id="L527" title="All 2 branches missed.">        if(dependencyManagement == null) return null;</span>
+<span class="nc" id="L528">        Document d = new Document();</span>
+<span class="nc" id="L529">        d.put(&quot;Dependencies&quot;, toJsonDep(dependencyManagement.getDependencies()));</span>
+<span class="nc" id="L530">        return d;</span>
+    }
+
+    private Document toJson(IssueManagement issueManagement) {
+<span class="nc bnc" id="L534" title="All 2 branches missed.">        if(issueManagement == null) return null;</span>
+<span class="nc" id="L535">        Document d = new Document();</span>
+<span class="nc" id="L536">        d.put(&quot;System&quot;, toJson(issueManagement.getSystem()));</span>
+<span class="nc" id="L537">        d.put(&quot;Url&quot;, toJson(issueManagement.getUrl()));</span>
+<span class="nc" id="L538">        return d;</span>
+    }
+
+    private String toJson(String text) {
+<span class="nc" id="L542">        return text;</span>
+    }
+
+    private Document toJson(CiManagement ciManagement) {
+<span class="nc bnc" id="L546" title="All 2 branches missed.">        if(ciManagement == null) return null;</span>
+<span class="nc" id="L547">        Document d = new Document();</span>
+<span class="nc" id="L548">        d.put(&quot;System&quot;, toJson(ciManagement.getSystem()));</span>
+<span class="nc" id="L549">        d.put(&quot;Url&quot;, toJson(ciManagement.getUrl()));</span>
+<span class="nc" id="L550">        d.put(&quot;Notifiers&quot;, toJsonNot(ciManagement.getNotifiers()));</span>
+<span class="nc" id="L551">        return d;</span>
+    }
+
+    private List&lt;Document&gt; toJsonNot(List&lt;Notifier&gt; notifiers) {
+<span class="nc" id="L555">        List&lt;Document&gt; out = new ArrayList&lt;&gt;();</span>
+<span class="nc bnc" id="L556" title="All 2 branches missed.">        if(notifiers == null) return out;</span>
+<span class="nc" id="L557">        notifiers.forEach(notifier -&gt; out.add(toJson(notifier)));</span>
+<span class="nc" id="L558">        return out;</span>
+    }
+
+    private Document toJson(Notifier notifier) {
+<span class="nc bnc" id="L562" title="All 2 branches missed.">        if(notifier == null) return null;</span>
+<span class="nc" id="L563">        Document d = new Document();</span>
+<span class="nc" id="L564">        d.put(&quot;Address&quot;, toJson(notifier.getAddress()));</span>
+        // d.put(&quot;&quot;, toJson(notifier.getConfiguration())); NOTE: ignore
+<span class="nc" id="L566">        d.put(&quot;Type&quot;, toJson(notifier.getType()));</span>
+<span class="nc" id="L567">        return d;</span>
+    }
+
+    private Document toJson(Build build) {
+<span class="nc bnc" id="L571" title="All 2 branches missed.">        if(build == null) return null;</span>
+<span class="nc" id="L572">        Document d = new Document();</span>
+<span class="nc" id="L573">        d.put(&quot;PluginManagement&quot;, toJson(build.getPluginManagement()));</span>
+<span class="nc" id="L574">        d.put(&quot;OutputDirectory&quot;, toJson(build.getOutputDirectory()));</span>
+<span class="nc" id="L575">        d.put(&quot;ScriptSourceDirectory&quot;, toJson(build.getScriptSourceDirectory()));</span>
+<span class="nc" id="L576">        d.put(&quot;SourceDirectory&quot;, toJson(build.getSourceDirectory()));</span>
+<span class="nc" id="L577">        d.put(&quot;TestOutputDirectory&quot;, toJson(build.getTestOutputDirectory()));</span>
+<span class="nc" id="L578">        d.put(&quot;TestSourceDirectory&quot;, toJson(build.getTestSourceDirectory()));</span>
+<span class="nc" id="L579">        d.put(&quot;DefaultGoal&quot;, toJson(build.getDefaultGoal()));</span>
+<span class="nc" id="L580">        d.put(&quot;Directory&quot;, toJson(build.getDirectory()));</span>
+<span class="nc" id="L581">        d.put(&quot;FinalName&quot;, toJson(build.getFinalName()));</span>
+<span class="nc" id="L582">        d.put(&quot;Extensions&quot;, toJsonExt(build.getExtensions()));</span>
+<span class="nc" id="L583">        d.put(&quot;Filters&quot;, toJsonString(build.getFilters()));</span>
+<span class="nc" id="L584">        d.put(&quot;Plugins&quot;, toJsonPgn(build.getPlugins()));</span>
+<span class="nc" id="L585">        d.put(&quot;Resources&quot;, toJsonRsc(build.getResources()));</span>
+<span class="nc" id="L586">        d.put(&quot;TestResources&quot;, toJsonRsc(build.getTestResources()));</span>
+<span class="nc" id="L587">        return d;</span>
+    }
+
+    private List&lt;Document&gt; toJsonExt(List&lt;Extension&gt; extensions) {
+<span class="nc" id="L591">        List&lt;Document&gt; out = new ArrayList&lt;&gt;();</span>
+<span class="nc bnc" id="L592" title="All 2 branches missed.">        if(extensions == null) return out;</span>
+<span class="nc" id="L593">        extensions.forEach(extension -&gt; out.add(toJson(extension)));</span>
+<span class="nc" id="L594">        return out;</span>
+    }
+
+    private Document toJson(Extension extension) {
+<span class="nc bnc" id="L598" title="All 2 branches missed.">        if(extension == null) return null;</span>
+<span class="nc" id="L599">        Document d = new Document();</span>
+<span class="nc" id="L600">        d.put(&quot;ArtifactId&quot;, toJson(extension.getArtifactId()));</span>
+<span class="nc" id="L601">        d.put(&quot;GroupId&quot;, toJson(extension.getGroupId()));</span>
+<span class="nc" id="L602">        d.put(&quot;Version&quot;, toJson(extension.getVersion()));</span>
+<span class="nc" id="L603">        return d;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.0.201801022044</span></div></body></html>

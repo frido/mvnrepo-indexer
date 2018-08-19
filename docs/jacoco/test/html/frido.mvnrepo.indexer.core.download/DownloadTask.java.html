@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="sk"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>DownloadTask.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">mvnrepo-indexer</a> &gt; <a href="index.source.html" class="el_package">frido.mvnrepo.indexer.core.download</a> &gt; <span class="el_source">DownloadTask.java</span></div><h1>DownloadTask.java</h1><pre class="source lang-java linenums">package frido.mvnrepo.indexer.core.download;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import frido.mvnrepo.indexer.core.client.Client;
+
+public class DownloadTask implements Prioritable {
+
+<span class="fc" id="L10">    Logger log = LoggerFactory.getLogger(DownloadTask.class);</span>
+
+<span class="fc" id="L12">    private int priority = 0;</span>
+    private Client httpClient;
+    private Consumer consumer;
+    private DownloadLink link;
+
+<span class="fc" id="L17">    public DownloadTask(DownloadLink link, Client httpClient, Consumer consumer) {</span>
+<span class="fc" id="L18">        this.httpClient = httpClient;</span>
+<span class="fc" id="L19">        this.consumer = consumer;</span>
+<span class="fc" id="L20">        this.link = link;</span>
+<span class="fc" id="L21">        this.priority = link.getDeep();        </span>
+<span class="fc" id="L22">    }</span>
+
+    @Override
+    public void run() {
+        try {
+<span class="fc" id="L27">            String content = httpClient.download(link);</span>
+<span class="fc" id="L28">            consumer.notify(link, content);</span>
+<span class="nc" id="L29">        } catch (Exception e) {</span>
+<span class="nc" id="L30">            log.error(&quot;Downloader - Task - Error&quot;, e);</span>
+<span class="nc" id="L31">            consumer.error(e);</span>
+<span class="fc" id="L32">        }</span>
+<span class="fc" id="L33">    }</span>
+
+    @Override
+    public int getPriority() {
+<span class="fc" id="L37">        return this.priority;</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.0.201801022044</span></div></body></html>
