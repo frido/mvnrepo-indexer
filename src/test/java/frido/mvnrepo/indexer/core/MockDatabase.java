@@ -40,7 +40,7 @@ public class MockDatabase implements Database {
 	}
 
 	@Override
-	public void update(String collection, Document query, Document newOne) {
+	synchronized public void update(String collection, Document query, Document newOne) {
 		updated.add(newOne);
     }
     

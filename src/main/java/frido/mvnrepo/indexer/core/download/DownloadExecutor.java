@@ -4,7 +4,12 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class DownloadExecutor implements Executor{
+
+    Logger log = LoggerFactory.getLogger(DownloadExecutor.class);
 
     private ExecutorService executor;
 

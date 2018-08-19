@@ -60,19 +60,16 @@ public class Crawler implements Consumer {
     }
 
     private List<DownloadLink> getLinks(DownloadLink link, String content) {
-        log.trace("getLinks - content: {}", content);
-        log.trace("getLinks - link: {}", link);
         List<DownloadLink> links = new LinkedList<>();
         Matcher m = p.matcher(content);
         while (m.find()) {
             links.add(link.append(m.group(1)));
-            log.trace("getLinks - appender: {}", link.append(m.group(1)));
         }
         return links;
     }
 
     private void doNext(DownloadLink link) {
-        log.trace("doNext: {}", link);
+        //log.trace("doNext: {}", link);
         if (link.match(this.filter)) {
             this.match(link);
         } else if (link.isDirectory()) {
