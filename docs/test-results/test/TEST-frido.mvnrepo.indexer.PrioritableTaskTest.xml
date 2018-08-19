@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="frido.mvnrepo.indexer.PrioritableTaskTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2018-08-11T21:33:30" hostname="DESKTOP-508B8I8" time="0.0">
+  <properties/>
+  <testcase name="testTaskPriority" classname="frido.mvnrepo.indexer.PrioritableTaskTest" time="0.0"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

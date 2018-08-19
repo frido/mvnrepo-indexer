@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="sk"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>PomUrlBuilder.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">mvnrepo-indexer</a> &gt; <a href="index.source.html" class="el_package">frido.mvnrepo.indexer</a> &gt; <span class="el_source">PomUrlBuilder.java</span></div><h1>PomUrlBuilder.java</h1><pre class="source lang-java linenums">package frido.mvnrepo.indexer;
+
+<span class="nc" id="L3">public class PomUrlBuilder {</span>
+    private String group;
+    private String artifact;
+    private String version;
+
+	public PomUrlBuilder group(String group) {
+<span class="nc" id="L9">        this.group = group;</span>
+<span class="nc" id="L10">		return this;</span>
+    }
+    
+    public PomUrlBuilder artifact(String artifact) {
+<span class="nc" id="L14">        this.artifact = artifact;</span>
+<span class="nc" id="L15">        return this;</span>
+    }
+    
+    public PomUrlBuilder version(String version) {
+<span class="nc" id="L19">        this.version = version;</span>
+<span class="nc" id="L20">        return this;</span>
+    }
+    
+    public String build() throws PomUrlException{
+<span class="nc bnc" id="L24" title="All 6 branches missed.">        if (group == null || artifact == null || version == null) {</span>
+<span class="nc" id="L25">            throw new PomUrlException(String.format(&quot;PomUrlException: group=%s, artifact=%s, version=%s&quot;, group, artifact, version));</span>
+        }
+        // TODO: base url configurable
+<span class="nc" id="L28">        return &quot;http://central.maven.org/maven2/&quot; + group.replace(&quot;.&quot;, &quot;/&quot;) + &quot;/&quot; + artifact + &quot;/&quot; + version + &quot;/&quot;</span>
+                + artifact + &quot;-&quot; + version + &quot;.pom&quot;;
+    }
+
+    
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.8.201612092310</span></div></body></html>

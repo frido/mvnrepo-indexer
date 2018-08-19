@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="frido.mvnrepo.indexer.ProjectTest" tests="3" skipped="0" failures="0" errors="0" timestamp="2018-08-11T21:33:30" hostname="DESKTOP-508B8I8" time="2.587">
+  <properties/>
+  <testcase name="threading" classname="frido.mvnrepo.indexer.ProjectTest" time="0.047"/>
+  <testcase name="getUniqFilter" classname="frido.mvnrepo.indexer.ProjectTest" time="2.54"/>
+  <testcase name="generalTest" classname="frido.mvnrepo.indexer.ProjectTest" time="0.0"/>
+  <system-out><![CDATA[23:33:30.837 [pool-2-thread-1] INFO  f.m.indexer.github.GitHubHandler - notify:https://github.com/frido/flowable
+23:33:30.837 [pool-2-thread-1] INFO  f.m.indexer.github.GitHubHandler - run:https://github.com/frido/flowable
+23:33:33.011 [pool-2-thread-1] INFO  f.m.indexer.github.GitHubHandler - finally:https://github.com/frido/flowable
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

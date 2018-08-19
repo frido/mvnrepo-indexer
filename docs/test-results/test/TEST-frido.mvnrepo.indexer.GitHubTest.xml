@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="frido.mvnrepo.indexer.GitHubTest" tests="2" skipped="0" failures="0" errors="0" timestamp="2018-03-31T09:32:52" hostname="DESKTOP-508B8I8" time="8.615">
+  <properties/>
+  <testcase name="testMongoQuery" classname="frido.mvnrepo.indexer.GitHubTest" time="6.005"/>
+  <testcase name="testDownloader" classname="frido.mvnrepo.indexer.GitHubTest" time="2.61"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="sk"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Crawler.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">mvnrepo-indexer</a> &gt; <a href="index.source.html" class="el_package">frido.mvnrepo.indexer</a> &gt; <span class="el_source">Crawler.java</span></div><h1>Crawler.java</h1><pre class="source lang-java linenums">package frido.mvnrepo.indexer;
+
+import java.util.LinkedList;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+public class Crawler implements Consumer {
+
+<span class="fc" id="L13">    Logger log = LoggerFactory.getLogger(Crawler.class);</span>
+
+<span class="fc" id="L15">    private static String LINK_PATTERN = &quot;&lt;a href=\&quot;(.*?)\&quot;&quot;;</span>
+<span class="fc" id="L16">    private static Pattern p = Pattern.compile(LINK_PATTERN);</span>
+
+    private CrawlerMatchHandler matchHandler;
+    private String filter;
+    Downloader downloader;
+
+<span class="fc" id="L22">    public Crawler(Downloader downloader, String match, CrawlerMatchHandler matchHandler) {</span>
+
+<span class="fc" id="L24">        this.matchHandler = matchHandler;</span>
+<span class="fc" id="L25">        this.filter = match;</span>
+<span class="fc" id="L26">        this.downloader = downloader;</span>
+<span class="fc" id="L27">    }</span>
+
+    public void search(String link) {
+<span class="fc" id="L30">        log.trace(&quot;search: {}&quot;, link);</span>
+<span class="fc" id="L31">        downloader.start(link, this);</span>
+<span class="fc" id="L32">    }</span>
+
+    public void match(String link) {
+<span class="fc" id="L35">        log.trace(&quot;match: {}&quot;, link);</span>
+<span class="fc" id="L36">        this.downloader.start(link, new Consumer() {</span>
+
+            @Override
+            public void notify(String url, String content) {
+<span class="fc" id="L40">                matchHandler.match(url, content);</span>
+<span class="fc" id="L41">            }</span>
+
+            @Override
+            public void error(Throwable e) {
+<span class="nc" id="L45">                log.error(&quot;Crawler - Task - Error&quot;, e);</span>
+<span class="nc" id="L46">            }</span>
+        });
+<span class="fc" id="L48">    }</span>
+
+    @Override
+    public void notify(String url, String content) {
+<span class="fc" id="L52">        List&lt;String&gt; links = getLinks(url, content);</span>
+<span class="fc bfc" id="L53" title="All 2 branches covered.">        for (String link : links) {</span>
+<span class="fc" id="L54">            doNext(link);</span>
+<span class="fc" id="L55">        }</span>
+<span class="fc" id="L56">    }</span>
+
+    @Override
+    public void error(Throwable e) {
+<span class="nc" id="L60">        log.error(&quot;Crawler - Task - Error&quot;, e);</span>
+<span class="nc" id="L61">    }</span>
+
+    private List&lt;String&gt; getLinks(String url, String content) {
+<span class="fc" id="L64">        log.trace(&quot;getLinks: {}&quot;, content);</span>
+<span class="fc" id="L65">        List&lt;String&gt; links = new LinkedList&lt;&gt;();</span>
+<span class="fc" id="L66">        Matcher m = p.matcher(content);</span>
+<span class="fc bfc" id="L67" title="All 2 branches covered.">        while (m.find()) {</span>
+<span class="fc" id="L68">            String link = getFullUrl(url, m.group(1));</span>
+<span class="fc" id="L69">            links.add(link);</span>
+<span class="fc" id="L70">        }</span>
+<span class="fc" id="L71">        return links;</span>
+    }
+
+    private void doNext(String link) {
+<span class="fc" id="L75">        log.trace(&quot;doNext: {}&quot;, link);</span>
+<span class="fc bfc" id="L76" title="All 2 branches covered.">        if (link.endsWith(this.filter)) {</span>
+<span class="fc" id="L77">            this.match(link);</span>
+<span class="fc bfc" id="L78" title="All 4 branches covered.">        }else if (link.endsWith(&quot;/&quot;) &amp;&amp; !link.endsWith(&quot;../&quot;)) {</span>
+<span class="fc" id="L79">            this.search(link);</span>
+        }
+<span class="fc" id="L81">    }</span>
+
+    private String getFullUrl(String url, String link) {
+<span class="fc" id="L84">        log.trace(&quot;getFullUrl: {}, {})&quot;, url, link);</span>
+<span class="pc bpc" id="L85" title="2 of 4 branches missed.">        if (link.startsWith(&quot;https://&quot;) || link.startsWith(&quot;http://&quot;)) {</span>
+<span class="nc" id="L86">            return link;</span>
+        }
+<span class="fc" id="L88">        return url + link;</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.8.201612092310</span></div></body></html>
