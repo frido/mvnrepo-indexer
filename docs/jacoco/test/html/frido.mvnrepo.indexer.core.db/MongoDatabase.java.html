@@ -15,13 +15,13 @@ import com.mongodb.client.model.UpdateOptions;
 
 public class MongoDatabase implements Database {
 
-<span class="fc" id="L18">    Logger log = LoggerFactory.getLogger(MongoDatabase.class);</span>
+<span class="nc" id="L18">    Logger log = LoggerFactory.getLogger(MongoDatabase.class);</span>
     private static final String ENV_MONGO_URL = &quot;MONGO_URL&quot;;
     private com.mongodb.client.MongoDatabase db;
 
     @SuppressWarnings(&quot;resource&quot;)
-<span class="fc" id="L23">    public MongoDatabase() {</span>
-<span class="fc" id="L24">        String connectionString = System.getenv().get(ENV_MONGO_URL);</span>
+<span class="nc" id="L23">    public MongoDatabase() {</span>
+<span class="nc" id="L24">        String connectionString = System.getenv().get(ENV_MONGO_URL);</span>
 <span class="nc" id="L25">        MongoClientURI uri  = new MongoClientURI(connectionString);</span>
 <span class="nc" id="L26">        MongoClient client = new MongoClient(uri);</span>
 <span class="nc" id="L27">        db = client.getDatabase(uri.getDatabase());</span>
