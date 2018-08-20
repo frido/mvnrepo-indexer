@@ -1,3 +1,5 @@
+https://frido.github.io/mvnrepo-indexer/ 
+
 * ./gradlew run - run application
 * ./gradlew test - run tests
 * ./gradlew test --tests frido.mvnrepo.indexer.ArtifactProcessorTest

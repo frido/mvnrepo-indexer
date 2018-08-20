@@ -1,0 +1,7 @@
+frido.mvnrepo.indexer
+frido.mvnrepo.indexer.artifact
+frido.mvnrepo.indexer.core.client
+frido.mvnrepo.indexer.core.db
+frido.mvnrepo.indexer.core.download
+frido.mvnrepo.indexer.github
+frido.mvnrepo.indexer.pom

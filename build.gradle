@@ -121,6 +121,10 @@ tasks.withType(Pmd) {
     }
 }
 
+javadoc {
+	destinationDir = file("docs/javadoc")
+}
+
 task fatJar(type: Jar) {
 	manifest {
         attributes 'Main-Class': 'frido.mvnrepo.indexer.App'
