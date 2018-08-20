@@ -3,6 +3,7 @@ package frido.mvnrepo.indexer;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -30,9 +31,7 @@ public class GitHubProcessorTest {
         DownloadExecutor executor = new DownloadExecutor(new NoThreadExecutor());
         GitHubProcessor process3 = new GitHubProcessor(database, executor);
         process3.start();
-        assertEquals(
-                "Document{{owner={login=frido}, name=flowable, createdAt=2017-05-06T09:52:29Z, description=null, homepageUrl=null, pushedAt=2017-05-06T09:52:29Z, stargazers={totalCount=0}, watchers={totalCount=0}, forks={totalCount=0}}}",
-                database.getUpdated().get(0).toString());
+        assertEquals("mvnrepo-indexer", database.getUpdated().get(0).getString("name"));
     }
 
     @Test

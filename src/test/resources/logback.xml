@@ -12,11 +12,10 @@
       </encoder>
    </appender>
 
-  <logger name="frido.mvnrepo.indexer.StoreMatchHandler" level="TRACE"/>
   <logger name="org.mongodb.driver" level="ERROR"/>
   
 
-  <root level="TRACE">
+  <root level="OFF">
     <appender-ref ref="STDOUT" />
   </root>
 </configuration>

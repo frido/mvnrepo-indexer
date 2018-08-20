@@ -36,7 +36,7 @@ public class MockDatabase implements Database {
 
 	@Override
 	public Iterable<Document> getGitHubRelated() {
-		return Arrays.asList(new Document("Url", "https://github.com/frido/flowable"));
+		return Arrays.asList(new Document("Url", "https://github.com/frido/mvnrepo-indexer"));
 	}
 
 	@Override
