@@ -1,31 +1,31 @@
-<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="sk"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>PomLinkBuilder.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">mvnrepo-indexer</a> &gt; <a href="index.source.html" class="el_package">frido.mvnrepo.indexer.pom</a> &gt; <span class="el_source">PomLinkBuilder.java</span></div><h1>PomLinkBuilder.java</h1><pre class="source lang-java linenums">package frido.mvnrepo.indexer.pom;
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>PomLinkBuilder.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">mvnrepo-indexer</a> &gt; <a href="index.source.html" class="el_package">frido.mvnrepo.indexer.pom</a> &gt; <span class="el_source">PomLinkBuilder.java</span></div><h1>PomLinkBuilder.java</h1><pre class="source lang-java linenums">package frido.mvnrepo.indexer.pom;
 
-<span class="nc" id="L3">public class PomLinkBuilder {</span>
+<span class="fc" id="L3">public class PomLinkBuilder {</span>
 	private static final String HTTP_CENTRAL_MAVEN_ORG_MAVEN2 = &quot;http://central.maven.org/maven2/&quot;;
 	private String group;
     private String artifact;
     private String version;
 
 	public PomLinkBuilder group(String group) {
-<span class="nc" id="L10">        this.group = group;</span>
-<span class="nc" id="L11">		return this;</span>
+<span class="fc" id="L10">        this.group = group;</span>
+<span class="fc" id="L11">		return this;</span>
     }
     
     public PomLinkBuilder artifact(String artifact) {
-<span class="nc" id="L15">        this.artifact = artifact;</span>
-<span class="nc" id="L16">        return this;</span>
+<span class="fc" id="L15">        this.artifact = artifact;</span>
+<span class="fc" id="L16">        return this;</span>
     }
     
     public PomLinkBuilder version(String version) {
-<span class="nc" id="L20">        this.version = version;</span>
-<span class="nc" id="L21">        return this;</span>
+<span class="fc" id="L20">        this.version = version;</span>
+<span class="fc" id="L21">        return this;</span>
     }
     
     public String build() throws PomUrlException{
-<span class="nc bnc" id="L25" title="All 6 branches missed.">        if (group == null || artifact == null || version == null) {</span>
+<span class="pc bpc" id="L25" title="3 of 6 branches missed.">        if (group == null || artifact == null || version == null) {</span>
 <span class="nc" id="L26">            throw new PomUrlException(String.format(&quot;PomUrlException: group=%s, artifact=%s, version=%s&quot;, group, artifact, version));</span>
         }
-<span class="nc" id="L28">        return HTTP_CENTRAL_MAVEN_ORG_MAVEN2 + group.replace(&quot;.&quot;, &quot;/&quot;) + &quot;/&quot; + artifact + &quot;/&quot; + version + &quot;/&quot;</span>
+<span class="fc" id="L28">        return HTTP_CENTRAL_MAVEN_ORG_MAVEN2 + group.replace(&quot;.&quot;, &quot;/&quot;) + &quot;/&quot; + artifact + &quot;/&quot; + version + &quot;/&quot;</span>
                 + artifact + &quot;-&quot; + version + &quot;.pom&quot;;
     }
 

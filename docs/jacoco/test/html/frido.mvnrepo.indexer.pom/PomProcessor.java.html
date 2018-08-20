@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="sk"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>PomProcessor.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">mvnrepo-indexer</a> &gt; <a href="index.source.html" class="el_package">frido.mvnrepo.indexer.pom</a> &gt; <span class="el_source">PomProcessor.java</span></div><h1>PomProcessor.java</h1><pre class="source lang-java linenums">package frido.mvnrepo.indexer.pom;
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>PomProcessor.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">mvnrepo-indexer</a> &gt; <a href="index.source.html" class="el_package">frido.mvnrepo.indexer.pom</a> &gt; <span class="el_source">PomProcessor.java</span></div><h1>PomProcessor.java</h1><pre class="source lang-java linenums">package frido.mvnrepo.indexer.pom;
 
 import org.bson.Document;
 import org.slf4j.Logger;
@@ -15,31 +15,31 @@ import frido.mvnrepo.indexer.core.download.DownloadLink;
 import frido.mvnrepo.indexer.core.download.Downloader;
 
 public class PomProcessor {
-<span class="nc" id="L18">    static Logger log = LoggerFactory.getLogger(PomProcessor.class);</span>
+<span class="fc" id="L18">    static Logger log = LoggerFactory.getLogger(PomProcessor.class);</span>
     private Database db;
     private DownloadExecutor executor;
 
-<span class="nc" id="L22">    public PomProcessor(Database database, DownloadExecutor executor){</span>
-<span class="nc" id="L23">        this.db = database;</span>
-<span class="nc" id="L24">        this.executor = executor;</span>
-<span class="nc" id="L25">    }</span>
+<span class="fc" id="L22">    public PomProcessor(Database database, DownloadExecutor executor){</span>
+<span class="fc" id="L23">        this.db = database;</span>
+<span class="fc" id="L24">        this.executor = executor;</span>
+<span class="fc" id="L25">    }</span>
 
     public void start() {
-<span class="nc" id="L28">        Iterable&lt;Document&gt; list  = db.getAll(&quot;metadata&quot;);</span>
-<span class="nc" id="L29">        Consumer consumer = new PomHandler(db);</span>
-<span class="nc" id="L30">        Client httpClient = new DownloadClient(new JerseyHttpClient());</span>
-<span class="nc" id="L31">        Downloader loader = new Downloader(executor, httpClient);</span>
-<span class="nc" id="L32">        list.forEach(doc -&gt; {</span>
-<span class="nc" id="L33">            String pomLink = null;</span>
+<span class="fc" id="L28">        Iterable&lt;Document&gt; list  = db.getAll(&quot;metadata&quot;);</span>
+<span class="fc" id="L29">        Consumer consumer = new PomHandler(db);</span>
+<span class="fc" id="L30">        Client httpClient = new DownloadClient(new JerseyHttpClient());</span>
+<span class="fc" id="L31">        Downloader loader = new Downloader(executor, httpClient);</span>
+<span class="fc" id="L32">        list.forEach(doc -&gt; {</span>
+<span class="fc" id="L33">            String pomLink = null;</span>
             try {
-<span class="nc" id="L35">                pomLink = new Metadata(doc).getPomLink();</span>
+<span class="fc" id="L35">                pomLink = new Metadata(doc).getPomLink();</span>
 <span class="nc" id="L36">            } catch (PomUrlException e) {</span>
 <span class="nc" id="L37">                log.error(&quot;Artifact - pomLink&quot;, e);</span>
 <span class="nc" id="L38">                consumer.error(e);</span>
 <span class="nc" id="L39">                return;</span>
-<span class="nc" id="L40">			}</span>
-<span class="nc" id="L41">            loader.start(new DownloadLink(pomLink), consumer);</span>
-<span class="nc" id="L42">        });</span>
-<span class="nc" id="L43">    }</span>
+<span class="fc" id="L40">			}</span>
+<span class="fc" id="L41">            loader.start(new DownloadLink(pomLink), consumer);</span>
+<span class="fc" id="L42">        });</span>
+<span class="fc" id="L43">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.0.201801022044</span></div></body></html>

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="sk"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>MongoDatabase.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">mvnrepo-indexer</a> &gt; <a href="index.source.html" class="el_package">frido.mvnrepo.indexer.core.db</a> &gt; <span class="el_source">MongoDatabase.java</span></div><h1>MongoDatabase.java</h1><pre class="source lang-java linenums">package frido.mvnrepo.indexer.core.db;
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>MongoDatabase.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">mvnrepo-indexer</a> &gt; <a href="index.source.html" class="el_package">frido.mvnrepo.indexer.core.db</a> &gt; <span class="el_source">MongoDatabase.java</span></div><h1>MongoDatabase.java</h1><pre class="source lang-java linenums">package frido.mvnrepo.indexer.core.db;
 
 import java.util.Arrays;
 
@@ -15,13 +15,13 @@ import com.mongodb.client.model.UpdateOptions;
 
 public class MongoDatabase implements Database {
 
-<span class="nc" id="L18">    Logger log = LoggerFactory.getLogger(MongoDatabase.class);</span>
+<span class="fc" id="L18">    Logger log = LoggerFactory.getLogger(MongoDatabase.class);</span>
     private static final String ENV_MONGO_URL = &quot;MONGO_URL&quot;;
     private com.mongodb.client.MongoDatabase db;
 
     @SuppressWarnings(&quot;resource&quot;)
-<span class="nc" id="L23">    public MongoDatabase() {</span>
-<span class="nc" id="L24">        String connectionString = System.getenv().get(ENV_MONGO_URL);</span>
+<span class="fc" id="L23">    public MongoDatabase() {</span>
+<span class="fc" id="L24">        String connectionString = System.getenv().get(ENV_MONGO_URL);</span>
 <span class="nc" id="L25">        MongoClientURI uri  = new MongoClientURI(connectionString);</span>
 <span class="nc" id="L26">        MongoClient client = new MongoClient(uri);</span>
 <span class="nc" id="L27">        db = client.getDatabase(uri.getDatabase());</span>
