@@ -24,6 +24,7 @@ public class ProjectTest {
 
     Logger log = LoggerFactory.getLogger(ProjectTest.class);
 
+    /*
     @Test
     public void getUniqFilter() throws Exception {
         Database database = new MongoDatabase();
@@ -37,7 +38,7 @@ public class ProjectTest {
             assertFalse(it.hasNext());
         }
     }
-
+*/
     @Test
     public void generalTest(){
         Iterable<String> iterable = Arrays.asList("a","b","c","d","e");

@@ -25,6 +25,7 @@ public class GitHubProcessorTest {
 
     Logger log = LoggerFactory.getLogger(GitHubProcessorTest.class);
 
+    /*
     @Test
     public void testDownloader() {
         MockDatabase database = new MockDatabase();
@@ -33,7 +34,9 @@ public class GitHubProcessorTest {
         process3.start();
         assertEquals("mvnrepo-indexer", database.getUpdated().get(0).getString("name"));
     }
+    */
 
+    /*
     @Test
     public void testMongoQuery(){
         MongoDatabase db = new MongoDatabase();
@@ -46,4 +49,5 @@ public class GitHubProcessorTest {
         assertNotEquals(0, list.size());
         assertEquals(list.size(), set.size());
     }
+    */
 }

@@ -41,7 +41,7 @@
 </td>
 <td>
 <div class="infoBox" id="duration">
-<div class="counter">9.285s</div>
+<div class="counter">9.087s</div>
 <p>duration</p>
 </div>
 </td>
@@ -79,12 +79,12 @@
 </thead>
 <tr>
 <td class="success">testDownloader</td>
-<td class="success">2.459s</td>
+<td class="success">2.446s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
 <td class="success">testMongoQuery</td>
-<td class="success">6.826s</td>
+<td class="success">6.641s</td>
 <td class="success">passed</td>
 </tr>
 </table>
@@ -92,29 +92,26 @@
 <div id="tab1" class="tab">
 <h2>Standard output</h2>
 <span class="code">
-<pre>22:44:36,257 |-INFO in ch.qos.logback.classic.LoggerContext[default] - Could NOT find resource [logback-test.xml]
-22:44:36,258 |-INFO in ch.qos.logback.classic.LoggerContext[default] - Could NOT find resource [logback.groovy]
-22:44:36,258 |-INFO in ch.qos.logback.classic.LoggerContext[default] - Found resource [logback.xml] at [file:/C:/dev/repos/mvnrepo-indexer/build/resources/test/logback.xml]
-22:44:36,263 |-WARN in ch.qos.logback.classic.LoggerContext[default] - Resource [logback.xml] occurs multiple times on the classpath.
-22:44:36,263 |-WARN in ch.qos.logback.classic.LoggerContext[default] - Resource [logback.xml] occurs at [file:/C:/dev/repos/mvnrepo-indexer/build/resources/main/logback.xml]
-22:44:36,263 |-WARN in ch.qos.logback.classic.LoggerContext[default] - Resource [logback.xml] occurs at [file:/C:/dev/repos/mvnrepo-indexer/build/resources/test/logback.xml]
-22:44:36,490 |-INFO in ch.qos.logback.classic.joran.action.ConfigurationAction - debug attribute not set
-22:44:36,494 |-INFO in ch.qos.logback.core.joran.action.AppenderAction - About to instantiate appender of type [ch.qos.logback.core.ConsoleAppender]
-22:44:36,571 |-INFO in ch.qos.logback.core.joran.action.AppenderAction - Naming appender as [STDOUT]
-22:44:36,602 |-INFO in ch.qos.logback.core.joran.action.NestedComplexPropertyIA - Assuming default type [ch.qos.logback.classic.encoder.PatternLayoutEncoder] for [encoder] property
-22:44:36,774 |-INFO in ch.qos.logback.core.joran.action.AppenderAction - About to instantiate appender of type [ch.qos.logback.core.FileAppender]
-22:44:36,786 |-INFO in ch.qos.logback.core.joran.action.AppenderAction - Naming appender as [FILE]
-22:44:36,788 |-INFO in ch.qos.logback.core.joran.action.NestedComplexPropertyIA - Assuming default type [ch.qos.logback.classic.encoder.PatternLayoutEncoder] for [encoder] property
-22:44:36,789 |-INFO in ch.qos.logback.core.FileAppender[FILE] - File property is set to [log/log.txt]
-22:44:36,799 |-INFO in ch.qos.logback.classic.joran.action.LoggerAction - Setting level of logger [frido.mvnrepo.indexer.StoreMatchHandler] to TRACE
-22:44:36,799 |-INFO in ch.qos.logback.classic.joran.action.LoggerAction - Setting level of logger [org.mongodb.driver] to ERROR
-22:44:36,799 |-INFO in ch.qos.logback.classic.joran.action.RootLoggerAction - Setting level of ROOT logger to TRACE
-22:44:36,802 |-INFO in ch.qos.logback.core.joran.action.AppenderRefAction - Attaching appender named [STDOUT] to Logger[ROOT]
-22:44:36,808 |-INFO in ch.qos.logback.classic.joran.action.ConfigurationAction - End of configuration.
-22:44:36,816 |-INFO in ch.qos.logback.classic.joran.JoranConfigurator@443f0fc2 - Registering current configuration as safe fallback point
+<pre>23:00:08,444 |-INFO in ch.qos.logback.classic.LoggerContext[default] - Could NOT find resource [logback-test.xml]
+23:00:08,445 |-INFO in ch.qos.logback.classic.LoggerContext[default] - Could NOT find resource [logback.groovy]
+23:00:08,445 |-INFO in ch.qos.logback.classic.LoggerContext[default] - Found resource [logback.xml] at [file:/C:/dev/repos/mvnrepo-indexer/build/resources/test/logback.xml]
+23:00:08,449 |-WARN in ch.qos.logback.classic.LoggerContext[default] - Resource [logback.xml] occurs multiple times on the classpath.
+23:00:08,449 |-WARN in ch.qos.logback.classic.LoggerContext[default] - Resource [logback.xml] occurs at [file:/C:/dev/repos/mvnrepo-indexer/build/resources/main/logback.xml]
+23:00:08,449 |-WARN in ch.qos.logback.classic.LoggerContext[default] - Resource [logback.xml] occurs at [file:/C:/dev/repos/mvnrepo-indexer/build/resources/test/logback.xml]
+23:00:08,879 |-INFO in ch.qos.logback.classic.joran.action.ConfigurationAction - debug attribute not set
+23:00:08,885 |-INFO in ch.qos.logback.core.joran.action.AppenderAction - About to instantiate appender of type [ch.qos.logback.core.ConsoleAppender]
+23:00:08,986 |-INFO in ch.qos.logback.core.joran.action.AppenderAction - Naming appender as [STDOUT]
+23:00:09,026 |-INFO in ch.qos.logback.core.joran.action.NestedComplexPropertyIA - Assuming default type [ch.qos.logback.classic.encoder.PatternLayoutEncoder] for [encoder] property
+23:00:09,252 |-INFO in ch.qos.logback.core.joran.action.AppenderAction - About to instantiate appender of type [ch.qos.logback.core.FileAppender]
+23:00:09,265 |-INFO in ch.qos.logback.core.joran.action.AppenderAction - Naming appender as [FILE]
+23:00:09,268 |-INFO in ch.qos.logback.core.joran.action.NestedComplexPropertyIA - Assuming default type [ch.qos.logback.classic.encoder.PatternLayoutEncoder] for [encoder] property
+23:00:09,270 |-INFO in ch.qos.logback.core.FileAppender[FILE] - File property is set to [log/log.txt]
+23:00:09,280 |-INFO in ch.qos.logback.classic.joran.action.LoggerAction - Setting level of logger [org.mongodb.driver] to ERROR
+23:00:09,280 |-INFO in ch.qos.logback.classic.joran.action.RootLoggerAction - Setting level of ROOT logger to OFF
+23:00:09,281 |-INFO in ch.qos.logback.core.joran.action.AppenderRefAction - Attaching appender named [STDOUT] to Logger[ROOT]
+23:00:09,285 |-INFO in ch.qos.logback.classic.joran.action.ConfigurationAction - End of configuration.
+23:00:09,289 |-INFO in ch.qos.logback.classic.joran.JoranConfigurator@152b0f8f - Registering current configuration as safe fallback point
 
-22:44:44.419 [Test worker] TRACE f.m.indexer.github.GitHubClient - link:https://github.com/frido/mvnrepo-indexer
-22:44:44.436 [Test worker] TRACE f.m.i.core.client.JerseyHttpClient - download: https://api.github.com/graphql-{ &quot;query&quot;: &quot;query{repository(owner:\&quot;frido\&quot;, name:\&quot;mvnrepo-indexer\&quot;){owner {login} name createdAt description homepageUrl pushedAt stargazers {totalCount}watchers{totalCount}forks{totalCount}}}&quot;}
 </pre>
 </span>
 </div>
@@ -126,7 +123,7 @@
 <input id="line-wrapping-toggle" type="checkbox" autocomplete="off"/>
 </label>
 </div>Generated by 
-<a href="http://www.gradle.org">Gradle 4.9</a> at 20.8.2018 22:44:55</p>
+<a href="http://www.gradle.org">Gradle 4.9</a> at 20.8.2018 23:00:28</p>
 </div>
 </div>
 </body>
