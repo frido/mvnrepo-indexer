@@ -1,0 +1,23 @@
+{
+    "data": {
+        "repository": {
+            "owner": {
+                "login": "datamindedbe"
+            },
+            "name": "lighthouse",
+            "createdAt": "2018-01-29T16:30:57Z",
+            "description": "Lighthouse is a library for data lakes built on top of Apache Spark. It provides high-level APIs in Scala to streamline data pipelines and apply best practices.",
+            "homepageUrl": "",
+            "pushedAt": "2018-07-31T14:10:54Z",
+            "stargazers": {
+                "totalCount": 30
+            },
+            "watchers": {
+                "totalCount": 9
+            },
+            "forks": {
+                "totalCount": 1
+            }
+        }
+    }
+}

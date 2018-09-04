@@ -5,13 +5,7 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 public class ComparableExecutor extends ThreadPoolExecutor {
-    public ComparableExecutor(int poolSize) {
-        super(poolSize, poolSize, 0, TimeUnit.HOURS,
-                new PriorityBlockingQueue<Runnable>(100, (Runnable r1, Runnable r2) -> {
-                    Prioritable t1 = (Prioritable) r1;
-                    Prioritable t2 = (Prioritable) r2;
-                    return (-1) * (t1.getPriority() - t2.getPriority());
-                }));
-    }
-
+	public ComparableExecutor(int poolSize) {
+		super(poolSize, poolSize, 0, TimeUnit.HOURS, new PriorityBlockingQueue<Runnable>(100, new DeepComparator()));
+	}
 }

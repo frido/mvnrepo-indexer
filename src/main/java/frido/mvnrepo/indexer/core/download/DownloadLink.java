@@ -1,48 +1,43 @@
 package frido.mvnrepo.indexer.core.download;
 
+import java.net.URI;
+import java.net.URISyntaxException;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class DownloadLink {
+public class DownloadLink implements Link {
 
-    Logger log = LoggerFactory.getLogger(DownloadLink.class);
-    
-    private String link;
-    
-    public DownloadLink(String link){
-        this.link = link;
-    }
+	Logger log = LoggerFactory.getLogger(DownloadLink.class);
 
-    public boolean match(String filter) {
-        return link.endsWith(filter);
-    }
+	private String link;
 
-    public boolean isDirectory() {
-        return link.endsWith("/") && !link.endsWith("../");
-    }
+	public DownloadLink(String link) {
+		this.link = link;
+	}
 
-    public DownloadLink append(String appendLink) {
-        if (appendLink.startsWith("https://") || appendLink.startsWith("http://")) {
-            return new DownloadLink(appendLink);
-        }
-        return new DownloadLink(link + appendLink);
-    }
+	public boolean match(String filter) {
+		return link.endsWith(filter);
+	}
 
-    public int getDeep() {
-        int deep = 0;
-        for (char ch : link.toCharArray()) {
-            if (ch == '/') {
-                deep++;
-            }
-        }
-        return deep;
-    }
+	public boolean isDirectory() {
+		return link.endsWith("/") && !link.endsWith("../");
+	}
 
-    public String getLink(){
-        return link;
-    }
+	public DownloadLink append(String appendLink) {
+		if (appendLink.startsWith("https://") || appendLink.startsWith("http://")) {
+			return new DownloadLink(appendLink);
+		}
+		return new DownloadLink(link + appendLink);
+	}
 
-    public String toString(){
-        return this.link;
-    }
+	@Override
+	public String toString() {
+		return this.link;
+	}
+
+	@Override
+	public URI getURI() throws URISyntaxException {
+		return new URI(link);
+	}
 }

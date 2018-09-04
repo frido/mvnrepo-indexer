@@ -6,6 +6,6 @@ public interface Database {
     public Document save(String collection, Document doc);
     public Iterable<Document> getAll(String collection);
     public Iterable<Document> getByFilter(String collection, Document filter);
-    public Iterable<Document> getGitHubRelated();
+    public Iterable<Document> findByUrlWithGithub();
     public void update(String collection, Document query, Document newOne);
 }

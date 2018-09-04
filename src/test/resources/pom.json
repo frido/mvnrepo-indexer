@@ -1,0 +1,73 @@
+{
+    "_id": {
+        "$oid": "5ab7befa48b13953306ff2c4"
+    },
+    "ArtifactId": "lighthouse-platform_2.11",
+    "Build": null,
+    "CiManagement": null,
+    "Id": "be.dataminded:lighthouse-platform_2.11:jar:0.0.1",
+    "GroupId": "be.dataminded",
+    "ModelEncoding": "UTF-8",
+    "ModelVersion": "4.0.0",
+    "Description": "lighthouse-platform",
+    "InceptionYear": null,
+    "Name": "lighthouse-platform",
+    "Packaging": "jar",
+    "Url": "https://github.com/datamindedbe/lighthouse",
+    "Version": "0.0.1",
+    "IssueManagement": null,
+    "DependencyManagement": null,
+    "DistributionManagement": null,
+    "Contributors": [],
+    "Developers": [
+        {
+            "Id": "mlavaert",
+            "Organization": null,
+            "OrganizationUrl": null,
+            "Email": "mathias.lavaert@dataminded.be",
+            "Name": "Mathias Lavaert",
+            "Timezone": null,
+            "Url": "https://github.com/mlavaert",
+            "Roles": []
+        }
+    ],
+    "Licenses": [
+        {
+            "Distribution": "repo",
+            "Comments": null,
+            "Name": "Apache-2.0",
+            "Url": "http://www.apache.org/licenses/LICENSE-2.0"
+        }
+    ],
+    "MailingLists": [],
+    "Organization": {
+        "Name": "be.dataminded",
+        "Url": "https://github.com/datamindedbe/lighthouse"
+    },
+    "Parent": null,
+    "Prerequisites": null,
+    "Profiles": [],
+    "Scm": {
+        "Connection": "git@github.com:datamindedbe/lighthouse.git",
+        "DeveloperConnection": null,
+        "Tag": "HEAD",
+        "Url": "https://github.com/datamindedbe/lighthouse"
+    },
+    "Dependencies": [
+        {
+            "ManagementKey": "org.scala-lang:scala-library:jar",
+            "ArtifactId": "scala-library",
+            "Classifier": null,
+            "GroupId": "org.scala-lang",
+            "Optional": null,
+            "Scope": null,
+            "SystemPath": null,
+            "Type": "jar",
+            "Version": "2.11.12",
+            "Exclusions": []
+        }
+    ],
+    "Modules": [],
+    "PluginRepositories": [],
+    "Repositories": []
+}

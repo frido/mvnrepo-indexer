@@ -10,70 +10,65 @@ import org.slf4j.LoggerFactory;
 
 public class Crawler implements Consumer {
 
-    Logger log = LoggerFactory.getLogger(Crawler.class);
+	Logger log = LoggerFactory.getLogger(Crawler.class);
 
-    private static String LINK_PATTERN = "<a href=\"(.*?)\"";
-    private static Pattern p = Pattern.compile(LINK_PATTERN);
+	private static String LINK_PATTERN = "<a href=\"(.*?)\"";
+	private static Pattern p = Pattern.compile(LINK_PATTERN);
 
-    private CrawlerMatchHandler matchHandler;
-    private String filter;
-    Downloader downloader;
+	private DownloadExecutor executor;
+	private DownloadClient client;
+	private Consumer consumer;
+	private String filter;
 
-    public Crawler(Downloader downloader, String match, CrawlerMatchHandler matchHandler) {
-        this.matchHandler = matchHandler;
-        this.filter = match;
-        this.downloader = downloader;
-    }
+	public Crawler(DownloadClient client, DownloadExecutor executor, Consumer consumer) {
+		this.client = client;
+		this.executor = executor;
+		this.consumer = consumer;
+	}
 
-    public void search(DownloadLink link) {
-        log.trace("search: {}", link);
-        downloader.start(link, this);
-    }
+	public void search(Link link, String filter) {
+		this.filter = filter;
+		download(link);
+	}
 
-    public void match(DownloadLink link) {
-        log.trace("match: {}", link);
-        this.downloader.start(link, new Consumer() {
+	private void search(Link link) {
+		download(link);
+	}
 
-            @Override
-            public void notify(DownloadLink url, String content) {
-                matchHandler.match(url, content);
-            }
+	public void download(Link link) {
+		DownloadManager processor = new DownloadManager(client, executor);
+		processor.download(link, this);
+	}
 
-            @Override
-            public void error(Throwable e) {
-                log.error("Crawler - Task - Error", e);
-            }
-        });
-    }
+	public void match(Link link) {
+		DownloadManager processor = new DownloadManager(client, executor);
+		processor.download(link, consumer);
+	}
 
-    @Override
-    public void notify(DownloadLink link, String content) {
-        List<DownloadLink> links = getLinks(link, content);
-        for (DownloadLink item : links) {
-            doNext(item);
-        }
-    }
+	@Override
+	public void accept(Link link, String content) {
+		List<Link> links = getLinks(link, content);
+		for (Link item : links) {
+			if (item.match(this.filter)) {
+				this.match(item);
+			} else if (item.isDirectory()) {
+				this.search(item);
+			}
+		}
+	}
 
-    @Override
-    public void error(Throwable e) {
-        log.error("Crawler - Task - Error", e);
-    }
+	private List<Link> getLinks(Link link, String content) {
+		List<Link> links = new LinkedList<>();
+		Matcher m = p.matcher(content);
+		while (m.find()) {
+			links.add(link.append(m.group(1)));
+		}
+		return links;
+	}
 
-    private List<DownloadLink> getLinks(DownloadLink link, String content) {
-        List<DownloadLink> links = new LinkedList<>();
-        Matcher m = p.matcher(content);
-        while (m.find()) {
-            links.add(link.append(m.group(1)));
-        }
-        return links;
-    }
+	@Override
+	public void error(Exception e) {
+		// TODO Auto-generated method stub
 
-    private void doNext(DownloadLink link) {
-        //log.trace("doNext: {}", link);
-        if (link.match(this.filter)) {
-            this.match(link);
-        } else if (link.isDirectory()) {
-            this.search(link);
-        }
-    }
+	}
 }

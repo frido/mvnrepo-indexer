@@ -1,38 +1,57 @@
 package frido.mvnrepo.indexer.pom;
 
+import org.bson.Document;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import frido.mvnrepo.indexer.artifact.Metadata;
+import frido.mvnrepo.indexer.core.db.Database;
 import frido.mvnrepo.indexer.core.download.Consumer;
+import frido.mvnrepo.indexer.core.download.DownloadClient;
+import frido.mvnrepo.indexer.core.download.DownloadExecutor;
 import frido.mvnrepo.indexer.core.download.DownloadLink;
-import frido.mvnrepo.indexer.core.download.Downloader;
-import frido.mvnrepo.indexer.core.download.Provider;
+import frido.mvnrepo.indexer.core.download.DownloadManager;
+import frido.mvnrepo.indexer.core.download.Link;
+import frido.mvnrepo.indexer.data.Metadata;
+import frido.mvnrepo.indexer.data.Pom;
+import frido.mvnrepo.indexer.metadata.MetadataProcessor;
 
-public class PomProcessor {
-	static Logger log = LoggerFactory.getLogger(PomProcessor.class);
+public class PomProcessor implements Consumer {
 
-	private Downloader loader;
-	private Provider provider;
-	private Consumer consumer;
+	Logger log = LoggerFactory.getLogger(MetadataProcessor.class);
 
-	public PomProcessor(Provider provider, Downloader downloader, Consumer consumer) {
-		this.loader = downloader;
-		this.provider = provider;
-		this.consumer = consumer;
+	private Database db;
+	private DownloadClient client;
+	private DownloadExecutor executor;
+
+	public PomProcessor(Database database, DownloadClient client, DownloadExecutor executorService) {
+		this.db = database;
+		this.client = client;
+		this.executor = executorService;
 	}
 
 	public void start() {
-		provider.provide().forEach(doc -> {
-			String pomLink = null;
+		DownloadManager processor = new DownloadManager(client, executor);
+		for (Document doc : this.db.getAll("metadata")) {
 			try {
-				pomLink = new Metadata(doc).getPomLink();
+				Metadata metadata = Metadata.valueOf(doc);
+				String pomLink = new PomLinkBuilder().repo(metadata.getRepo()).group(metadata.getGroup())
+						.artifact(metadata.getArtifact()).version(metadata.getVersion()).build();
+				processor.download(new DownloadLink(pomLink), this);
 			} catch (PomUrlException e) {
-				log.error("Artifact - pomLink", e);
-				consumer.error(e);
-				return;
+				log.error("", e);
 			}
-			loader.start(new DownloadLink(pomLink), consumer);
-		});
+		}
+	}
+
+	@Override
+	public void accept(Link link, String content) {
+		Pom pom = Pom.valueOf(content);
+		this.db.update("pom", pom.getUniqFilter(), pom.getDocument());
+	}
+
+	@Override
+	public void error(Exception e) {
+		log.error("", e);
+
 	}
 }
