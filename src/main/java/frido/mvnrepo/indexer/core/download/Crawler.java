@@ -10,19 +10,17 @@ import org.slf4j.LoggerFactory;
 
 public class Crawler implements Consumer {
 
-	Logger log = LoggerFactory.getLogger(Crawler.class);
+	private Logger log = LoggerFactory.getLogger(Crawler.class);
 
 	private static String LINK_PATTERN = "<a href=\"(.*?)\"";
 	private static Pattern p = Pattern.compile(LINK_PATTERN);
 
-	private DownloadExecutor executor;
-	private DownloadClient client;
-	private Consumer consumer;
-	private String filter;
+	protected DownloadManager manager;
+	protected Consumer consumer;
+	protected String filter;
 
 	public Crawler(DownloadClient client, DownloadExecutor executor, Consumer consumer) {
-		this.client = client;
-		this.executor = executor;
+		manager = new DownloadManager(client, executor);
 		this.consumer = consumer;
 	}
 
@@ -31,18 +29,12 @@ public class Crawler implements Consumer {
 		download(link);
 	}
 
-	private void search(Link link) {
-		download(link);
-	}
-
 	public void download(Link link) {
-		DownloadManager processor = new DownloadManager(client, executor);
-		processor.download(link, this);
+		manager.download(link, this);
 	}
 
 	public void match(Link link) {
-		DownloadManager processor = new DownloadManager(client, executor);
-		processor.download(link, consumer);
+		manager.download(link, consumer);
 	}
 
 	@Override
@@ -52,12 +44,12 @@ public class Crawler implements Consumer {
 			if (item.match(this.filter)) {
 				this.match(item);
 			} else if (item.isDirectory()) {
-				this.search(item);
+				this.download(item);
 			}
 		}
 	}
 
-	private List<Link> getLinks(Link link, String content) {
+	protected List<Link> getLinks(Link link, String content) {
 		List<Link> links = new LinkedList<>();
 		Matcher m = p.matcher(content);
 		while (m.find()) {
@@ -68,7 +60,6 @@ public class Crawler implements Consumer {
 
 	@Override
 	public void error(Exception e) {
-		// TODO Auto-generated method stub
-
+		log.error("", e);
 	}
 }

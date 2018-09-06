@@ -4,10 +4,14 @@ import org.apache.commons.cli.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import frido.mvnrepo.indexer.core.client.JerseyHttpClient;
 import frido.mvnrepo.indexer.core.db.Database;
 import frido.mvnrepo.indexer.core.db.MongoDatabase;
 import frido.mvnrepo.indexer.core.download.ComparableExecutor;
+import frido.mvnrepo.indexer.core.download.DownloadClient;
 import frido.mvnrepo.indexer.core.download.DownloadExecutor;
+import frido.mvnrepo.indexer.core.download.DownloadLinkClient;
+import frido.mvnrepo.indexer.metadata.MetadataProcessor;
 
 public class App {
 
@@ -15,8 +19,16 @@ public class App {
 
 	public static void main(String[] args) {
 
+		System.out.println("1");
+
 		Database database = new MongoDatabase();
-		DownloadExecutor executor = new DownloadExecutor(new ComparableExecutor(5));
+		DownloadExecutor executor = new DownloadExecutor(new ComparableExecutor(50));
+		DownloadClient client = new DownloadLinkClient(new JerseyHttpClient());
+
+		MetadataProcessor processor = new MetadataProcessor(database, client, executor);
+		processor.start("http://central.maven.org/maven2/");
+
+		System.out.println("2");
 
 		CmdParser cmd = new CmdParser();
 		try {
@@ -26,9 +38,8 @@ public class App {
 		}
 
 		if (cmd.metadataFlag()) {
-			// MetadataHandler handler = new MetadataHandler(database, executor);
-			// MetadataProcessor process1 = new MetadataProcessor(handler);
-			// process1.start("http://central.maven.org/maven2/");
+//			MetadataProcessor processor = new MetadataProcessor(database, client, executor);
+//			processor.start("http://central.maven.org/maven2/ant/");
 		}
 		if (cmd.pomFlag()) {
 //			Provider provider = new MetadataProvider(database);

@@ -10,6 +10,8 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.bson.Document;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
@@ -27,6 +29,8 @@ public class Metadata {
 	public static final String ARTIFACT_ID = "artifactId";
 	public static final String GROUP_ID = "groupId";
 
+	Logger log = LoggerFactory.getLogger(Metadata.class);
+
 	private Document data;
 
 	public Metadata(Document metadata) {
@@ -35,6 +39,10 @@ public class Metadata {
 
 	public String getRepo() {
 		return data.getString(REPO);
+	}
+
+	public void setRepo(String repo) {
+		data.put(REPO, repo);
 	}
 
 	public String getGroup() {
@@ -46,7 +54,8 @@ public class Metadata {
 	}
 
 	public String getVersion() {
-		return Optional.ofNullable(data.getString(VERSION)).orElse(data.getString(LATEST));
+		return Optional.ofNullable(Optional.ofNullable(data.getString(LATEST)).orElse(data.getString(RELEASE)))
+				.orElse(data.getString(VERSION));
 	}
 
 	public String getIdentifier() {
@@ -55,6 +64,11 @@ public class Metadata {
 
 	public org.bson.Document getIdentifierFilter() {
 		return new Document(IDENTIFIER, data.getString(IDENTIFIER));
+	}
+
+	public void createIdentifier() {
+		String identifier = String.format("%s:%s:%s", getGroup(), getArtifact(), getVersion());
+		data.put(IDENTIFIER, identifier);
 	}
 
 	public Document getDocument() {
@@ -71,14 +85,15 @@ public class Metadata {
 		return new Metadata(doc);
 	}
 
-	public static org.bson.Document valueOf(String xml, String repo) throws XmlParseException {
+	public static Metadata valueOf(String xml, String repo) throws XmlParseException {
 		try {
 			DocumentBuilder docBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
 			org.w3c.dom.Document doc = docBuilder
 					.parse(new InputSource(new ByteArrayInputStream(xml.getBytes("utf-8"))));
-
 			doc.getDocumentElement().normalize();
+
 			org.bson.Document out = new org.bson.Document();
+			Metadata output = new Metadata(out);
 
 			NodeList metadata = doc.getElementsByTagName("metadata");
 			if (metadata.getLength() > 0) {
@@ -105,19 +120,12 @@ public class Metadata {
 					out.put(VERSIONS2, versions);
 				}
 				out.append(REPO, repo);
-				out.append(IDENTIFIER, createIdentifier(out));
 			}
-			return out;
+			output.createIdentifier();
+			return output;
 		} catch (Exception e) {
 			throw new XmlParseException(e);
 		}
-	}
-
-	private static String createIdentifier(org.bson.Document doc) {
-		String group = doc.getString(GROUP_ID);
-		String artifact = doc.getString(ARTIFACT_ID);
-		String version = Optional.ofNullable(doc.getString(VERSION)).orElse(doc.getString(LATEST));
-		return String.format("%s:%s:%s", group, artifact, version);
 	}
 
 	private static String getContent(Element element, String tag) {

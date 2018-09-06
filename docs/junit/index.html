@@ -20,13 +20,13 @@
 <tr>
 <td>
 <div class="infoBox" id="tests">
-<div class="counter">5</div>
+<div class="counter">15</div>
 <p>tests</p>
 </div>
 </td>
 <td>
 <div class="infoBox" id="failures">
-<div class="counter">0</div>
+<div class="counter">3</div>
 <p>failures</p>
 </div>
 </td>
@@ -38,7 +38,7 @@
 </td>
 <td>
 <div class="infoBox" id="duration">
-<div class="counter">3.446s</div>
+<div class="counter">8.131s</div>
 <p>duration</p>
 </div>
 </td>
@@ -47,8 +47,8 @@
 </div>
 </td>
 <td>
-<div class="infoBox success" id="successRate">
-<div class="percent">100%</div>
+<div class="infoBox failures" id="successRate">
+<div class="percent">80%</div>
 <p>successful</p>
 </div>
 </td>
@@ -58,13 +58,33 @@
 <div id="tabs">
 <ul class="tabLinks">
 <li>
-<a href="#tab0">Packages</a>
+<a href="#tab0">Failed tests</a>
 </li>
 <li>
-<a href="#tab1">Classes</a>
+<a href="#tab1">Packages</a>
+</li>
+<li>
+<a href="#tab2">Classes</a>
 </li>
 </ul>
 <div id="tab0" class="tab">
+<h2>Failed tests</h2>
+<ul class="linkList">
+<li>
+<a href="classes/frido.mvnrepo.indexer.tdd.PomTest.html">PomTest</a>.
+<a href="classes/frido.mvnrepo.indexer.tdd.PomTest.html#getUniqFilter">getUniqFilter</a>
+</li>
+<li>
+<a href="classes/frido.mvnrepo.indexer.tdd.PomTest.html">PomTest</a>.
+<a href="classes/frido.mvnrepo.indexer.tdd.PomTest.html#valueOf">valueOf</a>
+</li>
+<li>
+<a href="classes/frido.mvnrepo.indexer.tdd.integration.JerseyHttpClientIT.html">JerseyHttpClientIT</a>.
+<a href="classes/frido.mvnrepo.indexer.tdd.integration.JerseyHttpClientIT.html#post">post</a>
+</li>
+</ul>
+</div>
+<div id="tab1" class="tab">
 <h2>Packages</h2>
 <table>
 <thead>
@@ -79,19 +99,29 @@
 </thead>
 <tbody>
 <tr>
-<td class="success">
-<a href="packages/frido.mvnrepo.indexer.html">frido.mvnrepo.indexer</a>
+<td class="failures">
+<a href="packages/frido.mvnrepo.indexer.tdd.html">frido.mvnrepo.indexer.tdd</a>
+</td>
+<td>10</td>
+<td>2</td>
+<td>0</td>
+<td>0.055s</td>
+<td class="failures">80%</td>
+</tr>
+<tr>
+<td class="failures">
+<a href="packages/frido.mvnrepo.indexer.tdd.integration.html">frido.mvnrepo.indexer.tdd.integration</a>
 </td>
 <td>5</td>
+<td>1</td>
 <td>0</td>
-<td>0</td>
-<td>3.446s</td>
-<td class="success">100%</td>
+<td>8.076s</td>
+<td class="failures">80%</td>
 </tr>
 </tbody>
 </table>
 </div>
-<div id="tab1" class="tab">
+<div id="tab2" class="tab">
 <h2>Classes</h2>
 <table>
 <thead>
@@ -107,38 +137,119 @@
 <tbody>
 <tr>
 <td class="success"/>
-<a href="classes/frido.mvnrepo.indexer.ArtifactTest.html">frido.mvnrepo.indexer.ArtifactTest</a>
+<a href="classes/frido.mvnrepo.indexer.tdd.ClientExceptionTest.html">frido.mvnrepo.indexer.tdd.ClientExceptionTest</a>
 <td>1</td>
 <td>0</td>
 <td>0</td>
-<td>0.015s</td>
+<td>0.007s</td>
 <td class="success">100%</td>
 </tr>
 <tr>
 <td class="success"/>
-<a href="classes/frido.mvnrepo.indexer.MetadataProcessorTest.html">frido.mvnrepo.indexer.MetadataProcessorTest</a>
+<a href="classes/frido.mvnrepo.indexer.tdd.DeepComparatorTest.html">frido.mvnrepo.indexer.tdd.DeepComparatorTest</a>
 <td>1</td>
 <td>0</td>
 <td>0</td>
-<td>1.839s</td>
+<td>0.004s</td>
 <td class="success">100%</td>
 </tr>
 <tr>
 <td class="success"/>
-<a href="classes/frido.mvnrepo.indexer.PomProcessorTest.html">frido.mvnrepo.indexer.PomProcessorTest</a>
+<a href="classes/frido.mvnrepo.indexer.tdd.DownloadExecutorTest.html">frido.mvnrepo.indexer.tdd.DownloadExecutorTest</a>
 <td>1</td>
 <td>0</td>
 <td>0</td>
-<td>1.523s</td>
+<td>0.001s</td>
 <td class="success">100%</td>
 </tr>
 <tr>
 <td class="success"/>
-<a href="classes/frido.mvnrepo.indexer.ProjectTest.html">frido.mvnrepo.indexer.ProjectTest</a>
+<a href="classes/frido.mvnrepo.indexer.tdd.DownloadLinkTest.html">frido.mvnrepo.indexer.tdd.DownloadLinkTest</a>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>0.001s</td>
+<td class="success">100%</td>
+</tr>
+<tr>
+<td class="success"/>
+<a href="classes/frido.mvnrepo.indexer.tdd.DownloaderTest.html">frido.mvnrepo.indexer.tdd.DownloaderTest</a>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>0.032s</td>
+<td class="success">100%</td>
+</tr>
+<tr>
+<td class="success"/>
+<a href="classes/frido.mvnrepo.indexer.tdd.GithubConsumerTest.html">frido.mvnrepo.indexer.tdd.GithubConsumerTest</a>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>0s</td>
+<td class="success">100%</td>
+</tr>
+<tr>
+<td class="success"/>
+<a href="classes/frido.mvnrepo.indexer.tdd.GithubLinkProducerTest.html">frido.mvnrepo.indexer.tdd.GithubLinkProducerTest</a>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>0s</td>
+<td class="success">100%</td>
+</tr>
+<tr>
+<td class="success"/>
+<a href="classes/frido.mvnrepo.indexer.tdd.PomLinkBuilderTest.html">frido.mvnrepo.indexer.tdd.PomLinkBuilderTest</a>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>0.009s</td>
+<td class="success">100%</td>
+</tr>
+<tr>
+<td class="failures"/>
+<a href="classes/frido.mvnrepo.indexer.tdd.PomTest.html">frido.mvnrepo.indexer.tdd.PomTest</a>
+<td>2</td>
 <td>2</td>
 <td>0</td>
+<td>0.001s</td>
+<td class="failures">0%</td>
+</tr>
+<tr>
+<td class="success"/>
+<a href="classes/frido.mvnrepo.indexer.tdd.integration.CrawlerIT.html">frido.mvnrepo.indexer.tdd.integration.CrawlerIT</a>
+<td>1</td>
 <td>0</td>
-<td>0.069s</td>
+<td>0</td>
+<td>3.440s</td>
+<td class="success">100%</td>
+</tr>
+<tr>
+<td class="failures"/>
+<a href="classes/frido.mvnrepo.indexer.tdd.integration.JerseyHttpClientIT.html">frido.mvnrepo.indexer.tdd.integration.JerseyHttpClientIT</a>
+<td>2</td>
+<td>1</td>
+<td>0</td>
+<td>1.969s</td>
+<td class="failures">50%</td>
+</tr>
+<tr>
+<td class="success"/>
+<a href="classes/frido.mvnrepo.indexer.tdd.integration.MetadataProcessorIT.html">frido.mvnrepo.indexer.tdd.integration.MetadataProcessorIT</a>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>2.667s</td>
+<td class="success">100%</td>
+</tr>
+<tr>
+<td class="success"/>
+<a href="classes/frido.mvnrepo.indexer.tdd.integration.MongoDatabaseIT.html">frido.mvnrepo.indexer.tdd.integration.MongoDatabaseIT</a>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>0s</td>
 <td class="success">100%</td>
 </tr>
 </tbody>
@@ -152,7 +263,7 @@
 <input id="line-wrapping-toggle" type="checkbox" autocomplete="off"/>
 </label>
 </div>Generated by 
-<a href="http://www.gradle.org">Gradle 4.6</a> at Aug 20, 2018 9:14:06 PM</p>
+<a href="http://www.gradle.org">Gradle 4.0</a> at 4.9.2018 23:18:16</p>
 </div>
 </div>
 </body>

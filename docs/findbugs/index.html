@@ -71,16 +71,16 @@
 <p>FindBugs version: 3.0.1</p>
 <p>Code analyzed:</p>
 <ul>
-<li>/buddy/mvnrepo-indexer-1/build/classes/java/main</li>
+<li>C:\dev\repos\mvnrepo-indexer\build\classes\java\test</li>
 </ul>
 <p>
 <br/>
 <br/>
 </p>
 <h2>Metrics</h2>
-<p>990 lines of code analyzed,
-	in 35 classes, 
-	in 7 packages.</p>
+<p>265 lines of code analyzed,
+	in 24 classes, 
+	in 3 packages.</p>
 <table width="500" cellpadding="5" cellspacing="2">
 <tr class="tableheader">
 <th align="left">Metric</th>
@@ -94,18 +94,18 @@
 </tr>
 <tr class="tablerow1">
 <td>Medium Priority Warnings</td>
-<td align="right">1</td>
-<td align="right">1.01</td>
+<td align="right">4</td>
+<td align="right">15.09</td>
 </tr>
 <tr class="$totalClass">
 <td>
 <b>Total Warnings</b>
 </td>
 <td align="right">
-<b>1</b>
+<b>4</b>
 </td>
 <td align="right">
-<b>1.01</b>
+<b>15.09</b>
 </td>
 </tr>
 </table>
@@ -119,7 +119,7 @@
 <h2>Contents</h2>
 <ul>
 <li>
-<a href="#Warnings_STYLE">Dodgy code Warnings</a>
+<a href="#Warnings_PERFORMANCE">Performance Warnings</a>
 </li>
 <li>
 <a href="#Details">Details</a>
@@ -133,41 +133,83 @@
 </tr>
 <tr class="tablerow0">
 <td>
-<a href="#Warnings_STYLE">Dodgy code Warnings</a>
+<a href="#Warnings_PERFORMANCE">Performance Warnings</a>
 </td>
-<td align="right">1</td>
+<td align="right">4</td>
 </tr>
 <tr class="tablerow1">
 <td>
 <b>Total</b>
 </td>
 <td align="right">
-<b>1</b>
+<b>4</b>
 </td>
 </tr>
 </table>
 <h1>Warnings</h1>
 <p>Click on a warning row to see full context information.</p>
 <h2>
-<a name="Warnings_STYLE">Dodgy code Warnings</a>
+<a name="Warnings_PERFORMANCE">Performance Warnings</a>
 </h2>
 <table class="warningtable" width="100%" cellspacing="0">
 <tr class="tableheader">
 <th align="left">Code</th>
 <th align="left">Warning</th>
 </tr>
-<tr class="tablerow1" onclick="toggleRow('N65656');">
+<tr class="tablerow1" onclick="toggleRow('N65720');">
 <td>
-<span class="priority-2">REC</span>
+<span class="priority-2">Dm</span>
 </td>
-<td>Exception is caught when Exception is not thrown in frido.mvnrepo.indexer.artifact.Metadata.valueOf(String)</td>
+<td>frido.mvnrepo.indexer.tdd.helper.TestHelper.readFile(String) allocates an object, only to get the class object</td>
 </tr>
 <tr class="detailrow1">
 <td/>
 <td>
-<p id="N65656" style="display: none;">
-<a href="#REC_CATCH_EXCEPTION">Bug type REC_CATCH_EXCEPTION (click for details)</a>
-<br/>In class frido.mvnrepo.indexer.artifact.Metadata<br/>In method frido.mvnrepo.indexer.artifact.Metadata.valueOf(String)<br/>At Metadata.java:[line 91]</p>
+<p id="N65720" style="display: none;">
+<a href="#DM_NEW_FOR_GETCLASS">Bug type DM_NEW_FOR_GETCLASS (click for details)</a>
+<br/>In class frido.mvnrepo.indexer.tdd.helper.TestHelper<br/>In method frido.mvnrepo.indexer.tdd.helper.TestHelper.readFile(String)<br/>At TestHelper.java:[line 21]<br/>Another occurrence at TestHelper.java:[line 23]</p>
+</td>
+</tr>
+<tr class="tablerow0" onclick="toggleRow('N65685');">
+<td>
+<span class="priority-2">SIC</span>
+</td>
+<td>Should frido.mvnrepo.indexer.tdd.DeepComparatorTest$MockRunable be a _static_ inner class?</td>
+</tr>
+<tr class="detailrow0">
+<td/>
+<td>
+<p id="N65685" style="display: none;">
+<a href="#SIC_INNER_SHOULD_BE_STATIC">Bug type SIC_INNER_SHOULD_BE_STATIC (click for details)</a>
+<br/>In class frido.mvnrepo.indexer.tdd.DeepComparatorTest$MockRunable<br/>At DeepComparatorTest.java:[lines 30-41]</p>
+</td>
+</tr>
+<tr class="tablerow1" onclick="toggleRow('N65784');">
+<td>
+<span class="priority-2">SIC</span>
+</td>
+<td>Should frido.mvnrepo.indexer.tdd.integration.MetadataProcessorIT$PomExtractorDatabase be a _static_ inner class?</td>
+</tr>
+<tr class="detailrow1">
+<td/>
+<td>
+<p id="N65784" style="display: none;">
+<a href="#SIC_INNER_SHOULD_BE_STATIC">Bug type SIC_INNER_SHOULD_BE_STATIC (click for details)</a>
+<br/>In class frido.mvnrepo.indexer.tdd.integration.MetadataProcessorIT$PomExtractorDatabase<br/>At MetadataProcessorIT.java:[lines 48-58]</p>
+</td>
+</tr>
+<tr class="tablerow0" onclick="toggleRow('N65634');">
+<td>
+<span class="priority-2">UrF</span>
+</td>
+<td>Unread field: frido.mvnrepo.indexer.tdd.DeepComparatorTest.log</td>
+</tr>
+<tr class="detailrow0">
+<td/>
+<td>
+<p id="N65634" style="display: none;">
+<a href="#URF_UNREAD_FIELD">Bug type URF_UNREAD_FIELD (click for details)</a>
+<br/>In class frido.mvnrepo.indexer.tdd.DeepComparatorTest<br/>Field frido.mvnrepo.indexer.tdd.DeepComparatorTest.log<br/>At DeepComparatorTest.java:[line 15]</p>
 </td>
 </tr>
 </table>
@@ -175,26 +217,30 @@
 <a name="Details">Details</a>
 </h1>
 <h2>
-<a name="REC_CATCH_EXCEPTION">REC_CATCH_EXCEPTION: Exception is caught when Exception is not thrown</a>
+<a name="DM_NEW_FOR_GETCLASS">DM_NEW_FOR_GETCLASS: Method allocates an object, only to get the class object</a>
 </h2>
-  
-  <p>
-  This method uses a try-catch block that catches Exception objects, but Exception is not
-  thrown within the try block, and RuntimeException is not explicitly caught.  It is a common bug pattern to
-  say try { ... } catch (Exception e) { something } as a shorthand for catching a number of types of exception
-  each of whose catch blocks is identical, but this construct also accidentally catches RuntimeException as well,
-  masking potential bugs.
-  </p>
-  <p>A better approach is to either explicitly catch the specific exceptions that are thrown,
-  or to explicitly catch RuntimeException exception, rethrow it, and then catch all non-Runtime Exceptions, as shown below:</p>
-  <pre>
-  try {
-    ...
-  } catch (RuntimeException e) {
-    throw e;
-  } catch (Exception e) {
-    ... deal with all non-runtime exceptions ...
-  }</pre>
-  
-     </body>
+
+  <p>This method allocates an object just to call getClass() on it, in order to
+  retrieve the Class object for it. It is simpler to just access the .class property of the class.</p>
+
+    
+<h2>
+<a name="SIC_INNER_SHOULD_BE_STATIC">SIC_INNER_SHOULD_BE_STATIC: Should be a static inner class</a>
+</h2>
+
+  <p> This class is an inner class, but does not use its embedded reference
+  to the object which created it.&nbsp; This reference makes the instances
+  of the class larger, and may keep the reference to the creator object
+  alive longer than necessary.&nbsp; If possible, the class should be
+   made static.
+</p>
+
+    
+<h2>
+<a name="URF_UNREAD_FIELD">URF_UNREAD_FIELD: Unread field</a>
+</h2>
+
+  <p> This field is never read.&nbsp; Consider removing it from the class.</p>
+
+    </body>
 </html>

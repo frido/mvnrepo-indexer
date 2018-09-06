@@ -39,4 +39,8 @@ public class DownloadManager {
 		});
 	}
 
+	public String downloadSync(Link link) throws ClientException, URISyntaxException {
+		return client.download(link);
+	}
+
 }
