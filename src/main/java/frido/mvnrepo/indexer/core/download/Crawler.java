@@ -53,7 +53,10 @@ public class Crawler implements Consumer {
 		List<Link> links = new LinkedList<>();
 		Matcher m = p.matcher(content);
 		while (m.find()) {
-			links.add(link.append(m.group(1)));
+			String addon = m.group(1);
+			if (addon != null && !addon.isEmpty()) {
+				links.add(link.append(addon));
+			}
 		}
 		return links;
 	}

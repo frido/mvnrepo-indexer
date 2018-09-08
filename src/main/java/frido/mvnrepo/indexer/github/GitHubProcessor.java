@@ -13,11 +13,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import frido.mvnrepo.indexer.core.client.ClientException;
 import frido.mvnrepo.indexer.core.client.HttpClient;
-import frido.mvnrepo.indexer.core.db.Database;
+import frido.mvnrepo.indexer.core.db.Repository;
 import frido.mvnrepo.indexer.core.download.Consumer;
 import frido.mvnrepo.indexer.core.download.DownloadClient;
 import frido.mvnrepo.indexer.core.download.DownloadExecutor;
-import frido.mvnrepo.indexer.core.download.DownloadLink;
 import frido.mvnrepo.indexer.core.download.DownloadManager;
 import frido.mvnrepo.indexer.core.download.Link;
 import frido.mvnrepo.indexer.data.Project;
@@ -28,10 +27,10 @@ public class GitHubProcessor implements DownloadClient, Consumer {
 	private URI github = null;
 
 	private HttpClient client;
-	private Database database;
+	private Repository database;
 	private DownloadExecutor executor;
 
-	public GitHubProcessor(Database database, HttpClient client, DownloadExecutor executorService) {
+	public GitHubProcessor(Repository database, HttpClient client, DownloadExecutor executorService) {
 		this.database = database;
 		this.client = client;
 		this.executor = executorService;
@@ -44,10 +43,10 @@ public class GitHubProcessor implements DownloadClient, Consumer {
 
 	public void start() {
 		DownloadManager processor = new DownloadManager(this, executor);
-		for (Document doc : database.findByUrlWithGithub()) {
-			DownloadLink link = new DownloadLink(doc.getString("Url"));
-			processor.download(link, this);
-		}
+//		for (Document doc : database.findByUrlWithGithub()) {
+//			DownloadLink link = new DownloadLink(doc.getString("Url"));
+//			processor.download(link, this);
+//		}
 	}
 
 	@Override
@@ -59,7 +58,8 @@ public class GitHubProcessor implements DownloadClient, Consumer {
 			HashMap<String, HashMap<String, Object>> data = result.get("data");
 			HashMap<String, Object> repository = data.get("repository");
 			Project project = new Project(new Document(repository));
-			this.database.update("projects", project.getUniqFilter(), project.getDocument());
+			// this.database.update("projects", project.getUniqFilter(),
+			// project.getDocument());
 		} catch (Exception e) {
 			// log.error(content, e);
 		}

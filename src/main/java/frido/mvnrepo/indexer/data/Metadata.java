@@ -16,9 +16,11 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 
+import frido.mvnrepo.indexer.core.db.Record;
 import frido.mvnrepo.indexer.metadata.XmlParseException;
 
-public class Metadata {
+// TODO: Metadata ma zavislost na w3c, xml ... to sa mi nepaci
+public class Metadata implements Record {
 	private static final String IDENTIFIER = "identifier";
 	private static final String VERSIONS2 = "versions";
 	private static final String LAST_UPDATED = "lastUpdated";
@@ -133,5 +135,10 @@ public class Metadata {
 			return element.getElementsByTagName(tag).item(0).getTextContent();
 		}
 		return null;
+	}
+
+	@Override
+	public String getId() {
+		return getIdentifier();
 	}
 }

@@ -49,7 +49,6 @@ public class MetadataProcessorIT {
 
 		private List<Document> uptaded = Collections.synchronizedList(new ArrayList<>());
 
-		@Override
 		public void update(String collection, Document query, Document newOne) {
 			uptaded.add(newOne);
 		}

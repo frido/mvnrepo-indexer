@@ -1,34 +1,25 @@
 package frido.mvnrepo.indexer.tdd.helper;
 
-import org.bson.Document;
+import frido.mvnrepo.indexer.core.db.Repository;
 
-import frido.mvnrepo.indexer.core.db.Database;
-
-public class MockDatabase implements Database {
+public class MockDatabase implements Repository {
 
 	@Override
-	public Document save(String collection, Document doc) {
-		throw new UnsupportedOperationException();
+	public void save(Object record) {
+		// TODO Auto-generated method stub
+
 	}
 
 	@Override
-	public Iterable<Document> getAll(String collection) {
-		throw new UnsupportedOperationException();
+	public void update(Object record) {
+		// TODO Auto-generated method stub
+
 	}
 
 	@Override
-	public Iterable<Document> getByFilter(String collection, Document filter) {
-		throw new UnsupportedOperationException();
-	}
-
-	@Override
-	public Iterable<Document> findByUrlWithGithub() {
-		throw new UnsupportedOperationException();
-	}
-
-	@Override
-	public void update(String collection, Document query, Document newOne) {
-		throw new UnsupportedOperationException();
+	public Iterable getAll() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

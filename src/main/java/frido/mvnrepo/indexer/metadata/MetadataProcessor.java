@@ -3,7 +3,7 @@ package frido.mvnrepo.indexer.metadata;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import frido.mvnrepo.indexer.core.db.Database;
+import frido.mvnrepo.indexer.core.db.Repository;
 import frido.mvnrepo.indexer.core.download.Consumer;
 import frido.mvnrepo.indexer.core.download.DownloadClient;
 import frido.mvnrepo.indexer.core.download.DownloadExecutor;
@@ -15,12 +15,12 @@ public class MetadataProcessor implements Consumer {
 
 	Logger log = LoggerFactory.getLogger(MetadataProcessor.class);
 
-	private Database db;
+	private Repository<Metadata> db;
 	private DownloadClient client;
 	private DownloadExecutor executor;
 	private String repo;
 
-	public MetadataProcessor(Database database, DownloadClient client, DownloadExecutor executorService) {
+	public MetadataProcessor(Repository<Metadata> database, DownloadClient client, DownloadExecutor executorService) {
 		this.db = database;
 		this.client = client;
 		this.executor = executorService;
@@ -46,7 +46,9 @@ public class MetadataProcessor implements Consumer {
 	public void match(Metadata metadata) {
 		metadata.setRepo(repo);
 		// log.trace("match: " + metadata.getIdentifierFilter());
-		this.db.update("metadata", metadata.getIdentifierFilter(), metadata.getDocument()); // TODO: as part of
+		db.update(metadata);
+		// this.db.update("metadata", metadata.getIdentifierFilter(),
+		// metadata.getDocument()); // TODO: as part of
 	}
 
 }
