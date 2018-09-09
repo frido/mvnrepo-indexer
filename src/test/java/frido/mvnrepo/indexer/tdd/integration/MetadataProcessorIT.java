@@ -17,7 +17,6 @@ import frido.mvnrepo.indexer.core.download.DownloadClient;
 import frido.mvnrepo.indexer.core.download.DownloadExecutor;
 import frido.mvnrepo.indexer.core.download.DownloadLinkClient;
 import frido.mvnrepo.indexer.data.Metadata;
-import frido.mvnrepo.indexer.metadata.MetadataProcessor;
 import frido.mvnrepo.indexer.tdd.helper.MockDatabase;
 
 public class MetadataProcessorIT {
@@ -29,8 +28,9 @@ public class MetadataProcessorIT {
 		DownloadExecutor executor = new DownloadExecutor(new ComparableExecutor(5));
 		PomExtractorDatabase database = new PomExtractorDatabase();
 		DownloadClient client = new DownloadLinkClient(new JerseyHttpClient());
-		MetadataProcessor processor = new MetadataProcessor(database, client, executor);
-		processor.start("http://central.maven.org/maven2/ant/");
+		// MetadataProcessor processor = new MetadataProcessor(database, client,
+		// executor);
+		// processor.start("http://central.maven.org/maven2/ant/");
 
 //		
 //		Crawler clawler = new Crawler(, executor, consumer);

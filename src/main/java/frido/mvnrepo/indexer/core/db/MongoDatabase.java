@@ -1,5 +1,7 @@
 package frido.mvnrepo.indexer.core.db;
 
+import java.io.IOException;
+
 import org.bson.Document;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,10 +17,8 @@ public class MongoDatabase implements Datasource {
 	private com.mongodb.client.MongoDatabase db;
 	private String collection;
 
-	// TODO: pre kazdy kolekciu je vytvorena nova session. Ja potrebujem jednu
-	// session pre vsetky kolekcie
 	@SuppressWarnings("resource")
-	public MongoDatabase(String collection, Converter<Record, Document> converter) {
+	public MongoDatabase() {
 		String connectionString = System.getenv().get(ENV_MONGO_URL);
 		MongoClientURI uri = new MongoClientURI(connectionString);
 		MongoClient client = new MongoClient(uri);
@@ -42,5 +42,11 @@ public class MongoDatabase implements Datasource {
 	@Override
 	public Iterable<Document> getAll(String collection) {
 		return db.getCollection(collection).find();
+	}
+
+	@Override
+	public void close() throws IOException {
+
+		// TODO: close
 	}
 }

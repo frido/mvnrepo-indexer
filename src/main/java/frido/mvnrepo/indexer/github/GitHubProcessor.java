@@ -12,26 +12,35 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import frido.mvnrepo.indexer.core.client.ClientException;
-import frido.mvnrepo.indexer.core.client.HttpClient;
+import frido.mvnrepo.indexer.core.db.Datasource;
 import frido.mvnrepo.indexer.core.db.Repository;
 import frido.mvnrepo.indexer.core.download.Consumer;
 import frido.mvnrepo.indexer.core.download.DownloadClient;
 import frido.mvnrepo.indexer.core.download.DownloadExecutor;
 import frido.mvnrepo.indexer.core.download.DownloadManager;
 import frido.mvnrepo.indexer.core.download.Link;
+import frido.mvnrepo.indexer.data.Metadata;
+import frido.mvnrepo.indexer.data.Pom;
 import frido.mvnrepo.indexer.data.Project;
+import frido.mvnrepo.indexer.metadata.MetadataConverter;
+import frido.mvnrepo.indexer.metadata.MetadataRepository;
 
 public class GitHubProcessor implements DownloadClient, Consumer {
 
 	Logger log = LoggerFactory.getLogger(GitHubProcessor.class);
 	private URI github = null;
 
-	private HttpClient client;
-	private Repository database;
+	private DownloadClient client;
+	private Repository<Metadata> metadata;
+	private Repository<Pom> localPom;
+	private Repository<Pom> RemotePom;
 	private DownloadExecutor executor;
 
-	public GitHubProcessor(Repository database, HttpClient client, DownloadExecutor executorService) {
-		this.database = database;
+	public GitHubProcessor(Datasource remote, Datasource local, DownloadClient client,
+			DownloadExecutor executorService) {
+		this.metadata = new MetadataRepository(local, new MetadataConverter());
+		// this.localPom = new MetadataRepository(local, new MetadataConverter());
+		// this.RemotePom = new MetadataRepository(remote, new MetadataConverter());
 		this.client = client;
 		this.executor = executorService;
 		try {
@@ -74,6 +83,7 @@ public class GitHubProcessor implements DownloadClient, Consumer {
 
 	@Override
 	public String download(Link link) throws ClientException, URISyntaxException {
-		return this.client.post(github, new GitHubUrl(link.getURI()).query()); // TODO: lepsi pattern na konvertovanie
+		return null;// this.client.post(github, new GitHubUrl(link.getURI()).query()); // TODO:
+					// lepsi pattern na konvertovanie
 	}
 }

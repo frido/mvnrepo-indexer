@@ -1,38 +1,40 @@
 package frido.mvnrepo.indexer.core.db;
 
-import java.io.BufferedWriter;
-import java.io.File;
+import java.io.BufferedReader;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
-import java.io.OutputStreamWriter;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 import org.bson.Document;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.mongodb.BasicDBObject;
+import com.mongodb.util.JSON;
+
 public class FileDatasource implements Datasource {
 
 	Logger log = LoggerFactory.getLogger(FileDatasource.class);
 
-	private File file;
-	BufferedWriter writer;
+	private Map<String, FileWriter> writers = new HashMap<>();
 
-	// TODO: closing writer!!!
-	// TODO: handle different collections
-	public FileDatasource(String pathname) throws FileNotFoundException {
-		file = new File(pathname);
-		writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file)));
+	public FileDatasource() throws IOException {
 	}
 
 	@Override
 	public void save(String collection, Document record) {
-		try {
-			log.trace(record.toJson()); // TODO: fix
-			writer.write(record.toJson());
-			writer.write("\n");
-		} catch (IOException e) {
-			log.error("", e);
+		FileWriter writer = getOrCreateWriter(collection);
+		if (writer != null) {
+			try {
+				writer.write(record.toJson() + "\n"); // TODO: use system end line
+			} catch (IOException e) {
+				log.error("", e);
+			}
 		}
 	}
 
@@ -44,7 +46,41 @@ public class FileDatasource implements Datasource {
 
 	@Override
 	public Iterable<Document> getAll(String collection) {
-		throw new UnsupportedOperationException();
+		List<Document> output = new LinkedList<Document>();
+		try (BufferedReader br = new BufferedReader(new FileReader(collection + ".db"))) {
+			String line;
+			while ((line = br.readLine()) != null) {
+				log.info(line);
+				BasicDBObject record = (BasicDBObject) JSON.parse(line);
+				output.add(new Document(record));
+			}
+		} catch (FileNotFoundException e) {
+			log.error("", e);
+		} catch (IOException e) {
+			log.error("", e);
+		}
+		return output;
+	}
+
+	@Override
+	public void close() throws IOException {
+		System.out.println("Closing...");
+		for (FileWriter fw : writers.values()) {
+			fw.close();
+		}
+	}
+
+	private FileWriter getOrCreateWriter(String collection) {
+		FileWriter writer = writers.get(collection);
+		if (writer == null) {
+			try {
+				writer = new FileWriter(collection + ".db", true);
+				writers.put(collection, writer);
+			} catch (IOException e) {
+				log.error("", e);
+			}
+		}
+		return writer;
 	}
 
 }

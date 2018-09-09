@@ -1,8 +1,12 @@
 package frido.mvnrepo.indexer;
 
+import java.util.Optional;
+
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
+import org.apache.commons.cli.HelpFormatter;
+import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 
@@ -13,9 +17,13 @@ public class CmdParser {
 	private CommandLine cmd;
 
 	public CmdParser() {
-		options.addOption("metadata", false, "download metadata files");
-		options.addOption("pom", false, "download pom files");
-		options.addOption("github", false, "download github projects");
+//		options.addOption("m", true, "download metadata files");
+		options.addOption("p", false, "download pom files");
+		options.addOption("g", false, "download github projects");
+		options.addOption("t", true, "number of threads");
+		Option m = Option.builder("m").argName("repository").hasArg(true).optionalArg(true)
+				.desc("search given repository").build();
+		options.addOption(m);
 	}
 
 	public void parse(String[] args) throws ParseException {
@@ -24,14 +32,27 @@ public class CmdParser {
 	}
 
 	public boolean metadataFlag() {
-		return cmd.hasOption("metadata");
+		return cmd.hasOption("m");
+	}
+
+	public String repository() {
+		return Optional.ofNullable(cmd.getOptionValue("m")).orElse("http://central.maven.org/maven2/");
+	}
+
+	public String threadsCount() {
+		return Optional.ofNullable(cmd.getOptionValue("t")).orElse("50");
 	}
 
 	public boolean pomFlag() {
-		return cmd.hasOption("pom");
+		return cmd.hasOption("p");
 	}
 
 	public boolean githubFlag() {
-		return cmd.hasOption("github");
+		return cmd.hasOption("g");
+	}
+
+	public void printHelp() {
+		HelpFormatter formatter = new HelpFormatter();
+		formatter.printHelp("mvnRepo-indexer", options);
 	}
 }

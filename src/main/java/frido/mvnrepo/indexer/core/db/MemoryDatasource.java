@@ -1,5 +1,6 @@
 package frido.mvnrepo.indexer.core.db;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -34,6 +35,11 @@ public class MemoryDatasource implements Datasource {
 			memory.put(collection, list);
 		}
 		return memory.get(collection);
+	}
+
+	@Override
+	public void close() throws IOException {
+
 	}
 
 }
