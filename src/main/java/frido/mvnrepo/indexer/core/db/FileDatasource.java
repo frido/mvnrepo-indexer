@@ -51,8 +51,12 @@ public class FileDatasource implements Datasource {
 			String line;
 			while ((line = br.readLine()) != null) {
 				log.info(line);
-				BasicDBObject record = (BasicDBObject) JSON.parse(line);
-				output.add(new Document(record));
+				try {
+					BasicDBObject record = (BasicDBObject) JSON.parse(line);
+					output.add(new Document(record));
+				} catch (Exception e) {
+					log.error("JSON.parse(line) ERROR");
+				}
 			}
 		} catch (FileNotFoundException e) {
 			log.error("", e);

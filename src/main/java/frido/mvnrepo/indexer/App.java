@@ -20,6 +20,7 @@ import frido.mvnrepo.indexer.metadata.MetadataConverter;
 import frido.mvnrepo.indexer.metadata.MetadataProcessor;
 import frido.mvnrepo.indexer.metadata.MetadataRepository;
 import frido.mvnrepo.indexer.pom.PomProcessor;
+import frido.mvnrepo.indexer.stats.StatProcessor;
 
 public class App {
 
@@ -72,8 +73,17 @@ public class App {
 				executor.waitForTerminate();
 			}
 		}
+
 		if (cmd.githubFlag()) {
 			System.out.println("github");
+		}
+
+		if (cmd.statisticsFlag()) {
+			try (Datasource datasource = new FileDatasource()) {
+				StatProcessor stat = new StatProcessor(datasource);
+				stat.start();
+			}
+
 		}
 
 //		

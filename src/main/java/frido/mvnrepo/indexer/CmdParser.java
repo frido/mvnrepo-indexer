@@ -21,6 +21,7 @@ public class CmdParser {
 		options.addOption("p", false, "download pom files");
 		options.addOption("g", false, "download github projects");
 		options.addOption("t", true, "number of threads");
+		options.addOption("s", false, "print statistics");
 		Option m = Option.builder("m").argName("repository").hasArg(true).optionalArg(true)
 				.desc("search given repository").build();
 		options.addOption(m);
@@ -45,6 +46,10 @@ public class CmdParser {
 
 	public boolean pomFlag() {
 		return cmd.hasOption("p");
+	}
+
+	public boolean statisticsFlag() {
+		return cmd.hasOption("s");
 	}
 
 	public boolean githubFlag() {
