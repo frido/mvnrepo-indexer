@@ -4,7 +4,6 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.List;
 import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -12,6 +11,7 @@ import java.util.regex.Pattern;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.mongodb.BasicDBList;
 import com.mongodb.BasicDBObject;
 import com.mongodb.util.JSON;
 
@@ -43,15 +43,60 @@ public class StatProcessor {
 			while ((line = br.readLine()) != null) {
 				try {
 					BasicDBObject doc = (BasicDBObject) JSON.parse(line);
+					
+					getList(doc, "Dependencies").ifPresent(list -> {
+						list.forEach(d -> {
+							String key = getString((BasicDBObject) d, "GroupId").orElse("null") + ":" + getString((BasicDBObject) d, "ArtifactId").orElse("null");
+							String version = getString((BasicDBObject) d, "Version").orElse("null");
+							statistics.addDependencies(key, version);
+						});
+					});
+//					.map(e -> {
+//						
+////						return 
+//					})
+//					.ifPresent(key -> statistics.addDependencies(key));
+					
+					getList(doc, "Licenses").ifPresent(list -> {
+						list.forEach(d -> {
+							String key = getString((BasicDBObject) d, "Name").orElse("null");
+							statistics.addLicenses(key);
+						});
+					});
+					
+					getObject(doc, "Organization")
+					.flatMap(e -> getString(e, "Name"))
+					.ifPresent(key -> statistics.addOrganization(key));
 
-					getObject(doc, "IssueManagement")
-						.flatMap(im -> getString(im, "Url"))
-						.flatMap(url -> extractBase(url))
-						.ifPresent(key -> statistics.addCiManagement(key));
+					getList(doc, "Developers").ifPresent(list -> {
+						list.forEach(d -> {
+							String key = getString((BasicDBObject) d, "Name").orElse("null");
+							statistics.addDevelopers(key);
+						});
+					});
+					getList(doc, "Contributors").ifPresent(list -> {
+						list.forEach(d -> {
+							String key = getString((BasicDBObject) d, "Name").orElse("null");
+							statistics.addContributors(key);
+						});
+					});
+					
+					//issueManagement
+					
+					getObject(doc, "CiManagement")
+					.flatMap(e -> getString(e, "Url"))
+					.flatMap(url -> extractBase(url))
+					.ifPresent(key -> statistics.addCiManagement(key));
+					
+					getObject(doc, "DistributionManagement")
+					.flatMap(e -> getObject(e, "Repository"))
+					.flatMap(e -> getString(e, "Url"))
+					.ifPresent(key -> statistics.addDistributionManagement(key));
 
 				} catch (Exception e) {
+					e.printStackTrace();
 					errors++;
-					// log.error("JSON.parse(line) ERROR");
+					//return;
 				}
 			}
 		} catch (FileNotFoundException e) {
@@ -62,12 +107,26 @@ public class StatProcessor {
 
 		System.out.println("ERRORS: " + errors);
 
-		printMap(statistics.getCiManagement().getWords(), 10);
-		System.out.println(statistics.getCiManagement().getStatistics());
+		print(statistics.getCiManagement());
+		print(statistics.getContributors());
+		print(statistics.getDependencies());
+		print(statistics.getDevelopers());
+		print(statistics.getDistributionManagement());
+		print(statistics.getLicenses());
+		print(statistics.getOrganization());
+	}
+	
+	private void print(WordCounter counter) {
+		printMap(counter, 20);
+		System.out.println(counter.getStatistics());
 	}
 
 	private Optional<BasicDBObject> getObject(BasicDBObject doc, String prop) {
 		return Optional.ofNullable((BasicDBObject) doc.get(prop));
+	}
+	
+	private Optional<BasicDBList> getList(BasicDBObject doc, String prop) {
+		return Optional.ofNullable((BasicDBList) doc.get(prop));
 	}
 
 	private Optional<String> getString(BasicDBObject doc, String prop) {
@@ -86,10 +145,18 @@ public class StatProcessor {
 		return Optional.empty();
 	}
 
-	public <K, V> void printMap(List<Entry> list, int limit) {
-		for (Entry e : list) {
+	public <K, V> void printMap(WordCounter counter, int limit) {
+		int limit2 = limit;
+		for (Entry e : counter.getWords()) {
 			limit--;
-			System.out.println("Key : " + e.getKey() + " Value : " + e.getValue());
+			System.out.println("Key : " + e.getKey() + ", Value : " + e.getValue());
+			for (Entry subE : counter.getSubWords(e.getKey())) {
+				System.out.println("--- Key : " + subE.getKey() + ", Value : " + subE.getValue());
+				limit2--;
+				if (limit2 == 0) {
+					break;
+				}
+			}
 			if (limit == 0) {
 				return;
 			}
