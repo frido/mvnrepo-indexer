@@ -2,6 +2,8 @@
 
 # MvnRepo Indexer
 
+[Java](https://www.java.com/en/) crawler to download all `pom.xml` files from a repository.
+
 ## Run
 
 ```bash
